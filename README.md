@@ -1,7 +1,7 @@
 # AuctionWebApp
 
-## Test
-Sometext
+## Synopsis
+This is a Auction Web Application! :]
 
 ## Some headline
 Sometext
