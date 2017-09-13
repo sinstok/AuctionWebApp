@@ -7,6 +7,7 @@ package my.presentation;
 
 import boundary.ProductFacade;
 import entities.Product;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
@@ -31,6 +32,23 @@ public class ProductView {
     }
     public Product getProduct(){
         return product;
+    }
+    
+    public String addProduct(){
+        productFacade.create(product);
+        return null;
+    }
+    
+    public String getLastProduct(){
+        Product prod = new Product();
+        prod.setName("noProd");
+        prod.setFeatures("no feats");
+        List<Product> products = productFacade.findAll();
+        int size = products.size();
+        if(size > 0) {
+            prod = products.get(size - 1);         
+        }
+        return prod.getName() + " " + prod.getFeatures();
     }
     
     public int getNumberOfProducts(){

@@ -6,7 +6,12 @@
         <title>Facelet Title</title>
     </h:head>
     <h:body>
-        Hello from Facelets!
+        <h:outputLabel value="#{ProductView.lastProduct}" />
+        <h:form>
+           <h:outputLabel value="Name: " /><h:inputText value="#{ProductView.product.name}" />
+           <h:outputLabel value="Features: " /><h:inputText value="#{ProductView.product.features}" />
+           <h:commandButton action="#{ProductView.addProduct}" value=" Add product" /> 
+        </h:form>
     </h:body>
 </html>
 
