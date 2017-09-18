@@ -6,6 +6,7 @@
 package entities;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -24,7 +25,25 @@ public class Product implements Serializable {
     private Long id;
     private String name;
     private String features;
+    private List<Feedback> feedbacks;
+    private List<ProductListing> productListings;
 
+    public List<Feedback> getFeedbacks() {
+        return feedbacks;
+    }
+
+    public void setFeedbacks(List<Feedback> feedbacks) {
+        this.feedbacks = feedbacks;
+    }
+
+    public List<ProductListing> getProductListings() {
+        return productListings;
+    }
+
+    public void setProductListings(List<ProductListing> productListings) {
+        this.productListings = productListings;
+    }
+    
     public String getName() {
         return name;
     }

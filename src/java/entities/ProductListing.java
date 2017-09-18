@@ -7,6 +7,7 @@ package entities;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -32,6 +33,7 @@ public class ProductListing implements Serializable {
     private Date closing;
     @Temporal(TemporalType.TIMESTAMP)
     private Date published;
+    private List<Bid> bids;
     
 
     public Long getId() {
@@ -81,6 +83,15 @@ public class ProductListing implements Serializable {
     public void setPublished(Date published) {
         this.published = published;
     }
+
+    public List<Bid> getBids() {
+        return bids;
+    }
+
+    public void setBids(List<Bid> bids) {
+        this.bids = bids;
+    }
+    
     
     
 
