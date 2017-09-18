@@ -5,13 +5,8 @@
  */
 package my.presentation;
 
-import boundary.BukseFacade;
-import boundary.MannFacade;
 import boundary.ProductFacade;
-import entities.Bukse;
-import entities.Mann;
 import entities.Product;
-import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.inject.Named;
@@ -28,10 +23,6 @@ public class ProductView {
     @EJB
     private ProductFacade productFacade;
     private Product product;
-    @EJB
-    private MannFacade mannFacade;
-    @EJB
-    private BukseFacade bukseFacade;
 
     /**
      * Creates a new instance of ProductView
@@ -45,19 +36,6 @@ public class ProductView {
     
     public String addProduct(){
         productFacade.create(product);
-        Mann enmann = new Mann();
-        Bukse bu1 = new Bukse();
-        Bukse bu2 = new Bukse();
-        bu1.setType("jean");
-        bu2.setType("tran");
-        enmann.setNavn("Eivind");
-        List<Bukse> bukser = new ArrayList<Bukse>();
-        bukser.add(bu1);
-        bukser.add(bu2);
-        bukseFacade.create(bu1);
-        bukseFacade.create(bu2);
-        enmann.setBukser(bukser);
-        mannFacade.create(enmann);
         return null;
     }
     
