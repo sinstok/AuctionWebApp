@@ -10,24 +10,22 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 /**
  *
  * @author Tomas
  */
 @Entity
-public class User implements Serializable {
+public class Feedback implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String name;
-    private String phone;
-    private String mail;
     private double rating;
-    private String passwordHash;
-    private String passwordSalt;
+    private String feedback;
+    private User rater;
 
     public Long getId() {
         return id;
@@ -37,30 +35,6 @@ public class User implements Serializable {
         this.id = id;
     }
     
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getMail() {
-        return mail;
-    }
-
-    public void setMail(String mail) {
-        this.mail = mail;
-    }
-
     public double getRating() {
         return rating;
     }
@@ -69,20 +43,20 @@ public class User implements Serializable {
         this.rating = rating;
     }
 
-    public String getPasswordHash() {
-        return passwordHash;
+    public String getFeedback() {
+        return feedback;
     }
 
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
+    public void setFeedback(String feedback) {
+        this.feedback = feedback;
     }
 
-    public String getPasswordSalt() {
-        return passwordSalt;
+    public User getRater() {
+        return rater;
     }
 
-    public void setPasswordSalt(String passwordSalt) {
-        this.passwordSalt = passwordSalt;
+    public void setRater(User rater) {
+        this.rater = rater;
     }
 
     @Override
@@ -95,10 +69,10 @@ public class User implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof User)) {
+        if (!(object instanceof Feedback)) {
             return false;
         }
-        User other = (User) object;
+        Feedback other = (Feedback) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -107,7 +81,7 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return "entities.User[ id=" + id + " ]";
+        return "entities.Feedback[ id=" + id + " ]";
     }
     
 }
