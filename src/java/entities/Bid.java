@@ -28,7 +28,7 @@ public class Bid implements Serializable {
     private double amount;
     @Temporal(TemporalType.TIMESTAMP)
     private Date bidDate;
-    private User user;
+    private AuctionUser user;
 
     public Long getId() {
         return id;
@@ -54,11 +54,11 @@ public class Bid implements Serializable {
         this.bidDate = bidDate;
     }
 
-    public User getUser() {
+    public AuctionUser getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(AuctionUser user) {
         this.user = user;
     }
 

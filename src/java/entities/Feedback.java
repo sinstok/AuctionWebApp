@@ -25,7 +25,7 @@ public class Feedback implements Serializable {
     private Long id;
     private double rating;
     private String feedback;
-    private User rater;
+    private AuctionUser rater;
 
     public Long getId() {
         return id;
@@ -51,11 +51,11 @@ public class Feedback implements Serializable {
         this.feedback = feedback;
     }
 
-    public User getRater() {
+    public AuctionUser getRater() {
         return rater;
     }
 
-    public void setRater(User rater) {
+    public void setRater(AuctionUser rater) {
         this.rater = rater;
     }
 

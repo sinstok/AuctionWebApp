@@ -5,8 +5,13 @@
  */
 package my.presentation;
 
+import boundary.FeedbackFacade;
 import boundary.ProductFacade;
+import boundary.AuctionUserFacade;
+import entities.AuctionUser;
+import entities.Feedback;
 import entities.Product;
+import entities.AuctionUser;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.inject.Named;
@@ -22,6 +27,11 @@ public class ProductView {
 
     @EJB
     private ProductFacade productFacade;
+    @EJB
+    private FeedbackFacade feedbackFacade;
+     @EJB
+    private AuctionUserFacade userFacade;
+    
     private Product product;
 
     /**
@@ -35,7 +45,25 @@ public class ProductView {
     }
     
     public String addProduct(){
-        productFacade.create(product);
+        //productFacade.create(product);
+        AuctionUser user = new AuctionUser();
+        user.setName("AA");
+        AuctionUser user2 = new AuctionUser();
+        user.setName("BB");
+        
+        
+        Feedback feedback = new Feedback();
+        feedback.setFeedback("bra");
+        feedback.setRating(4.5);
+        feedback.setRater(user);
+        user2.addFeedback(feedback);
+        
+        userFacade.create(user);
+        userFacade.create(user2);
+        
+        
+        
+        
         return null;
     }
     
