@@ -28,16 +28,50 @@ public class AuctionUser implements Serializable {
     private Long id;
 
     private String name;
+    private String phone;
+    private String email;
+    private String address;
+    
     @OneToMany(cascade=PERSIST)
     private List<Feedback> feedbacks;
     
-    public void addFeedback(Feedback feedback){
+    @OneToMany(cascade=PERSIST)
+    private List<ProductListing> listings;
+    
+     @OneToMany(cascade=PERSIST)
+    private List<ProductListing> bids;
+     
+     public void addFeedback(Feedback feedback){
         if(feedbacks == null){
             feedbacks = new ArrayList<Feedback>();   
         }
         feedbacks.add(feedback);
     }
- 
+    
+    public void addListing(ProductListing listing){
+        if(listings == null){
+            listings = new ArrayList<ProductListing>();
+        }
+        listings.add(listing);
+    }
+    
+    //GETTERS&SETTERS
+
+    public void setListings(List<ProductListing> listings) {
+        this.listings = listings;
+    }
+
+    public void setBids(List<ProductListing> bids) {
+        this.bids = bids;
+    }
+
+    public List<ProductListing> getListings() {
+        return listings;
+    }
+
+    public List<ProductListing> getBids() {
+        return bids;
+    }
 
     public List<Feedback> getFeedbacks() {
         return feedbacks;

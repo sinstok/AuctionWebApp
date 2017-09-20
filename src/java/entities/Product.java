@@ -6,11 +6,14 @@
 package entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+import static javax.persistence.CascadeType.PERSIST;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -25,8 +28,17 @@ public class Product implements Serializable {
     private Long id;
     private String name;
     private String features;
+    @OneToMany(cascade=PERSIST)
     private List<Feedback> feedbacks;
+    @OneToMany(cascade=PERSIST)
     private List<ProductListing> productListings;
+    
+    public void addListing(ProductListing productListing){
+        if(productListing == null){
+            productListings = new ArrayList<ProductListing>();
+        }
+        productListings.add(productListing);
+    }
 
     public List<Feedback> getFeedbacks() {
         return feedbacks;

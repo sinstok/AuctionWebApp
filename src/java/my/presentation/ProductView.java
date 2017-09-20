@@ -12,10 +12,13 @@ import entities.AuctionUser;
 import entities.Feedback;
 import entities.Product;
 import entities.AuctionUser;
+import helpers.DBean;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
 
 /**
  *
@@ -26,11 +29,10 @@ import javax.enterprise.context.RequestScoped;
 public class ProductView {
 
     @EJB
-    private ProductFacade productFacade;
-    @EJB
-    private FeedbackFacade feedbackFacade;
-     @EJB
-    private AuctionUserFacade userFacade;
+    ProductFacade productFacade;
+     
+    @Inject
+    private DBean dbi;
     
     private Product product;
 
@@ -44,8 +46,10 @@ public class ProductView {
         return product;
     }
     
-    public String addProduct(){
+  
+    public void addProduct(){
         //productFacade.create(product);
+        /*
         AuctionUser user = new AuctionUser();
         user.setName("AA");
         AuctionUser user2 = new AuctionUser();
@@ -60,11 +64,10 @@ public class ProductView {
         
         userFacade.create(user);
         userFacade.create(user2);
-        
-        
-        
-        
-        return null;
+        */
+        dbi.test();
+         
+       
     }
     
     public String getLastProduct(){

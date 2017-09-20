@@ -6,12 +6,15 @@
 package entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import static javax.persistence.CascadeType.PERSIST;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -33,7 +36,19 @@ public class ProductListing implements Serializable {
     private Date closing;
     @Temporal(TemporalType.TIMESTAMP)
     private Date published;
+    @OneToMany(cascade=PERSIST)
     private List<Bid> bids;
+    
+    public void ProductListing(){
+        bids = new ArrayList<Bid>();
+    }
+    
+    public void addBid(Bid bid){
+        if(bids == null){
+            bids = new ArrayList<Bid>();
+        } 
+        bids.add(bid);
+    }
     
 
     public Long getId() {
