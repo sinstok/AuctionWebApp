@@ -130,7 +130,7 @@ public class ProductDescriptionView {
         if(closing.after(now)){
            long diff = closing.getTime() - now.getTime();
            long diffHours = diff / (60 * 60 * 1000);
-           time = Objects.toString(diffHours, null) + " hours left";
+           time = "There are " + Objects.toString(diffHours, null) + " hours left";
         }else{
             time = "Biding is closed";
         }
