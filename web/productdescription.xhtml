@@ -23,10 +23,5 @@
         <p><h:outputLabel value="#{PDView.productListing.closing}" /></p>
         <p>There are <h:outputLabel value="#{PDView.timeLeft}" /> hours left</p>
         
-        <h:form>
-           <h:outputLabel value="Name: " /><h:inputText value="#{PDView.product.name}" />
-           <h:outputLabel value="Features: " /><h:inputText value="#{PDView.product.features}" />
-           <h:commandButton action="#{PDView.addProduct}" value=" Add product" /> 
-        </h:form>
     </h:body>
 </html>
