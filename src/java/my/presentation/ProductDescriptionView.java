@@ -63,7 +63,7 @@ public class ProductDescriptionView {
         Date d2 = new Date();
         Calendar c = Calendar.getInstance(); 
         c.setTime(d1); 
-        c.add(Calendar.DATE, 1);
+        c.add(Calendar.HOUR, 3);
         d2 = c.getTime();
         pl.setPublished(d1); 
         pl.setClosing(d2);
@@ -129,8 +129,22 @@ public class ProductDescriptionView {
         
         if(closing.after(now)){
            long diff = closing.getTime() - now.getTime();
-           long diffHours = diff / (60 * 60 * 1000);
-           time = "There are " + Objects.toString(diffHours, null) + " hours left";
+           long min = 60000L;
+           long hour = 3600000L;
+           long day = 86400000L;
+           if(diff < min){
+                long diffSecs = diff / (1000);
+                time = "There are " + Objects.toString(diffSecs, null) + " seconds left"; 
+           }else if(diff < hour) {
+                long diffMins = diff / (60 * 1000);
+                time = "There are " + Objects.toString(diffMins, null) + " minutes left";
+           }else if(diff < day){
+                long diffHours = diff / (60 * 60 * 1000);
+                time = "There are " + Objects.toString(diffHours, null) + " hours left";
+           }else{
+               long diffDays = diff / (24 * 60 * 60 * 1000);
+               time = "There are " + Objects.toString(diffDays, null) + " days left";
+           }
         }else{
             time = "Biding is closed";
         }
