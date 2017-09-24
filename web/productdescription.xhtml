@@ -23,5 +23,14 @@
         <p><h:outputLabel value="#{PDView.productListing.closing}" /></p>
         <p><h:outputLabel value="#{PDView.timeLeft}" /></p>
         
+        
+        <h:form>
+           <p><h:outputLabel value="Comment: " /></p>
+           <p><h:inputTextarea value="#{PDView.comment}" /></p>
+           <p><h:commandButton action="#{PDView.addComment}" value=" Add Comment" /></p>
+        </h:form>
+        
+        <p><h:outputText value="#{PDView.allComments}" /></p>
+        
     </h:body>
 </html>

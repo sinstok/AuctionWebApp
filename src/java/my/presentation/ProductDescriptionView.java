@@ -6,9 +6,12 @@
 package my.presentation;
 
 import boundary.BidFacade;
+import boundary.FeedbackFacade;
 import boundary.ProductFacade;
 import boundary.ProductListingFacade;
+import entities.AuctionUser;
 import entities.Bid;
+import entities.Feedback;
 import entities.Product;
 import entities.ProductListing;
 import helpers.DBean;
@@ -40,12 +43,16 @@ public class ProductDescriptionView {
     
     @EJB
     BidFacade bidFacade;
+    
+    @EJB
+    FeedbackFacade feedbackFacade;
      
     @Inject
     private DBean dbi;
     
     private Product product;
     private String value;
+    private String comment;
     //private String time;
     //private Bid bid;
     private ProductListing pl;
@@ -56,9 +63,15 @@ public class ProductDescriptionView {
      */
     public ProductDescriptionView() {
         this.pl = new ProductListing();
+        this.product = new Product();
+        
+        product.setName("Newman");
+        product.setFeatures("no feats");
+        
         pl.setBasePrice(10);
         //pl.setImage(image);
         pl.setDescription("Some text");
+        
         Date d1 = new Date();
         Date d2 = new Date();
         Calendar c = Calendar.getInstance(); 
@@ -67,17 +80,35 @@ public class ProductDescriptionView {
         d2 = c.getTime();
         pl.setPublished(d1); 
         pl.setClosing(d2);
+        
         //Bid bid = bidFacade.find(109);
         //Bid bid2 = bidFacade.find(108);
         Bid b1 = new Bid();
         b1.setAmount(30);
         Bid b2 = new Bid();
         b2.setAmount(35);
-        List<Bid> bids = new ArrayList<Bid>();
+        List<Bid> bids = new ArrayList<>();
         bids.add(b2);
         bids.add(b1);
-        //plFacade.find(pl);
         pl.setBids(bids);
+        
+        AuctionUser rater = new AuctionUser();
+        rater.setName("Gustav");
+        List<Feedback> feeds = new ArrayList<>();
+        Feedback f1 = new Feedback();
+        f1.setFeedback("tjohei");
+        f1.setRater(rater);
+        feeds.add(f1);
+                
+        List<String> comments = new ArrayList<>();
+        Product prod1 = new Product();
+        
+        
+        List<ProductListing> prolist = new ArrayList<>();
+        prolist.add(pl);
+        product.setProductListings(prolist);
+        product.setFeedbacks(feeds);
+        
     }
     
     public ProductListing getProductListing(){
@@ -85,10 +116,7 @@ public class ProductDescriptionView {
     }
     
     public Product getProduct(){
-        Product prod = new Product();
-        prod.setName("Newman");
-        prod.setFeatures("no feats");
-        return prod;
+        return product;
     }
     
     public String getValue(){
@@ -97,6 +125,14 @@ public class ProductDescriptionView {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
     
     public String getThisProduct(){
@@ -109,10 +145,7 @@ public class ProductDescriptionView {
         return prod.getFeatures();
     }
     
-    public void addProduct(){
-        productFacade.create(product);
-    }
-    
+    //Må legge til innlogget bruker
     public void addBid(){
         Bid newBid = new Bid();
         newBid.setAmount(Double.parseDouble(this.getValue()));
@@ -120,6 +153,21 @@ public class ProductDescriptionView {
         bids.add(newBid);
         pl.setBids(bids);
         //bidFacade.create(newBid);
+    }
+    
+    //Må legge til innlogget bruker
+    public void addComment(){
+        Product prod = this.getProduct();
+        Feedback feed = new Feedback();
+        String com = this.getComment();
+        AuctionUser rater = new AuctionUser();
+        rater.setName("No user");
+        feed.setRater(rater);
+        feed.setFeedback(com);
+        List<Feedback> feeds = prod.getFeedbacks();
+        feeds.add(feed);
+        prod.setFeedbacks(feeds);
+        //feedbackFacade.create(feed);
     }
     
     public String getTimeLeft(){
@@ -154,7 +202,7 @@ public class ProductDescriptionView {
     
     public double getHighestBid() {
         List<Bid> bids = pl.getBids();
-        double b = 0;
+        double b = pl.getBasePrice();
         if(!(bids.isEmpty())){
             for(int i = 0; i <= bids.size() - 1; i++){
                 double current = bids.get(i).getAmount();
@@ -164,6 +212,18 @@ public class ProductDescriptionView {
             }
         }
         return b;
+    }
+       
+    public List<String> getAllComments(){
+        Product prod = this.getProduct();
+        List<Feedback> feeds = prod.getFeedbacks();
+        List<String> comments = new ArrayList<>();
+        if(!(feeds.isEmpty())) {
+            for(int i = 0; i < feeds.size(); i++){
+                comments.add(feeds.get(i).getRater().getName() + ": " + feeds.get(i).getFeedback());
+            }
+        }
+        return comments;
     }
     
 }
