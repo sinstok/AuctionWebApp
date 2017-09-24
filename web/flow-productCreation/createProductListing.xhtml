@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <h:outputLabel value="#{createProductListingView.product.name}" />
+        <h:form>
+           <h:outputLabel value="Starting price" />
+           <h:inputText value="#{createProductListingView.productListing.basePrice}" />
+            <br/>
+            <h:outputLabel value="Description: " />
+            <h:inputText value="#{createProductListingView.productListing.description}" />
+            <br/>
+            <h:outputLabel value="Closing date: " />
+            <h:inputText value="#{createProductListingView.productListing.closing}" p:placeholder="yyyy-MM-dd">
+                <f:convertDateTime pattern="yyyy-MM-dd"/>  
+            </h:inputText>
+            <br/>
+            <h:commandButton action="#{createProductListingView.postProductListing}" value=" Add product" />
+        </h:form>
+    </h:body>
+</html>
+

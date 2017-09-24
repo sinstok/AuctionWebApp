@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+
+    Copyright (c) 2017 Oracle and/or its affiliates. All rights reserved.
+
+    You may not modify, use, reproduce, or distribute this software except in
+    compliance with the terms of the License at:
+    http://java.net/projects/javaeetutorial/pages/BerkeleyLicense
+
+-->
+<faces-config version="2.2" xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
+              
+    <flow-definition id="flow-productCreation">
+        
+    </flow-definition>
+</faces-config>
