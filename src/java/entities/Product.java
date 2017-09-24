@@ -34,9 +34,6 @@ public class Product implements Serializable {
     private List<ProductListing> productListings;
     
     public void addListing(ProductListing productListing){
-        if(productListing == null){
-            productListings = new ArrayList<ProductListing>();
-        }
         productListings.add(productListing);
     }
 
