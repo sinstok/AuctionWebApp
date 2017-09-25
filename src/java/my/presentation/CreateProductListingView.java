@@ -42,7 +42,7 @@ public class CreateProductListingView implements Serializable{
         product = new Product();
     }
     
-     public void postProductListing(){
+     public String postProductListing(){
         if(product.getId() == null){
             productFacade.create(product);
         }
@@ -50,6 +50,7 @@ public class CreateProductListingView implements Serializable{
         product.addListing(productListing);
         productFacade.edit(product);
         //productListingFacade.create(productListing);
+        return "returnFromproductCreation";
     }
      
     public String selectProduct(long id){
