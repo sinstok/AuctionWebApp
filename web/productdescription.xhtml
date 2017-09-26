@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://xmlns.jcp.org/jsf/html">
     <h:head>
         <title>Product description</title>
@@ -23,17 +24,28 @@
         <p><h:outputLabel value="#{PDView.productListing.closing}" /></p>
         <p><h:outputLabel value="#{PDView.timeLeft}" /></p>
         
-        
         <h:form>
+        <h:selectOneMenu value="#{PDView.rating}">
+            <f:selectItem itemValue="1.0" itemLabel="1 Star" />
+            <f:selectItem itemValue="2.0" itemLabel="2 Stars" />
+            <f:selectItem itemValue="3.0" itemLabel="3 Stars" />
+            <f:selectItem itemValue="4.0" itemLabel="4 Stars" />
+            <f:selectItem itemValue="5.0" itemLabel="5 Stars" />
+        </h:selectOneMenu>
+        
+        
            <p><h:outputLabel value="Comment: " /></p>
            <p><h:inputTextarea value="#{PDView.comment}" /></p>
-           <p><h:commandButton action="#{PDView.addComment}" value=" Add Comment" /></p>
+           <p><h:commandButton action="#{PDView.addFeedback()}" value=" Add Comment" /></p>
         </h:form>
         
         <p><h:outputText value="#{PDView.allComments}" /></p>
         <p><h:outputText value="#{PDView.sellerName}" /></p>
         <h:form>
             <p><h:commandButton action="#{PDView.addSeller}" value=" Add Seller" /></p>
+        </h:form>
+        <h:form>
+            <p><h:outputText value="#{PDView.rating}" /></p>
         </h:form>
     </h:body>
 </html>

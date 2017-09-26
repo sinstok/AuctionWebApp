@@ -57,6 +57,7 @@ public class ProductDescriptionView {
     private Product product;
     private String value;
     private String comment;
+    private String rating;
     private ProductListing pl;
     private AuctionUser seller;
     
@@ -82,6 +83,8 @@ public class ProductDescriptionView {
         Date d2 = c.getTime();
         pl.setPublished(d1); 
         pl.setClosing(d2);
+        
+        this.setRating("3.5");
         
         //Bid bid = bidFacade.find(109);
         //Bid bid2 = bidFacade.find(108);
@@ -143,6 +146,14 @@ public class ProductDescriptionView {
     public void setComment(String comment) {
         this.comment = comment;
     }
+
+    public String getRating() {
+        return rating;
+    }
+
+    public void setRating(String rating) {
+        this.rating = rating;
+    }
     
     public String getThisProduct(){
         Product prod = this.getProduct();
@@ -155,10 +166,9 @@ public class ProductDescriptionView {
     }
     
     public AuctionUser getSeller(){
-        Long prolis = 1238888L;
+        Long prolis = 109L;
         
-        AuctionUser sell = new AuctionUser(); //fjern denne
-        //AuctionUser sell =  auctionUserFacade.getSeller("listings_id", prolis);
+        AuctionUser sell =  auctionUserFacade.getSeller("listings_id", prolis);
         if(sell != null){
             return sell;
         } else {
@@ -179,25 +189,15 @@ public class ProductDescriptionView {
         //bidFacade.create(newBid);
     }
     
-    public void addSeller(){
-        AuctionUser test = new AuctionUser();
-        test.setName("Kunt Aril Hareide");
-        List<ProductListing> pls = new ArrayList<>();
-        pls.add(pl);
-        test.setListings(pls);
-        //plFacade.create(pl);
-        auctionUserFacade.create(test);
-        
-    }
-    
     //Må legge til innlogget bruker
-    public void addComment(){
+    public void addFeedback(){
         Product prod = this.getProduct();
         Feedback feed = new Feedback();
         String com = this.getComment();
         AuctionUser rater = new AuctionUser();
         rater.setName("No user");
         feed.setRater(rater);
+        feed.setRating(Double.parseDouble(this.getRating()));
         feed.setFeedback(com);
         List<Feedback> feeds = prod.getFeedbacks();
         feeds.add(feed);
@@ -253,6 +253,7 @@ public class ProductDescriptionView {
         Product prod = this.getProduct();
         List<Feedback> feeds = prod.getFeedbacks();
         List<String> comments = new ArrayList<>();
+        //comments.add("hei");
         if(!(feeds.isEmpty())) {
             for(int i = 0; i < feeds.size(); i++){
                 comments.add(feeds.get(i).getRater().getName() + ": " + feeds.get(i).getFeedback());
