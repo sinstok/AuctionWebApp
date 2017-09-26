@@ -31,32 +31,48 @@ public class AuctionUser implements Serializable {
     private String phone;
     private String email;
     private String address;
-    
-    @OneToMany(cascade=PERSIST)
+    private String password;
+
+    @OneToMany(cascade = PERSIST)
     private List<Feedback> feedbacks;
-    
-    @OneToMany(cascade=PERSIST)
+
+    @OneToMany(cascade = PERSIST)
     private List<ProductListing> listings;
-    
-     @OneToMany(cascade=PERSIST)
+
+    @OneToMany(cascade = PERSIST)
     private List<ProductListing> bids;
-     
-     public void addFeedback(Feedback feedback){
-        if(feedbacks == null){
-            feedbacks = new ArrayList<Feedback>();   
+
+    public void addFeedback(Feedback feedback) {
+        if (feedbacks == null) {
+            feedbacks = new ArrayList<Feedback>();
         }
         feedbacks.add(feedback);
     }
-    
-    public void addListing(ProductListing listing){
-        if(listings == null){
+
+    public void addListing(ProductListing listing) {
+        if (listings == null) {
             listings = new ArrayList<ProductListing>();
         }
         listings.add(listing);
     }
-    
-    //GETTERS&SETTERS
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    //GETTERS&SETTERS
     public void setListings(List<ProductListing> listings) {
         this.listings = listings;
     }

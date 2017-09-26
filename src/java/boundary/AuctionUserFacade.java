@@ -29,8 +29,8 @@ public class AuctionUserFacade extends AbstractFacade<AuctionUser> {
     public AuctionUserFacade() {
         super(AuctionUser.class);
     }
-    
-    public AuctionUser getSeller(String fieldName, Long id){
+
+    public AuctionUser getSeller(String fieldName, Long id) {
         /*List<AuctionUser> list = em.createQuery("SELECT t FROM " + "AuctionUser_ProductListing"
                     + " t WHERE t." + fieldName + " " + "=" + " :val 
                     ORDER BY t.id ASC", long.class).setParameter("val", id).getResultList();
@@ -38,21 +38,36 @@ public class AuctionUserFacade extends AbstractFacade<AuctionUser> {
         if(list.size() == 1){
             id = list.get(0);
         }*/
-        
-        /*List<AuctionUser> list = em.createQuery("SELECT t FROM " + AuctionUser.class.getSimpleName() + 
+
+ /*List<AuctionUser> list = em.createQuery("SELECT t FROM " + AuctionUser.class.getSimpleName() + 
                 "as t join t." + "listings" + " as ab WHERE ab.AuctionUser_id = :val ORDER BY t.id ASC",
                 AuctionUser.class).setParameter("val", id).getResultList();*/
-        
         List<AuctionUser> users = em.createQuery("SELECT p FROM ProductListing s JOIN AuctionUser p WHERE s.id = :val", AuctionUser.class).setParameter("val", id).getResultList();
-        
-        
-        
+
         AuctionUser user = null;
-        if(users != null){
-          
+        if (users != null) {
+
             user = users.get(0);
         }
         //long test = 0;
         return user;
+    }
+
+    public synchronized boolean register(String fieldName, Object value) {
+        List<AuctionUser> list = em.createQuery("SELECT t FROM " + AuctionUser.class.getSimpleName() + " t WHERE t." + fieldName + " " + "=" + " :val ORDER BY t.id ASC", AuctionUser.class).setParameter("val", value.toString()).getResultList();
+        if (list.size() != 1) {
+            return false;
+        }
+        return true;
+    }
+
+    public synchronized long login(String username, String password) {
+        AuctionUser user = null;
+        user = em.createQuery("SELECT t FROM AuctionUser t WHERE t.email = :val AND t.password = :vall", AuctionUser.class).setParameter("val", username).setParameter("vall", password).getSingleResult();
+
+        if (user == null) {
+            return 0;
+        }
+        return user.getId();
     }
 }
