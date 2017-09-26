@@ -8,6 +8,7 @@ package my.presentation;
 import boundary.FeedbackFacade;
 import boundary.ProductFacade;
 import boundary.AuctionUserFacade;
+import boundary.ProductListingFacade;
 import entities.AuctionUser;
 import entities.Feedback;
 import entities.Product;
@@ -30,6 +31,8 @@ public class ProductView {
 
     @EJB
     ProductFacade productFacade;
+    @EJB
+    AuctionUserFacade a;
      
     @Inject
     private DBean dbi;
@@ -66,6 +69,8 @@ public class ProductView {
         userFacade.create(user2);
         */
         dbi.test();
+        a.getSeller("", 109L);
+        
          
        
     }
