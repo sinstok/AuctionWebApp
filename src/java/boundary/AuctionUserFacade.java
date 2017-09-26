@@ -28,7 +28,9 @@ public class AuctionUserFacade extends AbstractFacade<AuctionUser> {
 
     public AuctionUserFacade() {
         super(AuctionUser.class);
+        
     }
+    
 
     public AuctionUser getSeller(String fieldName, Long id) {
         /*List<AuctionUser> list = em.createQuery("SELECT t FROM " + "AuctionUser_ProductListing"

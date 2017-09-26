@@ -42,15 +42,11 @@
         <h:form>
             <div class="container well">
                 <div class="row">
-                    <div class="col-md-3">
-                        <h:outputLabel value="#{ProductView.lastProduct}" /><br/>
-                        <h:outputLabel value="Name: " /><h:inputText styleClass="form-control" value="#{ProductView.product.name}" />
-                        <h:outputLabel value="Features: " /><h:inputText styleClass="form-control" value="#{ProductView.product.features}" />
-                    </div>
-                </div>
-                <div class="row">
                     <div class="col-md-3" style="padding-top: 5px">
-                        <h:commandButton styleClass="btn btn-primary" action="#{ProductView.addProduct}" value=" Add product" /> 
+                        <h:commandButton styleClass="btn btn-primary" action="flow-productCreation" value=" Add product" /> 
+                    </div>
+                    <div class="col-md-3" style="padding-top: 5px">
+                        <h:commandButton styleClass="btn btn-primary" action="#{ProductView.addProduct()}" value="Initialize Database" /> 
                     </div>
                 </div>
             </div>

@@ -51,25 +51,10 @@ public class ProductView {
     
   
     public void addProduct(){
-        //productFacade.create(product);
-        /*
-        AuctionUser user = new AuctionUser();
-        user.setName("AA");
-        AuctionUser user2 = new AuctionUser();
-        user.setName("BB");
-        
-        
-        Feedback feedback = new Feedback();
-        feedback.setFeedback("bra");
-        feedback.setRating(4.5);
-        feedback.setRater(user);
-        user2.addFeedback(feedback);
-        
-        userFacade.create(user);
-        userFacade.create(user2);
-        */
+
         dbi.test();
-        a.getSeller("", 109L);
+        
+        
         
          
        

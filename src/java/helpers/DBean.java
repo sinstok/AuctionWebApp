@@ -50,9 +50,9 @@ public class DBean {
         AuctionUser seller = new AuctionUser();
         seller.setName("Arne Seller");
         AuctionUser customer = new AuctionUser();
-        customer.setName("Nilsen Customer");
+        customer.setName("Atle Geitung");
         AuctionUser customer2 = new AuctionUser();
-        customer.setName("Rekdal Customer");
+        customer2.setName("Rekdal Customer");
         
         userFacade.create(customer);
         userFacade.create(seller);
@@ -74,8 +74,8 @@ public class DBean {
         productFacade.create(prod1);
         
         Product prod2 = new Product();
-        prod1.setFeatures("cool");
-        prod1.setName("Island");
+        prod2.setFeatures("cool");
+        prod2.setName("Island");
         productFacade.create(prod2);
         
         

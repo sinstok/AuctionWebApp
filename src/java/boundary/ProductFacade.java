@@ -5,7 +5,12 @@
  */
 package boundary;
 
+import entities.AuctionUser;
+import entities.Bid;
+import entities.Feedback;
 import entities.Product;
+import entities.ProductListing;
+import java.util.Date;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
