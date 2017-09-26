@@ -5,6 +5,7 @@
  */
 package my.presentation;
 
+import boundary.AuctionUserFacade;
 import boundary.BidFacade;
 import boundary.FeedbackFacade;
 import boundary.ProductFacade;
@@ -20,10 +21,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 import javax.ejb.EJB;
 import javax.inject.Named;
-import javax.enterprise.context.Dependent;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
@@ -34,6 +33,9 @@ import javax.inject.Inject;
 @Named(value = "PDView")
 @RequestScoped
 public class ProductDescriptionView {
+
+    @EJB
+    AuctionUserFacade auctionUserFacade;
     
     @EJB
     ProductFacade productFacade;
@@ -46,6 +48,8 @@ public class ProductDescriptionView {
     
     @EJB
     FeedbackFacade feedbackFacade;
+    
+    
      
     @Inject
     private DBean dbi;
@@ -53,9 +57,8 @@ public class ProductDescriptionView {
     private Product product;
     private String value;
     private String comment;
-    //private String time;
-    //private Bid bid;
     private ProductListing pl;
+    private AuctionUser seller;
     
 
     /**
@@ -73,11 +76,10 @@ public class ProductDescriptionView {
         pl.setDescription("Some text");
         
         Date d1 = new Date();
-        Date d2 = new Date();
         Calendar c = Calendar.getInstance(); 
         c.setTime(d1); 
         c.add(Calendar.HOUR, 3);
-        d2 = c.getTime();
+        Date d2 = c.getTime();
         pl.setPublished(d1); 
         pl.setClosing(d2);
         
@@ -99,7 +101,11 @@ public class ProductDescriptionView {
         f1.setFeedback("tjohei");
         f1.setRater(rater);
         feeds.add(f1);
-                
+        
+        AuctionUser seller = new AuctionUser();
+        seller.setName("Arve");
+        
+        
         List<String> comments = new ArrayList<>();
         Product prod1 = new Product();
         
@@ -108,6 +114,9 @@ public class ProductDescriptionView {
         prolist.add(pl);
         product.setProductListings(prolist);
         product.setFeedbacks(feeds);
+        seller.setListings(prolist);
+        
+        //auctionUserFacade.create(seller);
         
     }
     
@@ -145,6 +154,21 @@ public class ProductDescriptionView {
         return prod.getFeatures();
     }
     
+    public AuctionUser getSeller(){
+        Long prolis = 1238888L;
+        
+        AuctionUser sell = new AuctionUser(); //fjern denne
+        //AuctionUser sell =  auctionUserFacade.getSeller("listings_id", prolis);
+        if(sell != null){
+            return sell;
+        } else {
+            AuctionUser us = new AuctionUser();
+            us.setName("Sindre");
+            return us;
+        }
+        
+    }
+    
     //Må legge til innlogget bruker
     public void addBid(){
         Bid newBid = new Bid();
@@ -153,6 +177,17 @@ public class ProductDescriptionView {
         bids.add(newBid);
         pl.setBids(bids);
         //bidFacade.create(newBid);
+    }
+    
+    public void addSeller(){
+        AuctionUser test = new AuctionUser();
+        test.setName("Kunt Aril Hareide");
+        List<ProductListing> pls = new ArrayList<>();
+        pls.add(pl);
+        test.setListings(pls);
+        //plFacade.create(pl);
+        auctionUserFacade.create(test);
+        
     }
     
     //Må legge til innlogget bruker
@@ -224,6 +259,10 @@ public class ProductDescriptionView {
             }
         }
         return comments;
+    }
+    public String getSellerName(){
+        String name = this.getSeller().getName();
+        return name;
     }
     
 }
