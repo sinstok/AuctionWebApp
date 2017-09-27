@@ -58,7 +58,6 @@ public class ProductDescriptionView {
     private String comment;
     private String rating;
     private ProductListing pl;
-    private AuctionUser seller;
 
     /**
      * Creates a new instance of SomeView
@@ -83,45 +82,63 @@ public class ProductDescriptionView {
         pl.setClosing(d2);
 
         this.setRating("3.5");
-
-        //Bid bid = bidFacade.find(109);
-        //Bid bid2 = bidFacade.find(108);
+        
         Bid b1 = new Bid();
         b1.setAmount(30);
+        //bidFacade.create(b1);
         Bid b2 = new Bid();
         b2.setAmount(35);
+        //bidFacade.create(b2);
         List<Bid> bids = new ArrayList<>();
         bids.add(b2);
         bids.add(b1);
         pl.setBids(bids);
-
+        
+        
         AuctionUser rater = new AuctionUser();
         rater.setName("Gustav");
+        //auctionUserFacade.create(rater);
         List<Feedback> feeds = new ArrayList<>();
         Feedback f1 = new Feedback();
         f1.setFeedback("tjohei");
         f1.setRater(rater);
+        //feedbackFacade.create(f1);
         feeds.add(f1);
-
-        AuctionUser seller = new AuctionUser();
-        seller.setName("Arve");
-
-        List<String> comments = new ArrayList<>();
-        Product prod1 = new Product();
-
+        
+        
         List<ProductListing> prolist = new ArrayList<>();
         prolist.add(pl);
+        //plFacade.create(pl);
         product.setProductListings(prolist);
         product.setFeedbacks(feeds);
-        seller.setListings(prolist);
-        //auctionUserFacade.create(seller);
+        //productFacade.create(product);
+        
     }
-
+    
+    /*
+    for(liste med pl var=item)
+    <h:commandLink action="#{productListing(item.id)}"
+    */
+    
+    public ProductListing getProductListing(int id) {
+        Long proListId = Long.valueOf(id);
+        ProductListing proList = plFacade.find(proListId);
+        return proList;
+    }
+    
     public ProductListing getProductListing() {
         return pl;
     }
 
     public Product getProduct() {
+        Long prolis;
+        //Må finne den ekte id-en før denne funker sikkelig
+        /*prolis = Long.valueOf(this.getProductListing(7).getId());
+        
+        Product prod = productFacade.getProductFromListing("listings_id", prolis);
+        if(prod != null){
+            return prod;
+        }*/
         return product;
     }
 
@@ -160,12 +177,14 @@ public class ProductDescriptionView {
     }
 
     public AuctionUser getSeller() {
-        /*Long prolis = 59L;
+        /*Long prolis = 59L; //Må finne den ekte id-en før denne funker
         
         AuctionUser sell =  auctionUserFacade.getSeller("listings_id", prolis);
         if(sell != null){
             return sell;
         } else {*/
+        
+        //Placeholder
         AuctionUser us = new AuctionUser();
         us.setName("Sindre");
         return us;
@@ -281,5 +300,4 @@ public class ProductDescriptionView {
         String name = this.getSeller().getName();
         return name;
     }
-
 }

@@ -81,6 +81,7 @@ public class DBean {
         
         
         ProductListing pl1 = new ProductListing();
+        pl1.setId(7L);
         pl1.setBasePrice(3);
         pl1.setClosing(new Date());
         pl1.setPublished(new Date());
