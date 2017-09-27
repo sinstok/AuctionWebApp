@@ -18,34 +18,39 @@ import javax.faces.context.FacesContext;
 @SessionScoped
 public class LoginBean implements Serializable {
 
-    private boolean loggedIn;
+    private long userId;
 
     /**
      * Creates a new instance of LoginBean
      */
     public LoginBean() {
-
+        userId = 0;
     }
 
     public boolean login(long id) {
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getSessionMap().put("user", id);
-        loggedIn = true;
+        userId = id;
         return true;
     }
 
     public void logOut() {
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().invalidateSession();
-        loggedIn = false;
+        userId = 0;
     }
 
     public boolean isLoggedIn() {
-        return loggedIn;
+        FacesContext context = FacesContext.getCurrentInstance();
+        return context.getExternalContext().getSessionMap().get("user") != null;
     }
 
-    public void setLoggedIn(boolean loggedIn) {
-        this.loggedIn = loggedIn;
+    public long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
 
 }

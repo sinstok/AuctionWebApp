@@ -12,6 +12,7 @@ import helpers.LoginBean;
 import helpers.PasswordHash;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
 
 /**
@@ -23,10 +24,10 @@ import javax.faces.context.FacesContext;
 public class LoginView {
 
     @EJB
-    private AuctionUserFacade auctionUserFacade;
-
-    private LoginBean loginBean;
-    private PasswordHash hash;
+    private final AuctionUserFacade auctionUserFacade;
+    
+    private final LoginBean loginBean;
+    private final PasswordHash hash;
     private String email;
     private String password;
 
@@ -48,7 +49,7 @@ public class LoginView {
         }
         if (id != 0) {
             if (loginBean.login(id)) {
-                return "index?faces-redirect-true";
+                return "/faces/index";
             } else {
                 FacesMessage msg = new FacesMessage("Wrong user input!", "ERROR MSG");
                 FacesContext.getCurrentInstance().addMessage(null, msg);

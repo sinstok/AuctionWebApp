@@ -60,7 +60,7 @@ public class RegisterUserView {
                     this.newUser.setPassword(hashedPassword);
                     auctionUserFacade.create(this.newUser);
                     context.getExternalContext().getSessionMap().put("user", this.newUser.getId());
-                    loginBean.setLoggedIn(true);
+                    loginBean.setUserId(this.newUser.getId());
                     return "index?faces-redirect=true";
                 } catch (Exception e) {
                     context.addMessage(null, new FacesMessage("Woops. Some of the input you wrote is wrong."));
