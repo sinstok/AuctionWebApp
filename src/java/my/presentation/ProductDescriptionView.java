@@ -186,7 +186,9 @@ public class ProductDescriptionView {
             }
             RatingCalculator rc = new RatingCalculator();
             Double rating = rc.calcuatedRating(ratings);
-            return rating.toString();
+            if(rating > 0){
+               return rating.toString(); 
+            }
         }
         return "No ratings";
     }
