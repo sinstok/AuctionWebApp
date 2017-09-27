@@ -30,7 +30,7 @@ public class ProductListing implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private double basePrice;
-    private String image;
+    private byte[] image;
     private String description;
     @Temporal(TemporalType.TIMESTAMP)
     private Date closing;
@@ -67,11 +67,11 @@ public class ProductListing implements Serializable {
         this.basePrice = basePrice;
     }
 
-    public String getImage() {
+    public byte[] getImage() {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImage(byte[] image) {
         this.image = image;
     }
 
