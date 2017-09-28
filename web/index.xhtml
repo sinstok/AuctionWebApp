@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:a="http://xmlns.jcp.org/jsf/passthrough" 
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <h:head>
         <title>Facelet Title</title>
         <link rel="stylesheet" href="resources/css/bootstrap.css" />
@@ -34,8 +35,19 @@
                 </h:form>
                 <h:form>
                     <ul class="nav navbar-nav navbar-right">
-                        <li><h:commandLink action="loginPage"><span class="glyphicon glyphicon-log-in"> #{user}</span></h:commandLink></li>
-                        <li><h:commandLink value=" Logout" action="#{LoginView.logOut}" /></li>
+                        <li>
+                            <c:if test="#{user == null}">
+                                <h:commandLink action="loginPage">
+                                    <span class="glyphicon glyphicon-log-in"> Login</span>
+                                </h:commandLink>
+                            </c:if>
+                            <c:if test="#{user != null}">
+                                <h:commandLink action="#{UserProfileView.findUser(user)}" value="My Profile" />
+                                <h:commandLink action="#{LoginView.logOut()}">
+                                    <span class="glyphicon glyphicon-log-in"> Logout</span>
+                                </h:commandLink>
+                            </c:if>
+                        </li>
                         <li><h:commandLink action="productdescription"></h:commandLink></li>
                     </ul>
                 </h:form>
@@ -70,7 +82,7 @@
                         <div class="row well">
                             <h:graphicImage value="/image/productListing/#{productListing.id}" height="200"/>
                             <h:commandLink action="#{PDView.toProductListing(productListing.id)}">
-                            #{productListing.product.name}
+                                #{productListing.product.name}
                             </h:commandLink> <br />
                         </div>
                     </ui:repeat>
