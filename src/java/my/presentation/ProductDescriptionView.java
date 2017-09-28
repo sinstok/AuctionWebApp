@@ -58,6 +58,7 @@ public class ProductDescriptionView {
     private String comment;
     private String rating;
     private ProductListing pl;
+    private int plID = 2;
 
     /**
      * Creates a new instance of SomeView
@@ -120,28 +121,59 @@ public class ProductDescriptionView {
     <h:commandLink action="#{productListing(item.id)}"
     */
     
+    //From productlisting
     public ProductListing getProductListing(int id) {
         Long proListId = Long.valueOf(id);
         ProductListing proList = plFacade.find(proListId);
         return proList;
     }
     
-    public ProductListing getProductListing() {
-        return pl;
+    public String getDescription(){
+        //Må finne den ekte id-en før denne funker sikkelig
+        return this.getProductListing(plID).getDescription();
     }
-
+    
+    public byte[] getImage(){
+        //Må finne den ekte id-en før denne funker sikkelig
+        return this.getProductListing(plID).getImage();
+    }
+    
+    public Date getPublished(){
+        //Må finne den ekte id-en før denne funker sikkelig
+        return this.getProductListing(plID).getPublished();
+    }
+    
+    public Date getClosing(){
+        //Må finne den ekte id-en før denne funker sikkelig
+        return this.getProductListing(plID).getClosing();
+    }
+    //
+    
+    //From product
     public Product getProduct() {
         Long prolis;
         //Må finne den ekte id-en før denne funker sikkelig
-        /*prolis = Long.valueOf(this.getProductListing(7).getId());
+        prolis = Long.valueOf(this.getProductListing(plID).getId());
         
         Product prod = productFacade.getProductFromListing("listings_id", prolis);
         if(prod != null){
             return prod;
-        }*/
+        }
         return product;
     }
+    
+    public String getThisProduct() {
+        Product prod = this.getProduct();
+        return prod.getName();
+    }
 
+    public String getThisProductFeats() {
+        Product prod = this.getProduct();
+        return prod.getFeatures();
+    }
+    //
+
+    //From userinput
     public String getValue() {
         return value;
     }
@@ -165,16 +197,7 @@ public class ProductDescriptionView {
     public void setRating(String rating) {
         this.rating = rating;
     }
-
-    public String getThisProduct() {
-        Product prod = this.getProduct();
-        return prod.getName();
-    }
-
-    public String getThisProductFeats() {
-        Product prod = this.getProduct();
-        return prod.getFeatures();
-    }
+    //
 
     public AuctionUser getSeller() {
         /*Long prolis = 59L; //Må finne den ekte id-en før denne funker
@@ -189,7 +212,6 @@ public class ProductDescriptionView {
         us.setName("Sindre");
         return us;
         //}
-
     }
 
     public String getProductRating() {
@@ -216,10 +238,14 @@ public class ProductDescriptionView {
     public void addBid() {
         Bid newBid = new Bid();
         newBid.setAmount(Double.parseDouble(this.getValue()));
-        List<Bid> bids = pl.getBids();
+        ProductListing prolis = this.getProductListing(2);
+        //List<Bid> bids = pl.getBids();
+        List<Bid> bids = prolis.getBids();
         bids.add(newBid);
-        pl.setBids(bids);
-        //bidFacade.create(newBid);
+        //pl.setBids(bids);
+        prolis.setBids(bids);
+        plFacade.edit(prolis);
+        bidFacade.create(newBid);
     }
 
     //Må legge til innlogget bruker
@@ -236,12 +262,12 @@ public class ProductDescriptionView {
         List<Feedback> feeds = prod.getFeedbacks();
         feeds.add(feed);
         prod.setFeedbacks(feeds);
-        //productFacade.edit(prod);
+        productFacade.edit(prod);
         feedbackFacade.create(feed);
     }
 
     public String getTimeLeft() {
-        Date closing = pl.getClosing();
+        Date closing = this.getProductListing(plID).getClosing();
         Date now = new Date();
         String time;
 
@@ -270,8 +296,10 @@ public class ProductDescriptionView {
     }
 
     public double getHighestBid() {
-        List<Bid> bids = pl.getBids();
-        double b = pl.getBasePrice();
+        //List<Bid> bids = pl.getBids();
+        //double b = pl.getBasePrice();
+        List<Bid> bids = this.getProductListing(plID).getBids();
+        double b = this.getProductListing(plID).getBasePrice();
         if (!(bids.isEmpty())) {
             for (int i = 0; i <= bids.size() - 1; i++) {
                 double current = bids.get(i).getAmount();
