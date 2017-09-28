@@ -58,7 +58,7 @@ public class ProductDescriptionView {
     private String comment;
     private String rating;
     private ProductListing pl;
-    private int plID = 52;
+    private int plID = 202;
 
     /**
      * Creates a new instance of SomeView
