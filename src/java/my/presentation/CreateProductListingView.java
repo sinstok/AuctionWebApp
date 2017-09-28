@@ -69,6 +69,7 @@ public class CreateProductListingView implements Serializable{
         //auctionUserFacade.edit(au);
         
         product.addListing(productListing);
+        productListing.setProduct(product);
         productFacade.edit(product);
         //productListingFacade.create(productListing);
         return "returnFromproductCreation";

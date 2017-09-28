@@ -9,6 +9,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.CascadeType;
+import static javax.persistence.CascadeType.MERGE;
 import static javax.persistence.CascadeType.PERSIST;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -39,7 +41,7 @@ public class ProductListing implements Serializable {
     private Date published;
     @OneToMany(cascade=PERSIST)
     private List<Bid> bids;
-    @ManyToOne
+    @ManyToOne(cascade=MERGE)
     private Product product;
     
     public void ProductListing(){

@@ -85,8 +85,8 @@ public class DBean {
         pl1.setClosing(new Date());
         pl1.setPublished(new Date());
         pl1.setDescription("a little rough around the edges");
-        prod1.addListing(pl1);
-        productFacade.edit(prod1);
+        pl1.setProduct(prod1);
+        //productFacade.edit(prod1);
         seller.addListing(pl1);
         userFacade.edit(seller);
         

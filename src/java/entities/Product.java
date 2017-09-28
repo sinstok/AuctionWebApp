@@ -8,6 +8,7 @@ package entities;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import static javax.persistence.CascadeType.MERGE;
 import static javax.persistence.CascadeType.PERSIST;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -30,7 +31,7 @@ public class Product implements Serializable {
     private String features;
     @OneToMany(cascade=PERSIST)
     private List<Feedback> feedbacks;
-    @OneToMany(cascade=PERSIST, mappedBy="product")
+    @OneToMany(cascade={PERSIST, MERGE}, mappedBy="product")
     private List<ProductListing> productListings;
     
     public void addListing(ProductListing productListing){
