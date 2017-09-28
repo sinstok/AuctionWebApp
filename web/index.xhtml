@@ -35,6 +35,7 @@
                     <ul class="nav navbar-nav navbar-right">
                         <li><h:commandLink action="loginPage"><span class="glyphicon glyphicon-log-in"> #{user}</span></h:commandLink></li>
                         <li><h:commandLink value=" Logout" action="#{LoginView.logOut}" /></li>
+                        <li><h:commandLink action="productdescription"></h:commandLink></li>
                     </ul>
                 </h:form>
             </div>
@@ -51,7 +52,6 @@
                 </div>
             </div>
         </h:form>
-        <p> <a href="http://localhost:8080/AuctionWebApp/faces/productdescription.xhtml"> Link til produktbeskrivelse</a> </p>
         <h:graphicImage value="/image/productListing/10" />
     </h:body>
 </html>
