@@ -30,7 +30,7 @@ public class Product implements Serializable {
     private String features;
     @OneToMany(cascade=PERSIST)
     private List<Feedback> feedbacks;
-    @OneToMany(cascade=PERSIST)
+    @OneToMany(cascade=PERSIST, mappedBy="product")
     private List<ProductListing> productListings;
     
     public void addListing(ProductListing productListing){

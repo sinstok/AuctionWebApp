@@ -155,7 +155,7 @@ public class ProductDescriptionView {
         //Må finne den ekte id-en før denne funker sikkelig
         prolis = Long.valueOf(this.getProductListing(plID).getId());
         
-        Product prod = productFacade.getProductFromListing("listings_id", prolis);
+        Product prod = productFacade.getProductFromListing("listings_id", Long.valueOf(plID));
         if(prod != null){
             return prod;
         }

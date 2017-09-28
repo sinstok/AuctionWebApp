@@ -14,6 +14,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -38,6 +39,8 @@ public class ProductListing implements Serializable {
     private Date published;
     @OneToMany(cascade=PERSIST)
     private List<Bid> bids;
+    @ManyToOne
+    private Product product;
     
     public void ProductListing(){
         bids = new ArrayList<Bid>();
@@ -58,6 +61,16 @@ public class ProductListing implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+    
+    
 
     public double getBasePrice() {
         return basePrice;
