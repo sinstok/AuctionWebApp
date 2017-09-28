@@ -5,12 +5,15 @@
  */
 package entities;
 
+import helpers.Category;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import static javax.persistence.CascadeType.MERGE;
 import static javax.persistence.CascadeType.PERSIST;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -33,6 +36,17 @@ public class Product implements Serializable {
     private List<Feedback> feedbacks;
     @OneToMany(cascade={PERSIST, MERGE}, mappedBy="product")
     private List<ProductListing> productListings;
+    
+    @Enumerated(EnumType.STRING)
+    private Category category;
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
     
     public void addListing(ProductListing productListing){
         productListings.add(productListing);

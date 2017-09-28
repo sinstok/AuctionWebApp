@@ -6,13 +6,12 @@
 package my.presentation;
 
 import boundary.ProductListingFacade;
-import entities.Product;
 import entities.ProductListing;
+import helpers.Category;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.inject.Named;
-import javax.enterprise.context.Dependent;
 import javax.enterprise.context.RequestScoped;
 
 /**
@@ -40,12 +39,18 @@ public class ProductOverView {
         return "hehe";
     }
     
-    public List<ProductListing> getProductListings(int id) {
-        int[] range = {0,4};
-        
+    public List<ProductListing> getProductListings() {        
         List<ProductListing> list = plFacade.findAll();
-    
         return list;
+    }
+    
+    public List<String> getCategories() {
+        List<String> categories;
+        categories = new ArrayList<>();
+        for(Category c : Category.values()) {
+            categories.add(c.toString());
+        }
+        return categories;
     }
     
 }
