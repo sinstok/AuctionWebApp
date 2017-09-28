@@ -235,7 +235,7 @@ public class ProductDescriptionView {
     public void addBid() {
         Bid newBid = new Bid();
         newBid.setAmount(Double.parseDouble(this.getValue()));
-        ProductListing prolis = this.getProductListing(2);
+        ProductListing prolis = this.getProductListing(plID);
         //List<Bid> bids = pl.getBids();
         List<Bid> bids = prolis.getBids();
         bids.add(newBid);
