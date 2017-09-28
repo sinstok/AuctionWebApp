@@ -128,6 +128,11 @@ public class ProductDescriptionView {
         return proList;
     }
     
+    public String toProductListing(int id){
+        plID = id;
+        return "productdescription";
+    }
+    
     public String getDescription(){
         //Må finne den ekte id-en før denne funker sikkelig
         return this.getProductListing(plID).getDescription();
