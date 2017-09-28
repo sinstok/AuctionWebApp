@@ -33,7 +33,7 @@ public class ImageServlet extends HttpServlet {
     
    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
     String productListingId = URLDecoder.decode(req.getPathInfo().substring(1), "UTF-8");
-    ProductListing pl = productListingFacade.find(Integer.parseInt(productListingId));
+    ProductListing pl = productListingFacade.find(Long.parseLong(productListingId));
    
     byte[] bytes = null;
     if(pl != null){
