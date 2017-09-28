@@ -43,12 +43,12 @@
         <div class="row col-md-10" style="padding-left: 7em">
             <div class="container-fluid col-md-8 well">
                 <div class="row" style="padding-top: 1em">
-                    <div class="col-md-3">
-                        <h:graphicImage value="/image/productListing/52" />
+                    <div class="col-md-5">
+                        <h:graphicImage value="/image/productListing/202" />
                     </div>
-                    <div class="col-md-9">
-                        <p style="font-size: 2em">Product name: <h:outputLabel value="#{PDView.thisProduct}" /> </p>
-                        <p><h:outputText value="#{PDView.productRating}" /></p>
+                    <div class="col-md-7">
+                        <p style="font-size: 2em">Product Name: <h:outputLabel value="#{PDView.thisProduct}" /> </p>
+                        <p> Product Rating: <h:outputText value="#{PDView.productRating}" /></p>
                         <p style="font-size: 2em">Current Bid: <h:outputLabel value="#{PDView.highestBid}" /> $</p>
                         <p style="font-size: 1em">Place your bid in dollar</p>
                         <div class="row">
@@ -68,7 +68,11 @@
                     <div class="row" style="padding-top: 1em">
                         <div class="col-md-10">
                             <div>
+                                <p style="font-size: 2em">Description: </p>
                                 <h:outputLabel value="#{PDView.description}" />
+                            </div>
+                            <div>
+                                <p>Feautres: <h:outputLabel value="#{PDView.thisProductFeats}" /> </p>
                             </div>
                             <h:form>
                                 <p> Write Comment
