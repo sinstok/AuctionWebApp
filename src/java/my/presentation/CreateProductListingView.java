@@ -5,10 +5,13 @@
  */
 package my.presentation;
 
+import boundary.AuctionUserFacade;
 import boundary.ProductFacade;
 import boundary.ProductListingFacade;
+import entities.AuctionUser;
 import entities.Product;
 import entities.ProductListing;
+import helpers.LoginBean;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
@@ -18,6 +21,7 @@ import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
 import javax.faces.flow.FlowScoped;
 import javax.servlet.http.Part;
@@ -34,6 +38,8 @@ public class CreateProductListingView implements Serializable{
     ProductListingFacade productListingFacade;
     @EJB
     ProductFacade productFacade;
+    @EJB
+    AuctionUserFacade auctionUserFacade;
 
     private Product product;
 
@@ -48,6 +54,7 @@ public class CreateProductListingView implements Serializable{
     }
     
      public String postProductListing() throws IOException{
+         
         if(product.getId() == null){
             productFacade.create(product);
         }
@@ -56,6 +63,11 @@ public class CreateProductListingView implements Serializable{
         byte[] targetArray = new byte[is.available()];
         is.read(targetArray);
         productListing.setImage(targetArray);
+        
+        //AuctionUser au = auctionUserFacade.find(userId);
+        //au.addListing(productListing);
+        //auctionUserFacade.edit(au);
+        
         product.addListing(productListing);
         productFacade.edit(product);
         //productListingFacade.create(productListing);
