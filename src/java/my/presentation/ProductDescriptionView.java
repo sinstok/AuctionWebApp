@@ -58,7 +58,7 @@ public class ProductDescriptionView {
     private String comment;
     private String rating;
     private ProductListing pl;
-    private int plID = 102;
+    private int plID = 52;
 
     /**
      * Creates a new instance of SomeView
@@ -156,15 +156,7 @@ public class ProductDescriptionView {
     
     //From product
     public Product getProduct() {
-        Long prolis;
-        //Må finne den ekte id-en før denne funker sikkelig
-        prolis = Long.valueOf(this.getProductListing(plID).getId());
-        
-        Product prod = productFacade.getProductFromListing("listings_id", Long.valueOf(plID));
-        if(prod != null){
-            return prod;
-        }
-        return product;
+        return this.getProductListing(plID).getProduct();
     }
     
     public String getThisProduct() {
@@ -243,7 +235,7 @@ public class ProductDescriptionView {
     public void addBid() {
         Bid newBid = new Bid();
         newBid.setAmount(Double.parseDouble(this.getValue()));
-        ProductListing prolis = this.getProductListing(2);
+        ProductListing prolis = this.getProductListing(plID);
         //List<Bid> bids = pl.getBids();
         List<Bid> bids = prolis.getBids();
         bids.add(newBid);
