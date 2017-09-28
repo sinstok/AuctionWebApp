@@ -13,6 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 
 /**
@@ -37,9 +38,11 @@ public class AuctionUser implements Serializable {
     private List<Feedback> feedbacks;
 
     @OneToMany(cascade = PERSIST)
+    @JoinTable(name="auctionuser_listedproductlisting")
     private List<ProductListing> listings;
 
     @OneToMany(cascade = PERSIST)
+    @JoinTable(name="auctionuser_biddedproductlisting")
     private List<ProductListing> bids;
 
     public void addFeedback(Feedback feedback) {

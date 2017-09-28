@@ -52,30 +52,7 @@
                 </div>
             </div>
         </h:form>
-        <div class="row col-md-12">
-            <h:form>
-                <div class="col-md-1">
-                    <label>Categories</label>
-                    <ul class="nav nav-pills nav-stacked">
-                        <li><a href="#">Games</a></li>
-                        <li><a href="#">Clothing</a></li>
-                        <li><a href="#">Misc</a></li>
-                        <li><a href="#">Food</a></li>
-                    </ul>
-		</div>
-            </h:form>
-
-            <h:form>
-		<div class="container-fluid col-md-10">
-                    <ui:repeat value="#{ProductOverview.getProductListings()}" var="item">
-                        <div class="row well">
-                            <p style="font-size: 2em">Product 1</p>
-                            <h:commandLink action="#{productDescriptionView.getProductListing(item.id)}">#{item.name}</h:commandLink>
-			</div>
-                    </ui:repeat>
-		</div>
-            </h:form>
-	</div>
+        <p> <a href="http://localhost:8080/AuctionWebApp/faces/productdescription.xhtml"> Link til produktbeskrivelse</a> </p>
     </h:body>
 </html>
 
