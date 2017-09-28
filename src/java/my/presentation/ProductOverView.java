@@ -8,6 +8,7 @@ package my.presentation;
 import boundary.ProductListingFacade;
 import entities.Product;
 import entities.ProductListing;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.inject.Named;
@@ -37,6 +38,14 @@ public class ProductOverView {
         }
         
         return "hehe";
+    }
+    
+    public List<ProductListing> getProductListings(int id) {
+        int[] range = {0,4};
+        
+        List<ProductListing> list = plFacade.findAll();
+    
+        return list;
     }
     
 }

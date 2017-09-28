@@ -29,4 +29,10 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
         super(ProductListing.class);
     }
     
+    public String search(String search) 
+    {
+        
+        return "kult";
+    }
+    
 }
