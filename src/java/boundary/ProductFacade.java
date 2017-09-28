@@ -11,6 +11,7 @@ import entities.Feedback;
 import entities.Product;
 import entities.ProductListing;
 import java.util.Date;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -32,6 +33,18 @@ public class ProductFacade extends AbstractFacade<Product> {
 
     public ProductFacade() {
         super(Product.class);
+    }
+    
+    public Product getProductFromListing(String fieldName, Long id) {
+        List<Product> products = em.createQuery("SELECT p FROM ProductListing s JOIN Product p WHERE s.id = :val", Product.class).setParameter("val", id).getResultList();
+
+        Product prod = null;
+        if (products != null) {
+
+            prod = products.get(0);
+        }
+        
+        return prod;
     }
     
 }

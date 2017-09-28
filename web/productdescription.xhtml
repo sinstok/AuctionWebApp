@@ -18,10 +18,11 @@
         </h:form>
         
         <p>Product description: </p>
-        <h:outputLabel value="#{PDView.productListing.description}" />
+        <h:outputLabel value="#{PDView.description}" />
+        <h:outputLabel value="#{PDView.image}" />
         
-        <p><h:outputLabel value="#{PDView.productListing.published}" /></p>
-        <p><h:outputLabel value="#{PDView.productListing.closing}" /></p>
+        <p><h:outputLabel value="#{PDView.published}" /></p>
+        <p><h:outputLabel value="#{PDView.closing}" /></p>
         <p><h:outputLabel value="#{PDView.timeLeft}" /></p>
         
         <h:form>
@@ -42,10 +43,7 @@
         <p><h:outputText value="#{PDView.allComments}" /></p>
         <p><h:outputText value="#{PDView.sellerName}" /></p>
         <h:form>
-            <p><h:commandButton action="#{PDView.addSeller}" value=" Add Seller" /></p>
-        </h:form>
-        <h:form>
-            <p><h:outputText value="#{PDView.rating}" /></p>
+            <p><h:outputText value="#{PDView.productRating}" /></p>
         </h:form>
     </h:body>
 </html>

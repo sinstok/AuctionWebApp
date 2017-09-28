@@ -37,7 +37,7 @@ public class ProductOverView {
            pl  = pls.get(size - 1);         
         }
         
-        return pl.getImage();
+        return "hehe";
     }
     
     public List<ProductListing> getProductListings(int id) {

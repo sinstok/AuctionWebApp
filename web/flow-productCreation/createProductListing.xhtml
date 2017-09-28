@@ -9,12 +9,14 @@
     </h:head>
     <h:body>
         <h:outputLabel value="#{createProductListingView.product.name}" />
-        <h:form>
+        <h:form enctype="multipart/form-data">
            <h:outputLabel value="Starting price" />
            <h:inputText value="#{createProductListingView.productListing.basePrice}" />
             <br/>
             <h:outputLabel value="Description: " />
             <h:inputText value="#{createProductListingView.productListing.description}" />
+            <br/>
+            <h:inputFile value="#{createProductListingView.file}" />
             <br/>
             <h:outputLabel value="Closing date: " />
             <h:inputText value="#{createProductListingView.productListing.closing}" p:placeholder="yyyy-MM-dd">
