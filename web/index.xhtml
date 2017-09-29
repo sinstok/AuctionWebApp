@@ -83,12 +83,12 @@
             <div class="container-fluid col-md-10">
                 <h:form>
                     <ui:repeat value="#{productOverView.getProductListings()}" var="productListing"> 
-                        <div class="row well">
-                            <h:graphicImage value="/image/productListing/#{productListing.id}" height="200"/>
-                            <h:commandLink action="#{PDView.toProductListing(productListing.id)}">
+                        <h:commandLink action="#{PDView.toProductListing(productListing.id)}">
+                            <div class="row well">
+                                <h:graphicImage value="/image/productListing/#{productListing.id}" height="200"/>
                                 #{productListing.product.name}
-                            </h:commandLink> <br />
-                        </div>
+                            </div>
+                        </h:commandLink> <br />
                     </ui:repeat>
                 </h:form>
             </div>
