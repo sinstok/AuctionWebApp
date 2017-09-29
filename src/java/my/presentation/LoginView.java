@@ -49,7 +49,7 @@ public class LoginView {
         }
         if (id != 0) {
             if (loginBean.login(id)) {
-                return "index?faces-redirect-true";
+                return "index?faces-redirect=true";
             } else {
                 FacesMessage msg = new FacesMessage("Wrong user input!", "ERROR MSG");
                 FacesContext.getCurrentInstance().addMessage(null, msg);

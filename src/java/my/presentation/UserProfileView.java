@@ -44,7 +44,7 @@ public class UserProfileView {
             this.user = auctionUserFacade.find(id);
             return "userProfile";
         } else {
-            return "index?faces-redirect-true";
+            return "index?faces-redirect=true";
         }
     }
 

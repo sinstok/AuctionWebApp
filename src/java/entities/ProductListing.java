@@ -36,13 +36,13 @@ public class ProductListing implements Serializable {
     private byte[] image;
     private String description;
     @Temporal(TemporalType.TIMESTAMP)
-    private Date closing;
+    private Date closing = new Date();
     @Temporal(TemporalType.TIMESTAMP)
-    private Date published;
+    private Date published = new Date();
     @OneToMany(cascade=PERSIST)
-    private List<Bid> bids;
+    private List<Bid> bids = new ArrayList<Bid>();
     @ManyToOne(cascade=MERGE)
-    private Product product;
+    private Product product = new Product();
     
     public void ProductListing(){
         bids = new ArrayList<Bid>();

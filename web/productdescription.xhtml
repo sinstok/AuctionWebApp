@@ -2,7 +2,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <h:head>
         <title>Product description</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -34,8 +35,24 @@
                 </h:form>
                 <h:form>
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> #{user}</a></li>
-                        <li><h:commandLink value=" Logout" action="#{LoginView.logOut}" /></li>
+                        <c:if test="#{user == null}">
+                            <li>
+                                <h:commandLink action="loginPage">
+                                    <span class="glyphicon glyphicon-log-in" /> Login
+                                </h:commandLink>
+                            </li>
+                        </c:if>
+                        <c:if test="#{user != null}">
+                            <li>
+                                <h:commandLink action="#{UserProfileView.findUser(user)}" value="My Profile" />
+                            </li>
+                            <li>
+                                <h:commandLink action="#{LoginView.logOut()}">
+                                    Logout <span class="glyphicon glyphicon-log-out" />
+                                </h:commandLink>
+                            </li>
+                        </c:if>
+                        <!--<li><h:commandLink action="productdescription"></h:commandLink></li>-->
                     </ul>
                 </h:form>
             </div>
@@ -44,10 +61,10 @@
             <div class="container-fluid col-md-8 well">
                 <div class="row" style="padding-top: 1em">
                     <div class="col-md-5">
-                        <h:graphicImage value="/image/productListing/#{PDView.ID}" />
+                        <h:graphicImage value="/image/productListing/#{PDView.ID}" height="200"/>
                     </div>
                     <div class="col-md-7">
-                        <p style="font-size: 2em">Product Name: <h:outputLabel value="#{PDView.thisProduct}" /> </p>
+                        <p style="font-size: 2em">Product Name: <h:outputLabel value="#{PDView.pl.product.name}" /> </p>
                         <p> Product Rating: <h:outputText value="#{PDView.productRating}" /></p>
                         <p style="font-size: 2em">Current Bid: <h:outputLabel value="#{PDView.highestBid}" /> $</p>
                         <p style="font-size: 1em">Place your bid in dollar</p>
@@ -60,8 +77,8 @@
                             </div>
                         </div>
                         <div>
-                            <p style="font-size: 1em">Date published: <h:outputLabel value="#{PDView.published}" /></p>
-                            <p style="font-size: 1em">Closing date: <h:outputLabel value="#{PDView.closing}" /></p>
+                            <p style="font-size: 1em">Date published: <h:outputLabel value="#{PDView.pl.published}" /></p>
+                            <p style="font-size: 1em">Closing date: <h:outputLabel value="#{PDView.pl.closing}" /></p>
                             <p style="font-size: 1em"><h:outputLabel value="#{PDView.timeLeft}" /></p>
                         </div>
                     </div>
@@ -69,7 +86,7 @@
                         <div class="col-md-10">
                             <div>
                                 <p style="font-size: 2em">Description: </p>
-                                <h:outputLabel value="#{PDView.description}" />
+                                <h:outputLabel value="#{PDView.pl.description}" />
                             </div>
                             <div>
                                 <p>Feautres: <h:outputLabel value="#{PDView.thisProductFeats}" /> </p>
