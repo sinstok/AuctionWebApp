@@ -9,8 +9,17 @@
     </h:head>
     <h:body>
         <h:form>
-           <h:outputLabel value="Name" />
-           <h:inputText value="#{createProductListingView.product.name}" />
+            <h:selectOneMenu value="#{createProductListingView.category}">
+                <f:selectItem itemValue="0" itemLabel="Instruments" />
+                <f:selectItem itemValue="1" itemLabel="Games" />
+                <f:selectItem itemValue="2" itemLabel="Clothes" />
+                <f:selectItem itemValue="3" itemLabel="Electronics" />
+                <f:selectItem itemValue="4" itemLabel="Books" />
+                <f:selectItem itemValue="5" itemLabel="Misc" />
+            </h:selectOneMenu>
+            <br/>
+            <h:outputLabel value="Name" />
+            <h:inputText value="#{createProductListingView.product.name}" />
             <br/>
             <h:outputLabel value="Features: " />
             <h:inputText value="#{createProductListingView.product.features}" />

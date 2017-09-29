@@ -71,11 +71,13 @@ public class DBean {
         Product prod1 = new Product();
         prod1.setFeatures("nice");
         prod1.setName("Book");
+        prod1.setCategory(Category.Books);
         productFacade.create(prod1);
         
         Product prod2 = new Product();
         prod2.setFeatures("cool");
         prod2.setName("Island");
+        prod1.setCategory(Category.Misc);
         productFacade.create(prod2);
         
         

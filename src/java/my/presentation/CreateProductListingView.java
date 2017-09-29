@@ -11,6 +11,7 @@ import boundary.ProductListingFacade;
 import entities.AuctionUser;
 import entities.Product;
 import entities.ProductListing;
+import helpers.Category;
 import helpers.LoginBean;
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,21 +20,19 @@ import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.inject.Named;
-import javax.enterprise.context.Dependent;
-import javax.enterprise.context.RequestScoped;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.context.FacesContext;
 import javax.faces.flow.FlowScoped;
+import javax.inject.Inject;
 import javax.servlet.http.Part;
+import javax.validation.constraints.NotNull;
 
 /**
  *
  * @author Joakim
  */
 @Named(value = "createProductListingView")
-@FlowScoped(value="flow-productCreation")
-public class CreateProductListingView implements Serializable{
-    
+@FlowScoped(value = "flow-productCreation")
+public class CreateProductListingView implements Serializable {
+
     @EJB
     ProductListingFacade productListingFacade;
     @EJB
@@ -41,46 +40,60 @@ public class CreateProductListingView implements Serializable{
     @EJB
     AuctionUserFacade auctionUserFacade;
 
+    @Inject
+    LoginBean login;
+
     private Product product;
 
+    @NotNull
     private Part file;
-  
+
     private ProductListing productListing;
-    
-    
+
+    @NotNull
+    private int category;
+
     public CreateProductListingView() {
         productListing = new ProductListing();
         product = new Product();
     }
-    
-     public String postProductListing() throws IOException{
-         
-        if(product.getId() == null){
+
+    public String postProductListing() throws IOException {
+
+        if (!login.isLoggedIn()) {
+            return "returnFromproductCreation";
+        }
+
+        if (product.getId() == null) {
+            Category[] categories = Category.values();
+            if(category < 1 || categories.length - 1 < category){
+                return "returnFromproductCreation";
+            }
+             product.setCategory(categories[category]);
+             
             productFacade.create(product);
         }
-        
+
         InputStream is = file.getInputStream();
         byte[] targetArray = new byte[is.available()];
         is.read(targetArray);
         productListing.setImage(targetArray);
-        
-        //AuctionUser au = auctionUserFacade.find(userId);
-        //au.addListing(productListing);
-        //auctionUserFacade.edit(au);
-        
+
+        AuctionUser au = auctionUserFacade.find(login.getUserId());
+        au.addListing(productListing);
+        auctionUserFacade.edit(au);
+
         product.addListing(productListing);
         productListing.setProduct(product);
         productFacade.edit(product);
         //productListingFacade.create(productListing);
         return "returnFromproductCreation";
     }
-     
-    public String selectProduct(long id){
+
+    public String selectProduct(long id) {
         product = productFacade.find(id);
         return "createProductListing";
     }
-    
-    
 
     public List<Product> getAllProducts() {
         return productFacade.findAll();
@@ -93,17 +106,23 @@ public class CreateProductListingView implements Serializable{
     public void setFile(Part file) {
         this.file = file;
     }
-    
-    
+
+    public int getCategory() {
+        return category;
+    }
+
+    public void setCategory(int category) {
+        this.category = category;
+    }
 
     public void setProduct(Product product) {
         this.product = product;
     }
-    
-     public Product getProduct() {
+
+    public Product getProduct() {
         return product;
     }
-     
+
     public ProductListing getProductListing() {
         return productListing;
     }
@@ -111,5 +130,5 @@ public class CreateProductListingView implements Serializable{
     public void setProductListing(ProductListing productListing) {
         this.productListing = productListing;
     }
-    
+
 }
