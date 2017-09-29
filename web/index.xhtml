@@ -32,23 +32,27 @@
                             </button>
                         </div>
                     </div>
-                </h:form>
+                </h:form>   
                 <h:form>
                     <ul class="nav navbar-nav navbar-right">
-                        <li>
-                            <c:if test="#{user == null}">
+                        <c:if test="#{user == null}">
+                            <li>
                                 <h:commandLink action="loginPage">
-                                    <span class="glyphicon glyphicon-log-in"> Login</span>
+                                    <span class="glyphicon glyphicon-log-in" /> Login
                                 </h:commandLink>
-                            </c:if>
-                            <c:if test="#{user != null}">
+                            </li>
+                        </c:if>
+                        <c:if test="#{user != null}">
+                            <li>
                                 <h:commandLink action="#{UserProfileView.findUser(user)}" value="My Profile" />
+                            </li>
+                            <li>
                                 <h:commandLink action="#{LoginView.logOut()}">
-                                    <span class="glyphicon glyphicon-log-in"> Logout</span>
+                                    Logout <span class="glyphicon glyphicon-log-out" />
                                 </h:commandLink>
-                            </c:if>
-                        </li>
-                        <li><h:commandLink action="productdescription"></h:commandLink></li>
+                            </li>
+                        </c:if>
+                        <!--<li><h:commandLink action="productdescription"></h:commandLink></li>-->
                     </ul>
                 </h:form>
             </div>
