@@ -9,12 +9,13 @@ import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import javax.annotation.ManagedBean;
 import javax.faces.context.FacesContext;
+import javax.inject.Named;
 
 /**
  *
  * @author Sindre
  */
-@ManagedBean
+@Named
 @SessionScoped
 public class LoginBean implements Serializable {
 
@@ -46,7 +47,11 @@ public class LoginBean implements Serializable {
     }
 
     public long getUserId() {
-        return userId;
+        FacesContext context = FacesContext.getCurrentInstance();
+        if(context.getExternalContext().getSessionMap().get("user") == null){
+            return -1;
+        }
+        return (long) context.getExternalContext().getSessionMap().get("user");
     }
 
     public void setUserId(long userId) {

@@ -13,6 +13,7 @@ import entities.AuctionUser;
 import entities.Feedback;
 import entities.Product;
 import entities.AuctionUser;
+import helpers.Category;
 import helpers.DBean;
 import java.util.List;
 import javax.annotation.PostConstruct;
