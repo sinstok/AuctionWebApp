@@ -13,13 +13,14 @@ import entities.ProductListing;
 import helpers.DBean;
 import helpers.RatingCalculator;
 import helpers.TimeManger;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.inject.Named;
-import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
@@ -29,7 +30,7 @@ import javax.inject.Inject;
  */
 @Named(value = "PDView")
 @RequestScoped
-public class ProductDescriptionView {
+public class ProductDescriptionView implements Serializable {
 
     @EJB
     AuctionUserFacade auctionUserFacade;
@@ -73,7 +74,21 @@ public class ProductDescriptionView {
 
     public String toProductListing(int id) {
         plID = id;
-        return "productdescription";
+        Long proListId = new Long(id);
+        this.pl = plFacade.find(proListId);
+        if (pl != null) {
+            return "productdescription";
+        } else {
+            return "index.xhtml";
+        }
+    }
+
+    public ProductListing getPl() {
+        return pl;
+    }
+
+    public void setPl(ProductListing pl) {
+        this.pl = pl;
     }
 
     public int getID() {
@@ -81,25 +96,25 @@ public class ProductDescriptionView {
     }
 
     public String getDescription() {
-        return this.getProductListing(plID).getDescription();
+        return this.pl.getDescription();
     }
 
     public byte[] getImage() {
-        return this.getProductListing(plID).getImage();
+        return this.pl.getImage();
     }
 
     public Date getPublished() {
-        return this.getProductListing(plID).getPublished();
+        return this.pl.getPublished();
     }
 
     public Date getClosing() {
-        return this.getProductListing(plID).getClosing();
+        return this.pl.getClosing();
     }
     //
 
     //From product
     public Product getProduct() {
-        return this.getProductListing(plID).getProduct();
+        return this.pl.getProduct();
     }
 
     public Product getProduct(int pID) {
@@ -159,7 +174,8 @@ public class ProductDescriptionView {
     }
 
     public String getProductRating() {
-        Product prod = this.getProduct();
+        //Product prod = this.getProduct();
+        Product prod = this.pl.getProduct();
         List<Feedback> feeds = prod.getFeedbacks();
         List<Double> ratings = new ArrayList<>();
         int size = feeds.size();
@@ -180,14 +196,22 @@ public class ProductDescriptionView {
 
     //Må legge til innlogget bruker
     public void addBid(int pID) {
+        
         Bid newBid = new Bid();
         newBid.setAmount(Double.parseDouble(this.getValue()));
-        ProductListing prolis = this.getProductListing(pID);
-        List<Bid> bids = prolis.getBids();
-        bids.add(newBid);
-        prolis.setBids(bids);
-        plFacade.edit(prolis);
-        bidFacade.create(newBid);
+        //ProductListing prolis = this.getProductListing(this.plID);
+        if (pl == null) {
+            FacesMessage msg = new FacesMessage("ProductListing er null", "ERROR MSG");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        } else {
+            List<Bid> bids = pl.getBids();
+            bids.add(newBid);
+            pl.setBids(bids);
+            plFacade.edit(pl);
+            bidFacade.create(newBid);
+        }
+        
+        this.toProductListing(pID);
     }
 
     //Må legge til innlogget bruker
@@ -219,7 +243,7 @@ public class ProductDescriptionView {
     }
 
     public String getTimeLeft() {
-        Date closing = this.getProductListing(plID).getClosing();
+        Date closing = this.pl.getClosing();
         Date now = new Date();
         TimeManger tm = new TimeManger();
         String time = tm.getTimeRemaining(closing, now);
@@ -227,8 +251,8 @@ public class ProductDescriptionView {
     }
 
     public double getHighestBid() {
-        List<Bid> bids = this.getProductListing(plID).getBids();
-        double b = this.getProductListing(plID).getBasePrice();
+        List<Bid> bids = this.pl.getBids();
+        double b = this.pl.getBasePrice();
         if (!(bids.isEmpty())) {
             for (int i = 0; i <= bids.size() - 1; i++) {
                 double current = bids.get(i).getAmount();
@@ -241,7 +265,8 @@ public class ProductDescriptionView {
     }
 
     public List<String> getAllComments() {
-        Product prod = this.getProduct();
+        //Product prod = this.getProduct();
+        Product prod = this.pl.getProduct();
         List<Feedback> feeds = prod.getFeedbacks();
         List<String> comments = new ArrayList<>();
         if (!(feeds.isEmpty())) {

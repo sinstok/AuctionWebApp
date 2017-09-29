@@ -64,7 +64,7 @@
                         <h:graphicImage value="/image/productListing/#{PDView.ID}" height="200"/>
                     </div>
                     <div class="col-md-7">
-                        <p style="font-size: 2em">Product Name: <h:outputLabel value="#{PDView.thisProduct}" /> </p>
+                        <p style="font-size: 2em">Product Name: <h:outputLabel value="#{PDView.pl.product.name}" /> </p>
                         <p> Product Rating: <h:outputText value="#{PDView.productRating}" /></p>
                         <p style="font-size: 2em">Current Bid: <h:outputLabel value="#{PDView.highestBid}" /> $</p>
                         <p style="font-size: 1em">Place your bid in dollar</p>
@@ -77,8 +77,8 @@
                             </div>
                         </div>
                         <div>
-                            <p style="font-size: 1em">Date published: <h:outputLabel value="#{PDView.published}" /></p>
-                            <p style="font-size: 1em">Closing date: <h:outputLabel value="#{PDView.closing}" /></p>
+                            <p style="font-size: 1em">Date published: <h:outputLabel value="#{PDView.pl.published}" /></p>
+                            <p style="font-size: 1em">Closing date: <h:outputLabel value="#{PDView.pl.closing}" /></p>
                             <p style="font-size: 1em"><h:outputLabel value="#{PDView.timeLeft}" /></p>
                         </div>
                     </div>
@@ -86,7 +86,7 @@
                         <div class="col-md-10">
                             <div>
                                 <p style="font-size: 2em">Description: </p>
-                                <h:outputLabel value="#{PDView.description}" />
+                                <h:outputLabel value="#{PDView.pl.description}" />
                             </div>
                             <div>
                                 <p>Feautres: <h:outputLabel value="#{PDView.thisProductFeats}" /> </p>
