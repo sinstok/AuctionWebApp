@@ -41,7 +41,7 @@ public class ProductListing implements Serializable {
     private Date published = new Date();
     @OneToMany(cascade=PERSIST)
     private List<Bid> bids = new ArrayList<Bid>();
-    @ManyToOne(cascade=MERGE)
+    @ManyToOne
     private Product product = new Product();
     
     public void ProductListing(){

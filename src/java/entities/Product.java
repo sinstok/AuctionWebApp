@@ -34,7 +34,7 @@ public class Product implements Serializable {
     private String features;
     @OneToMany(cascade=PERSIST)
     private List<Feedback> feedbacks = new ArrayList<Feedback>();
-    @OneToMany(cascade={PERSIST, MERGE}, mappedBy="product")
+    @OneToMany(cascade={PERSIST}, mappedBy="product")
     private List<ProductListing> productListings = new ArrayList<ProductListing>();
     
     @Enumerated(EnumType.STRING)

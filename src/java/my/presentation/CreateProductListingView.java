@@ -19,6 +19,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.faces.flow.FlowScoped;
 import javax.inject.Inject;
@@ -56,36 +58,45 @@ public class CreateProductListingView implements Serializable {
     public CreateProductListingView() {
         productListing = new ProductListing();
         product = new Product();
+        category = 0;
     }
 
     public String postProductListing() throws IOException {
 
         if (!login.isLoggedIn()) {
+            FacesMessage msg = new FacesMessage("       You must be logged in in order to add a product", "ERROR MSG");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
             return "returnFromproductCreation";
         }
-
+        
+        
         if (product.getId() == null) {
             Category[] categories = Category.values();
-            if(category < 1 || categories.length - 1 < category){
+            if(category < 0 || categories.length - 1 < category){
                 return "returnFromproductCreation";
             }
              product.setCategory(categories[category]);
              
             productFacade.create(product);
+        } else {
+            productFacade.edit(product);
         }
+        
+        productListing.setProduct(product);
 
         InputStream is = file.getInputStream();
         byte[] targetArray = new byte[is.available()];
         is.read(targetArray);
         productListing.setImage(targetArray);
+        
+        productListingFacade.create(productListing);
+       product.addListing(productListing);
 
         AuctionUser au = auctionUserFacade.find(login.getUserId());
         au.addListing(productListing);
         auctionUserFacade.edit(au);
 
-        product.addListing(productListing);
-        productListing.setProduct(product);
-        productFacade.edit(product);
+        
         //productListingFacade.create(productListing);
         return "returnFromproductCreation";
     }
