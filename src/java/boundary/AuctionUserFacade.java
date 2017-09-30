@@ -33,7 +33,7 @@ public class AuctionUserFacade extends AbstractFacade<AuctionUser> {
     
 
     public AuctionUser getSeller(String fieldName, Long id) {
-        List<AuctionUser> users = em.createQuery("SELECT p FROM ProductListing s JOIN AuctionUser p WHERE s.id = :val", AuctionUser.class).setParameter("val", id).getResultList();
+        List<AuctionUser> users = em.createQuery("SELECT a FROM AuctionUser a JOIN a.listings p WHERE p.id = :val ", AuctionUser.class).setParameter("val", id).getResultList();
 
         AuctionUser user = null;
         if (users != null) {
