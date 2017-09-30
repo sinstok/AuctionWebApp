@@ -131,12 +131,19 @@ public class ProductDescriptionView implements Serializable {
         if(!login.isLoggedIn()){
             return "loginPage";
         }
+        
+        AuctionUser bidder = auctionUserFacade.find(login.getUserId());
+        if(bidder.getId() == getSeller().getId()){
+            FacesMessage msg = new FacesMessage("You cannot bid on your own product", "ERROR MSG");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            return null;
+        } 
+         
         //ProductListing prolis = this.getProductListing(this.plID);
         if (pl == null) {
-            FacesMessage msg = new FacesMessage("ProductListing er null", "ERROR MSG");
+            FacesMessage msg = new FacesMessage("No productlisting", "ERROR MSG");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         } else {
-            AuctionUser bidder = auctionUserFacade.find(login.getUserId());
             
             Bid newBid = new Bid();
             newBid.setAmount(Double.parseDouble(this.getValue()));

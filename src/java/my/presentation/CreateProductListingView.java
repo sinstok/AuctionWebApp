@@ -68,35 +68,33 @@ public class CreateProductListingView implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, msg);
             return "returnFromproductCreation";
         }
-        
-        
+
         if (product.getId() == null) {
             Category[] categories = Category.values();
-            if(category < 0 || categories.length - 1 < category){
+            if (category < 0 || categories.length - 1 < category) {
                 return "returnFromproductCreation";
             }
-             product.setCategory(categories[category]);
-             
+            product.setCategory(categories[category]);
+
             productFacade.create(product);
         } else {
             productFacade.edit(product);
         }
-        
+
         productListing.setProduct(product);
 
         InputStream is = file.getInputStream();
         byte[] targetArray = new byte[is.available()];
         is.read(targetArray);
         productListing.setImage(targetArray);
-        
+
         productListingFacade.create(productListing);
-       product.addListing(productListing);
+        product.addListing(productListing);
 
         AuctionUser au = auctionUserFacade.find(login.getUserId());
         au.addListing(productListing);
         auctionUserFacade.edit(au);
 
-        
         //productListingFacade.create(productListing);
         return "returnFromproductCreation";
     }

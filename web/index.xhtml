@@ -58,32 +58,30 @@
                 </h:form>
             </div>
         </nav>
-        <h:form>
-            <div class="container well">
-                <div class="row">
-                    <div class="col-md-3" style="padding-top: 5px">
-                        <h:commandButton styleClass="btn btn-primary" action="flow-productCreation" value=" Add product" /> 
-                    </div>
-                    <div class="col-md-3" style="padding-top: 5px">
-                        <h:commandButton styleClass="btn btn-primary" action="#{ProductView.addProduct()}" value="Initialize Database" /> 
-                    </div>
-                </div>
-            </div>
-        </h:form>
         <div class="row col-md-12">
-            <div class="col-md-1">
+            <div class="col-md-2">
                 <h:form>
                     <label>Categories</label>
                     <ul class="nav nav-pills nav-stacked">
                         <ui:repeat value="#{productOverView.categories}" var="category">
                             <li><h:commandLink action="#{productListingsView.filterByCategory(category)}">
-                                #{category}
-                            </h:commandLink></li>
+                                    #{category}
+                                </h:commandLink></li>
                         </ui:repeat>
                     </ul>
                 </h:form>
             </div>
             <div class="container-fluid col-md-10">
+                <h:form>
+                    <div class="row well">
+                            <div class="col-md-3" style="padding-top: 5px">
+                                <h:commandButton styleClass="btn btn-primary" action="flow-productCreation" value=" Add product" /> 
+                            </div>
+                            <div class="col-md-3" style="padding-top: 5px">
+                                <h:commandButton styleClass="btn btn-primary" action="#{ProductView.addProduct()}" value="Initialize Database" /> 
+                            </div>
+                    </div>
+                </h:form>
                 <h:form>
                     <ui:repeat value="#{productOverView.getProductListings()}" var="productListing"> 
                         <h:commandLink action="#{productOverView.toProductDescription(productListing)}">

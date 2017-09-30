@@ -57,14 +57,22 @@
                 </h:form>
             </div>
         </nav>
-        <div class="row col-md-10" style="padding-left: 7em">
+        <div class="row col-md-12" style="padding-left: 7em">
             <div class="container-fluid col-md-8 well">
                 <div class="row" style="padding-top: 1em">
-                    <div class="col-md-5">
-                        <h:graphicImage value="/image/productListing/#{PDView.pl.id}" height="200"/>
+                    <div class="col-md-6">
+                        <h:graphicImage value="/image/productListing/#{PDView.pl.id}" width="100%"/>
+                        <div>
+                            <p>Description: </p>
+                            <h:outputLabel value="#{PDView.pl.description}" />
+                        </div>
+                        <div>
+                            <p>Features: </p>
+                            <h:outputLabel value="#{PDView.thisProductFeats}" />
+                        </div>
                     </div>
-                    <div class="col-md-7">
-                        <p style="font-size: 2em">Product Name: <h:outputLabel value="#{PDView.pl.product.name}" /> </p>
+                    <div class="col-md-6">
+                        <p style="font-size: 2em"><h:outputLabel value="#{PDView.pl.product.name}" /> </p>
                         <p> Product Rating: <h:outputText value="#{PDView.productRating}" /></p>
                         <p style="font-size: 2em">Current Bid: <h:outputLabel value="#{PDView.highestBid}" /> $</p>
                         <p style="font-size: 1em">Place your bid in dollar</p>
@@ -82,36 +90,29 @@
                             <p style="font-size: 1em"><h:outputLabel value="#{PDView.timeLeft}" /></p>
                         </div>
                     </div>
-                    <div class="row" style="padding-top: 1em">
-                        <div class="col-md-10">
-                            <div>
-                                <p style="font-size: 2em">Description: </p>
-                                <h:outputLabel value="#{PDView.pl.description}" />
-                            </div>
-                            <div>
-                                <p>Feautres: <h:outputLabel value="#{PDView.thisProductFeats}" /> </p>
-                            </div>
-                            <h:form>
-                                <p> Write Comment
-                                    <h:selectOneMenu value="#{PDView.rating}">
-                                        <f:selectItem itemValue="1.0" itemLabel="1 Star" />
-                                        <f:selectItem itemValue="2.0" itemLabel="2 Stars" />
-                                        <f:selectItem itemValue="3.0" itemLabel="3 Stars" />
-                                        <f:selectItem itemValue="4.0" itemLabel="4 Stars" />
-                                        <f:selectItem itemValue="5.0" itemLabel="5 Stars" />
-                                    </h:selectOneMenu>
-                                </p>
-                                <p>
-                                    <h:inputTextarea value="#{PDView.comment}" />
-                                </p>
-                                #{PDView.ID}
-                                <p><h:commandButton action="#{PDView.addFeedback(PDView.ID)}" value=" Send comment and rating" /></p>
-                            </h:form>
-                        </div>
+                </div>
+                <div class="row" style="padding-top: 1em">
+                    <div class="col-md-10">
+                        <h:form>
+                            <p> Write Comment
+                                <h:selectOneMenu value="#{PDView.rating}">
+                                    <f:selectItem itemValue="1.0" itemLabel="1 Star" />
+                                    <f:selectItem itemValue="2.0" itemLabel="2 Stars" />
+                                    <f:selectItem itemValue="3.0" itemLabel="3 Stars" />
+                                    <f:selectItem itemValue="4.0" itemLabel="4 Stars" />
+                                    <f:selectItem itemValue="5.0" itemLabel="5 Stars" />
+                                </h:selectOneMenu>
+                            </p>
+                            <p>
+                                <h:inputTextarea value="#{PDView.comment}" />
+                            </p>
+                            #{PDView.ID}
+                            <p><h:commandButton action="#{PDView.addFeedback(PDView.ID)}" value=" Send comment and rating" /></p>
+                        </h:form>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4" style="padding-top: 10em">
+            <div class="col-md-4" >
                 <div class="container-fluid well">
                     <p style="font-size: 2em">Seller: <h:outputText value="#{PDView.seller.name}" /></p>
                 </div>
