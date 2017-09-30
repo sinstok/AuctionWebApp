@@ -39,7 +39,6 @@ public class LoginView {
      */
     public LoginView() {
         auctionUserFacade = new AuctionUserFacade();
-        //loginBean = new LoginBean();
         hash = new PasswordHash();
     }
 
@@ -89,7 +88,7 @@ public class LoginView {
     public String toUserProfile() {
         if (loginBean.isLoggedIn()) {
             ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-            ec.getRequestMap().put("userId", ec.getSessionMap().get("user"));
+            ec.getRequestMap().put("userId", loginBean.getUserId());
             return "userProfile";
         } else {
             return "index";
