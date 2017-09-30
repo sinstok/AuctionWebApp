@@ -61,7 +61,7 @@
             <div class="container-fluid col-md-8 well">
                 <div class="row" style="padding-top: 1em">
                     <div class="col-md-5">
-                        <h:graphicImage value="/image/productListing/#{PDView.ID}" height="200"/>
+                        <h:graphicImage value="/image/productListing/#{PDView.pl.id}" height="200"/>
                     </div>
                     <div class="col-md-7">
                         <p style="font-size: 2em">Product Name: <h:outputLabel value="#{PDView.pl.product.name}" /> </p>
@@ -113,7 +113,7 @@
             </div>
             <div class="col-md-4" style="padding-top: 10em">
                 <div class="container-fluid well">
-                    <p style="font-size: 2em">Seller: <h:outputText value="#{PDView.sellerName}" /></p>
+                    <p style="font-size: 2em">Seller: <h:outputText value="#{PDView.seller.name}" /></p>
                 </div>
             </div>
         </div>

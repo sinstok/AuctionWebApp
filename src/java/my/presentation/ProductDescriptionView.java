@@ -86,6 +86,10 @@ public class ProductDescriptionView implements Serializable {
         ProductListing proList = plFacade.find(proListId);
         return proList;
     }
+    
+    public AuctionUser getSeller(){
+        return auctionUserFacade.getSeller(value, pl.getId());
+    }
 /*
     public String toProductListing(int id) {
         plID = id;
@@ -100,20 +104,6 @@ public class ProductDescriptionView implements Serializable {
 */
     //
 
-    public AuctionUser getSeller() {
-        /*Må finnes en seller før denne funker
-        
-        AuctionUser sell =  auctionUserFacade.getSeller("listings_id", Long.valueOf(plID);
-        if(sell != null){
-            return sell;
-        } else {*/
-
-        //Placeholder
-        AuctionUser us = new AuctionUser();
-        us.setName("Sindre");
-        return us;
-        //}
-    }
 
     public String getProductRating() {
         //Product prod = this.getProduct();
@@ -138,21 +128,20 @@ public class ProductDescriptionView implements Serializable {
 
     //Må legge til innlogget bruker
     public String addBid(int pID) {
-        /*
-        Long proListId = new Long(pID);
-        this.pl = plFacade.find(proListId);
-                
-                if(pl == null){
-                    return "index";
-                }
-        */
-        Bid newBid = new Bid();
-        newBid.setAmount(Double.parseDouble(this.getValue()));
+        if(!login.isLoggedIn()){
+            return "loginPage";
+        }
         //ProductListing prolis = this.getProductListing(this.plID);
         if (pl == null) {
             FacesMessage msg = new FacesMessage("ProductListing er null", "ERROR MSG");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         } else {
+            AuctionUser bidder = auctionUserFacade.find(login.getUserId());
+            
+            Bid newBid = new Bid();
+            newBid.setAmount(Double.parseDouble(this.getValue()));
+            newBid.setUser(bidder);
+            
             List<Bid> bids = pl.getBids();
             bids.add(newBid);
             pl.setBids(bids);
@@ -229,11 +218,6 @@ public class ProductDescriptionView implements Serializable {
             }
         }
         return comments;
-    }
-
-    public String getSellerName() {
-        String name = this.getSeller().getName();
-        return name;
     }
     
         public ProductListing getPl() {
