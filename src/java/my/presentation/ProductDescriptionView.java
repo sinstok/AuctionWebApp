@@ -11,6 +11,7 @@ import entities.Feedback;
 import entities.Product;
 import entities.ProductListing;
 import helpers.DBean;
+import helpers.LoginBean;
 import helpers.RatingCalculator;
 import helpers.TimeManger;
 import java.io.Serializable;
@@ -51,6 +52,9 @@ public class ProductDescriptionView implements Serializable {
 
     @EJB
     FeedbackFacade feedbackFacade;
+    
+    @Inject
+    LoginBean login;
 
     @Inject
     private DBean dbi;
@@ -160,7 +164,10 @@ public class ProductDescriptionView implements Serializable {
     }
 
     //Må legge til innlogget bruker
-    public void addFeedback(int pID) {
+    public String addFeedback(int pID) {
+        if(!login.isLoggedIn()){
+            return "loginPage";
+        }
         plID = pID;
         Product prod = null; //this.getProduct();
         if (this.getProduct() == null) {
@@ -171,10 +178,10 @@ public class ProductDescriptionView implements Serializable {
             Feedback feed = new Feedback();
             String com = this.getComment();
             //Placholder user
-            AuctionUser rater = new AuctionUser();
-            rater.setName("No user");
-            //AuctionUser rater = auctionUserFacade.find(FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user"));
-            auctionUserFacade.create(rater);
+            //AuctionUser rater = new AuctionUser();
+            //rater.setName("No user");
+            AuctionUser rater = auctionUserFacade.find(login.getUserId());
+            //auctionUserFacade.create(rater);
             feed.setRater(rater);
             feed.setRating(Double.parseDouble(this.getRating()));
             feed.setFeedback(com);
@@ -184,6 +191,8 @@ public class ProductDescriptionView implements Serializable {
             productFacade.edit(prod);
             feedbackFacade.create(feed);
         }
+        
+        return null;
 
     }
 
