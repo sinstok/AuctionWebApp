@@ -13,6 +13,8 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 
 /**
  *
@@ -51,6 +53,13 @@ public class ProductOverView {
             categories.add(c.toString());
         }
         return categories;
+    }
+    
+    public String toProductDescription(ProductListing pl) {
+        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        ec.getRequestMap().put("productListing", pl);
+        return "productdescription";
+        //return "viewProductListing";
     }
     
 }

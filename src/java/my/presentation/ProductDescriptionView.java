@@ -17,21 +17,26 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.faces.application.FacesMessage;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.bean.ManagedBean;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 
 /**
  *
  * @author Tomas
  */
-@Named(value = "PDView")
-@RequestScoped
+@ManagedBean(name = "PDView")
+@ViewScoped
 public class ProductDescriptionView implements Serializable {
-
+     private static final long serialVersionUID = 1L;
+ 
     @EJB
     AuctionUserFacade auctionUserFacade;
 
@@ -61,8 +66,14 @@ public class ProductDescriptionView implements Serializable {
      * Creates a new instance of SomeView
      */
     public ProductDescriptionView() {
-        this.pl = new ProductListing();
+        this.pl = null;
         this.product = new Product();
+    }
+    
+    @PostConstruct
+    public void init() {
+        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        this.pl = (ProductListing) ec.getRequestMap().get("productListing");
     }
 
     //From productlisting
@@ -71,7 +82,7 @@ public class ProductDescriptionView implements Serializable {
         ProductListing proList = plFacade.find(proListId);
         return proList;
     }
-
+/*
     public String toProductListing(int id) {
         plID = id;
         Long proListId = new Long(id);
@@ -82,8 +93,141 @@ public class ProductDescriptionView implements Serializable {
             return "index.xhtml";
         }
     }
+*/
+    //
 
-    public ProductListing getPl() {
+    public AuctionUser getSeller() {
+        /*Må finnes en seller før denne funker
+        
+        AuctionUser sell =  auctionUserFacade.getSeller("listings_id", Long.valueOf(plID);
+        if(sell != null){
+            return sell;
+        } else {*/
+
+        //Placeholder
+        AuctionUser us = new AuctionUser();
+        us.setName("Sindre");
+        return us;
+        //}
+    }
+
+    public String getProductRating() {
+        //Product prod = this.getProduct();
+        Product prod = pl.getProduct();
+        List<Feedback> feeds = prod.getFeedbacks();
+        List<Double> ratings = new ArrayList<>();
+        int size = feeds.size();
+        if (size > 0) {
+            for (int i = 0; i < size; i++) {
+                if (feeds.get(i).getRating() != 0.0) {
+                    ratings.add(feeds.get(i).getRating());
+                }
+            }
+            RatingCalculator rc = new RatingCalculator();
+            Double rating = rc.calcuatedRating(ratings);
+            if (rating > 0) {
+                return rating.toString();
+            }
+        }
+        return "No ratings";
+    }
+
+    //Må legge til innlogget bruker
+    public String addBid(int pID) {
+        /*
+        Long proListId = new Long(pID);
+        this.pl = plFacade.find(proListId);
+                
+                if(pl == null){
+                    return "index";
+                }
+        */
+        Bid newBid = new Bid();
+        newBid.setAmount(Double.parseDouble(this.getValue()));
+        //ProductListing prolis = this.getProductListing(this.plID);
+        if (pl == null) {
+            FacesMessage msg = new FacesMessage("ProductListing er null", "ERROR MSG");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        } else {
+            List<Bid> bids = pl.getBids();
+            bids.add(newBid);
+            pl.setBids(bids);
+            plFacade.edit(pl);
+            //bidFacade.create(newBid);
+        }
+        
+        return null;
+    }
+
+    //Må legge til innlogget bruker
+    public void addFeedback(int pID) {
+        plID = pID;
+        Product prod = null; //this.getProduct();
+        if (this.getProduct() == null) {
+            FacesMessage msg = new FacesMessage("product er null", "ERROR MSG");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        } else {
+            prod = this.getProduct();
+            Feedback feed = new Feedback();
+            String com = this.getComment();
+            //Placholder user
+            AuctionUser rater = new AuctionUser();
+            rater.setName("No user");
+            //AuctionUser rater = auctionUserFacade.find(FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user"));
+            auctionUserFacade.create(rater);
+            feed.setRater(rater);
+            feed.setRating(Double.parseDouble(this.getRating()));
+            feed.setFeedback(com);
+            List<Feedback> feeds = prod.getFeedbacks();
+            feeds.add(feed);
+            prod.setFeedbacks(feeds);
+            productFacade.edit(prod);
+            feedbackFacade.create(feed);
+        }
+
+    }
+
+    public String getTimeLeft() {
+        Date closing = this.pl.getClosing();
+        Date now = new Date();
+        TimeManger tm = new TimeManger();
+        String time = tm.getTimeRemaining(closing, now);
+        return time;
+    }
+
+    public double getHighestBid() {
+        List<Bid> bids = this.pl.getBids();
+        double b = this.pl.getBasePrice();
+        if (!(bids.isEmpty())) {
+            for (int i = 0; i <= bids.size() - 1; i++) {
+                double current = bids.get(i).getAmount();
+                if (current > b) {
+                    b = current;
+                }
+            }
+        }
+        return b;
+    }
+
+    public List<String> getAllComments() {
+        //Product prod = this.getProduct();
+        Product prod = this.pl.getProduct();
+        List<Feedback> feeds = prod.getFeedbacks();
+        List<String> comments = new ArrayList<>();
+        if (!(feeds.isEmpty())) {
+            for (int i = 0; i < feeds.size(); i++) {
+                comments.add(feeds.get(i).getRater().getName() + ": " + feeds.get(i).getFeedback());
+            }
+        }
+        return comments;
+    }
+
+    public String getSellerName() {
+        String name = this.getSeller().getName();
+        return name;
+    }
+    
+        public ProductListing getPl() {
         return pl;
     }
 
@@ -156,129 +300,5 @@ public class ProductDescriptionView implements Serializable {
     public void setRating(String rating) {
         this.rating = rating;
     }
-    //
-
-    public AuctionUser getSeller() {
-        /*Må finnes en seller før denne funker
-        
-        AuctionUser sell =  auctionUserFacade.getSeller("listings_id", Long.valueOf(plID);
-        if(sell != null){
-            return sell;
-        } else {*/
-
-        //Placeholder
-        AuctionUser us = new AuctionUser();
-        us.setName("Sindre");
-        return us;
-        //}
-    }
-
-    public String getProductRating() {
-        //Product prod = this.getProduct();
-        Product prod = this.pl.getProduct();
-        List<Feedback> feeds = prod.getFeedbacks();
-        List<Double> ratings = new ArrayList<>();
-        int size = feeds.size();
-        if (size != 0) {
-            for (int i = 0; i < size; i++) {
-                if (feeds.get(i).getRating() != 0.0) {
-                    ratings.add(feeds.get(i).getRating());
-                }
-            }
-            RatingCalculator rc = new RatingCalculator();
-            Double rating = rc.calcuatedRating(ratings);
-            if (rating > 0) {
-                return rating.toString();
-            }
-        }
-        return "No ratings";
-    }
-
-    //Må legge til innlogget bruker
-    public void addBid(int pID) {
-        
-        Bid newBid = new Bid();
-        newBid.setAmount(Double.parseDouble(this.getValue()));
-        //ProductListing prolis = this.getProductListing(this.plID);
-        if (pl == null) {
-            FacesMessage msg = new FacesMessage("ProductListing er null", "ERROR MSG");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-        } else {
-            List<Bid> bids = pl.getBids();
-            bids.add(newBid);
-            pl.setBids(bids);
-            plFacade.edit(pl);
-            bidFacade.create(newBid);
-        }
-        
-        this.toProductListing(pID);
-    }
-
-    //Må legge til innlogget bruker
-    public void addFeedback(int pID) {
-        plID = pID;
-        Product prod = null; //this.getProduct();
-        if (this.getProduct() == null) {
-            FacesMessage msg = new FacesMessage("product er null", "ERROR MSG");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-        } else {
-            prod = this.getProduct();
-            Feedback feed = new Feedback();
-            String com = this.getComment();
-            //Placholder user
-            AuctionUser rater = new AuctionUser();
-            rater.setName("No user");
-            //AuctionUser rater = auctionUserFacade.find(FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user"));
-            auctionUserFacade.create(rater);
-            feed.setRater(rater);
-            feed.setRating(Double.parseDouble(this.getRating()));
-            feed.setFeedback(com);
-            List<Feedback> feeds = prod.getFeedbacks();
-            feeds.add(feed);
-            prod.setFeedbacks(feeds);
-            productFacade.edit(prod);
-            feedbackFacade.create(feed);
-        }
-
-    }
-
-    public String getTimeLeft() {
-        Date closing = this.pl.getClosing();
-        Date now = new Date();
-        TimeManger tm = new TimeManger();
-        String time = tm.getTimeRemaining(closing, now);
-        return time;
-    }
-
-    public double getHighestBid() {
-        List<Bid> bids = this.pl.getBids();
-        double b = this.pl.getBasePrice();
-        if (!(bids.isEmpty())) {
-            for (int i = 0; i <= bids.size() - 1; i++) {
-                double current = bids.get(i).getAmount();
-                if (current > b) {
-                    b = current;
-                }
-            }
-        }
-        return b;
-    }
-
-    public List<String> getAllComments() {
-        //Product prod = this.getProduct();
-        Product prod = this.pl.getProduct();
-        List<Feedback> feeds = prod.getFeedbacks();
-        List<String> comments = new ArrayList<>();
-        if (!(feeds.isEmpty())) {
-            for (int i = 0; i < feeds.size(); i++) {
-                comments.add(feeds.get(i).getRater().getName() + ": " + feeds.get(i).getFeedback());
-            }
-        }
-        return comments;
-    }
-
-    public String getSellerName() {
-        String name = this.getSeller().getName();
-        return name;
-    }
 }
+
