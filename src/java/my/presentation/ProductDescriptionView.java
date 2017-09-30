@@ -263,10 +263,6 @@ public class ProductDescriptionView implements Serializable {
         return this.pl.getDescription();
     }
 
-    public byte[] getImage() {
-        return this.pl.getImage();
-    }
-
     public Date getPublished() {
         return this.pl.getPublished();
     }
