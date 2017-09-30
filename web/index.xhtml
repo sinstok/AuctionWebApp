@@ -76,7 +76,9 @@
                     <label>Categories</label>
                     <ul class="nav nav-pills nav-stacked">
                         <ui:repeat value="#{productOverView.categories}" var="category">
-                            <li><a href="#">#{category}</a></li>
+                            <li><h:commandLink action="#{productListingsView.filterByCategory(category)}">
+                                #{category}
+                            </h:commandLink></li>
                         </ui:repeat>
                     </ul>
                 </h:form>
