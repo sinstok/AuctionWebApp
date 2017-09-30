@@ -7,17 +7,20 @@ package my.presentation;
 
 import boundary.AuctionUserFacade;
 import entities.AuctionUser;
+import entities.ProductListing;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.inject.Named;
-import javax.enterprise.context.RequestScoped;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
 /**
  *
  * @author Sindre
  */
-@Named(value = "UserProfileView")
-@RequestScoped
+@ManagedBean(name = "UserProfileView")
+@ViewScoped
 public class UserProfileView {
 
     @EJB
@@ -29,6 +32,13 @@ public class UserProfileView {
      */
     public UserProfileView() {
         user = new AuctionUser();
+    }
+    
+    @PostConstruct
+    public void init(){
+        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        Long userId = (Long) ec.getRequestMap().get("userId");
+        this.user = auctionUserFacade.find(userId);
     }
 
     public String getEmail() {

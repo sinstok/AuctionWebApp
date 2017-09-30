@@ -7,15 +7,14 @@ package helpers;
 
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
-import javax.annotation.ManagedBean;
+import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
-import javax.inject.Named;
 
 /**
  *
  * @author Sindre
  */
-@Named
+@ManagedBean(name = "loginBean")
 @SessionScoped
 public class LoginBean implements Serializable {
 

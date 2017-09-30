@@ -12,8 +12,9 @@ import helpers.LoginBean;
 import helpers.PasswordHash;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedProperty;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 
 /**
  *
@@ -25,8 +26,10 @@ public class LoginView {
 
     @EJB
     private final AuctionUserFacade auctionUserFacade;
-    
-    private final LoginBean loginBean;
+
+    @Inject
+    private LoginBean loginBean;
+
     private final PasswordHash hash;
     private String email;
     private String password;
@@ -36,7 +39,7 @@ public class LoginView {
      */
     public LoginView() {
         auctionUserFacade = new AuctionUserFacade();
-        loginBean = new LoginBean();
+        //loginBean = new LoginBean();
         hash = new PasswordHash();
     }
 
@@ -83,4 +86,13 @@ public class LoginView {
         this.password = password;
     }
 
+    public String toUserProfile() {
+        if (loginBean.isLoggedIn()) {
+            ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+            ec.getRequestMap().put("userId", ec.getSessionMap().get("user"));
+            return "userProfile";
+        } else {
+            return "index";
+        }
+    }
 }
