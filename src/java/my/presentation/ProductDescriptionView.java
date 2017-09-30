@@ -36,8 +36,9 @@ import javax.inject.Inject;
 @ManagedBean(name = "PDView")
 @ViewScoped
 public class ProductDescriptionView implements Serializable {
-     private static final long serialVersionUID = 1L;
- 
+
+    private static final long serialVersionUID = 1L;
+
     @EJB
     AuctionUserFacade auctionUserFacade;
 
@@ -52,7 +53,7 @@ public class ProductDescriptionView implements Serializable {
 
     @EJB
     FeedbackFacade feedbackFacade;
-    
+
     @Inject
     LoginBean login;
 
@@ -60,7 +61,7 @@ public class ProductDescriptionView implements Serializable {
     private DBean dbi;
 
     private Product product;
-    private String value;
+    private double newBidValue;
     private String comment;
     private String rating;
     private ProductListing pl;
@@ -73,7 +74,7 @@ public class ProductDescriptionView implements Serializable {
         this.pl = null;
         this.product = new Product();
     }
-    
+
     @PostConstruct
     public void init() {
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
@@ -86,24 +87,10 @@ public class ProductDescriptionView implements Serializable {
         ProductListing proList = plFacade.find(proListId);
         return proList;
     }
-    
-    public AuctionUser getSeller(){
-        return auctionUserFacade.getSeller(value, pl.getId());
-    }
-/*
-    public String toProductListing(int id) {
-        plID = id;
-        Long proListId = new Long(id);
-        this.pl = plFacade.find(proListId);
-        if (pl != null) {
-            return "productdescription";
-        } else {
-            return "index.xhtml";
-        }
-    }
-*/
-    //
 
+    public AuctionUser getSeller() {
+        return auctionUserFacade.getSeller(pl.getId());
+    }
 
     public String getProductRating() {
         //Product prod = this.getProduct();
@@ -128,56 +115,87 @@ public class ProductDescriptionView implements Serializable {
 
     //Må legge til innlogget bruker
     public String addBid(int pID) {
-        if(!login.isLoggedIn()){
+        if (!login.isLoggedIn()) {
             return "loginPage";
         }
-        
+
         AuctionUser bidder = auctionUserFacade.find(login.getUserId());
-        if(bidder.getId() == getSeller().getId()){
+        if (bidder.getId() == getSeller().getId()) {
             FacesMessage msg = new FacesMessage("You cannot bid on your own product", "ERROR MSG");
             FacesContext.getCurrentInstance().addMessage(null, msg);
             return null;
-        } 
-         
+        }
+
         //ProductListing prolis = this.getProductListing(this.plID);
         if (pl == null) {
             FacesMessage msg = new FacesMessage("No productlisting", "ERROR MSG");
             FacesContext.getCurrentInstance().addMessage(null, msg);
-        } else {
-            
-            Bid newBid = new Bid();
-            newBid.setAmount(Double.parseDouble(this.getValue()));
-            newBid.setUser(bidder);
-            
-            List<Bid> bids = pl.getBids();
-            bids.add(newBid);
-            pl.setBids(bids);
-            plFacade.edit(pl);
-            //bidFacade.create(newBid);
+            return null;
+        }
+        if(pl.getClosing().before(new Date())){
+             FacesMessage msg = new FacesMessage("Bidding has closed", "ERROR MSG");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            return null;
         }
         
+        Bid highestBid = getHighestBid();
+        if (newBidValue < highestBid.getAmount()) {
+            FacesMessage msg = new FacesMessage("Bid too low", "ERROR MSG");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            return null;
+        } else if (newBidValue == highestBid.getAmount() && highestBid.getUser() != null) {
+            FacesMessage msg = new FacesMessage("Someone already made that bid", "ERROR MSG");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            return null;
+        }
+        Bid newBid = new Bid();
+        newBid.setAmount(this.newBidValue);
+        newBid.setUser(bidder);
+
+        List<Bid> bids = pl.getBids();
+        bids.add(newBid);
+        pl.setBids(bids);
+        plFacade.edit(pl);
+        //bidFacade.create(newBid);
+
         return null;
     }
 
     //Må legge til innlogget bruker
     public String addFeedback(int pID) {
-        if(!login.isLoggedIn()){
+        if (!login.isLoggedIn()) {
             return "loginPage";
         }
-        plID = pID;
+
+        AuctionUser rater = auctionUserFacade.find(login.getUserId());
+        Date now = new Date();
+        Date closing = pl.getClosing();
+        Bid highestBid = getHighestBid();
+
+        if (highestBid.getUser() == null || highestBid.getUser().getId() != rater.getId() || closing.after(now)) {
+            FacesMessage msg = new FacesMessage("You must purchase the product before adding feedback", "ERROR MSG");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            return null;
+        }
+        
+        Feedback oldFeedback = pl.getProduct().getFeedbackOfUser(rater.getId());
+        if(oldFeedback != null){
+            oldFeedback.setRating(Double.parseDouble(this.getRating()));
+            oldFeedback.setFeedback(comment);
+            feedbackFacade.edit(oldFeedback);
+            return null;
+        }
+
         Product prod = null; //this.getProduct();
         if (this.getProduct() == null) {
-            FacesMessage msg = new FacesMessage("product er null", "ERROR MSG");
+            FacesMessage msg = new FacesMessage("product is null", "ERROR MSG");
             FacesContext.getCurrentInstance().addMessage(null, msg);
+            return "index";
         } else {
             prod = this.getProduct();
             Feedback feed = new Feedback();
             String com = this.getComment();
-            //Placholder user
-            //AuctionUser rater = new AuctionUser();
-            //rater.setName("No user");
-            AuctionUser rater = auctionUserFacade.find(login.getUserId());
-            //auctionUserFacade.create(rater);
+
             feed.setRater(rater);
             feed.setRating(Double.parseDouble(this.getRating()));
             feed.setFeedback(com);
@@ -187,7 +205,7 @@ public class ProductDescriptionView implements Serializable {
             productFacade.edit(prod);
             feedbackFacade.create(feed);
         }
-        
+
         return null;
 
     }
@@ -200,18 +218,20 @@ public class ProductDescriptionView implements Serializable {
         return time;
     }
 
-    public double getHighestBid() {
+    public Bid getHighestBid() {
         List<Bid> bids = this.pl.getBids();
-        double b = this.pl.getBasePrice();
+        Bid highestBid = new Bid();
+        highestBid.setAmount(pl.getBasePrice());
+
         if (!(bids.isEmpty())) {
-            for (int i = 0; i <= bids.size() - 1; i++) {
+            for (int i = 0; i < bids.size(); i++) {
                 double current = bids.get(i).getAmount();
-                if (current > b) {
-                    b = current;
+                if (current > highestBid.getAmount()) {
+                    highestBid = bids.get(i);
                 }
             }
         }
-        return b;
+        return highestBid;
     }
 
     public List<String> getAllComments() {
@@ -226,8 +246,8 @@ public class ProductDescriptionView implements Serializable {
         }
         return comments;
     }
-    
-        public ProductListing getPl() {
+
+    public ProductListing getPl() {
         return pl;
     }
 
@@ -277,12 +297,12 @@ public class ProductDescriptionView implements Serializable {
     //
 
     //From userinput
-    public String getValue() {
-        return value;
+    public double getValue() {
+        return newBidValue;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setValue(double value) {
+        this.newBidValue = value;
     }
 
     public String getComment() {
@@ -301,4 +321,3 @@ public class ProductDescriptionView implements Serializable {
         this.rating = rating;
     }
 }
-

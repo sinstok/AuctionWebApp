@@ -39,6 +39,17 @@ public class Product implements Serializable {
     
     @Enumerated(EnumType.STRING)
     private Category category;
+    
+    public Feedback getFeedbackOfUser(long userId){
+        Feedback result = null;
+        
+        for(Feedback fb : feedbacks){
+            if(fb.getRater().getId() == userId){
+                return fb;
+            }
+        }
+        return result;
+    }
 
     public Category getCategory() {
         return category;

@@ -73,8 +73,9 @@
                     </div>
                     <div class="col-md-6">
                         <p style="font-size: 2em"><h:outputLabel value="#{PDView.pl.product.name}" /> </p>
-                        <p> Product Rating: <h:outputText value="#{PDView.productRating}" /></p>
-                        <p style="font-size: 2em">Current Bid: <h:outputLabel value="#{PDView.highestBid}" /> $</p>
+                        <p> Product rating: <h:outputText value="#{PDView.productRating}" /></p>
+                        <p> Starting price: <h:outputText value="#{PDView.pl.basePrice} $" /></p>
+                        <p style="font-size: 2em">Current Bid: <h:outputLabel value="#{PDView.highestBid.amount} $" /></p>
                         <p style="font-size: 1em">Place your bid in dollar</p>
                         <div class="row">
                             <div class="form-group col-xs-4">

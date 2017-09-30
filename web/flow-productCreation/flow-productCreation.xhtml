@@ -13,7 +13,7 @@
         </h:form>
         <h:form>
             <ui:repeat value="#{createProductListingView.allProducts}" var="product">
-                #{product.name} <h:commandButton action="#{createProductListingView.selectProduct(product.id)}" value="Select" /> <br />
+                <h:commandButton action="#{createProductListingView.selectProduct(product.id)}" value="#{product.name}" /> <br />
             </ui:repeat>
         </h:form>
     </h:body>

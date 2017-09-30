@@ -5,7 +5,9 @@
  */
 package boundary;
 
+import entities.AuctionUser;
 import entities.Bid;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,5 +30,6 @@ public class BidFacade extends AbstractFacade<Bid> {
     public BidFacade() {
         super(Bid.class);
     }
+    
     
 }
