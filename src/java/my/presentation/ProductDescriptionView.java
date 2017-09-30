@@ -183,7 +183,7 @@ public class ProductDescriptionView implements Serializable {
             oldFeedback.setRating(Double.parseDouble(this.getRating()));
             oldFeedback.setFeedback(comment);
             feedbackFacade.edit(oldFeedback);
-            return null;
+            return null;    
         }
 
         Product prod = null; //this.getProduct();

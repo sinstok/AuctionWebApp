@@ -5,7 +5,9 @@
  */
 package boundary;
 
+import entities.Product;
 import entities.ProductListing;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -29,10 +31,11 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
         super(ProductListing.class);
     }
     
-    public String search(String search) 
+    public List<ProductListing> search(String search) 
     {
-        
-        return "kult";
+       List<ProductListing> productListings = em.createQuery("SELECT pl FROM ProductListing pl JOIN pl.product p WHERE lower(pl.description) LIKE :search OR lower(p.name) LIKE :search OR lower(p.features) LIKE :search", ProductListing.class).setParameter("search", search.toLowerCase()).getResultList();
+
+        return productListings;
     }
     
 }
