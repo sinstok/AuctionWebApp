@@ -64,10 +64,10 @@
         <div class="row col-md-12" style="padding-left: 7em">
             <div class="container-fluid col-md-8 well">
                 <div class="row" style="padding-top: 1em">
-                    <div class="col-md-6">
-                        <h:graphicImage value="/image/productListing/#{PDView.pl.id}" width="100%"/>
+                    <div class="col-md-3">
+                        <h:graphicImage value="/image/productListing/#{PDView.pl.id}" width="75%" height="100%"/>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-9">
                         <p style="font-size: 2em"><h:outputLabel value="#{PDView.pl.product.name}" /> </p>
                         <p> Product rating: <h:outputText value="#{PDView.productRating}" /></p>
                         <p> Starting price: <h:outputText value="#{PDView.pl.basePrice} $" /></p>
