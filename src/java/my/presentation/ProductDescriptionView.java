@@ -87,11 +87,19 @@ public class ProductDescriptionView implements Serializable {
         ProductListing proList = plFacade.find(proListId);
         return proList;
     }
-
+    /**
+     * Returns the ID of the Seller of this productlisting
+     * @return 
+     */
     public AuctionUser getSeller() {
         return auctionUserFacade.getSeller(pl.getId());
     }
 
+    /**
+     * Returns a string value of the average rating of the product,
+     * or the string "No ratings" if the product has not recived any ratings
+     * @return 
+     */
     public String getProductRating() {
         //Product prod = this.getProduct();
         Product prod = pl.getProduct();
@@ -113,7 +121,12 @@ public class ProductDescriptionView implements Serializable {
         return "No ratings";
     }
 
-    //Må legge til innlogget bruker
+    /**
+     * Adds a Bid from the loged in AuctionUser. 
+     * If the bid is not larger then the current highest bid, the bid will not be added and a error message will be displayed
+     * @param pID
+     * @return 
+     */
     public String addBid(int pID) {
         if (!login.isLoggedIn()) {
             return "loginPage";
@@ -161,7 +174,11 @@ public class ProductDescriptionView implements Serializable {
         return null;
     }
 
-    //Må legge til innlogget bruker
+    /**
+     * Make a Feedback from the values from the user inputs, if the Auction User have bought the product
+     * @param pID
+     * @return 
+     */
     public String addFeedback(int pID) {
         if (!login.isLoggedIn()) {
             return "loginPage";
@@ -210,6 +227,10 @@ public class ProductDescriptionView implements Serializable {
 
     }
 
+    /**
+     * Returns a string that will tell the remainig bidding time of this productlisting
+     * @return 
+     */
     public String getTimeLeft() {
         Date closing = this.pl.getClosing();
         Date now = new Date();
@@ -218,6 +239,11 @@ public class ProductDescriptionView implements Serializable {
         return time;
     }
 
+    /**
+     * Returns the largest bidding amount if it exsits
+     * else it will return the productlistings baseprice
+     * @return 
+     */
     public Bid getHighestBid() {
         List<Bid> bids = this.pl.getBids();
         Bid highestBid = new Bid();
@@ -233,7 +259,11 @@ public class ProductDescriptionView implements Serializable {
         }
         return highestBid;
     }
-
+    
+    /**
+     * Returns a list of strings that includes a AuctionUser's Name and their comment
+     * @return 
+     */
     public List<String> getAllComments() {
         //Product prod = this.getProduct();
         Product prod = this.pl.getProduct();
@@ -247,6 +277,7 @@ public class ProductDescriptionView implements Serializable {
         return comments;
     }
 
+    //GETTERS & SETTERS
     public ProductListing getPl() {
         return pl;
     }
@@ -259,19 +290,6 @@ public class ProductDescriptionView implements Serializable {
         return plID;
     }
 
-    public String getDescription() {
-        return this.pl.getDescription();
-    }
-
-    public Date getPublished() {
-        return this.pl.getPublished();
-    }
-
-    public Date getClosing() {
-        return this.pl.getClosing();
-    }
-    //
-
     //From product
     public Product getProduct() {
         return this.pl.getProduct();
@@ -280,17 +298,6 @@ public class ProductDescriptionView implements Serializable {
     public Product getProduct(int pID) {
         return this.getProductListing(pID).getProduct();
     }
-
-    public String getThisProduct() {
-        Product prod = this.getProduct();
-        return prod.getName();
-    }
-
-    public String getThisProductFeats() {
-        Product prod = this.getProduct();
-        return prod.getFeatures();
-    }
-    //
 
     //From userinput
     public double getValue() {
