@@ -123,8 +123,8 @@ public class ProductDescriptionView implements Serializable {
     }
     
     /**
-     * Returns a string value of the average rating of the product,
-     * or the string "No ratings" if the product has not recived any ratings
+     * Returns a string value of the average rating of the seller,
+     * or the string "No ratings" if the seller has not recived any ratings
      * @return 
      */
     public String getAvergeSellerRating() {
@@ -254,6 +254,11 @@ public class ProductDescriptionView implements Serializable {
         return null;
     }
     
+    /**
+     * Adds a rating to the seller from user input
+     * @param pID
+     * @return 
+     */
     public String addSellerRating(int pID){
         if (!login.isLoggedIn()) {
             return "loginPage";
@@ -263,6 +268,10 @@ public class ProductDescriptionView implements Serializable {
         AuctionUser seller = this.getSeller();
         if (seller == null) {
             FacesMessage msg = new FacesMessage("seller is null", "ERROR MSG");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            return "index";
+        } else if (rater.getId().equals(seller.getId())){
+            FacesMessage msg = new FacesMessage("Can't give a rating to yourself", "ERROR MSG");
             FacesContext.getCurrentInstance().addMessage(null, msg);
             return "index";
         } else {
