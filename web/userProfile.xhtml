@@ -1,7 +1,8 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:head>
         <title>User profile</title>
         <link href="resources/css/bootstrap.css" rel="stylesheet" />
@@ -37,9 +38,6 @@
         </nav>
         <div class="container well">
             <h:form>
-                <!--<div class="col-md-4">
-                    <img src="desert.jpg" alt="WTF?" class="img-responsive" />
-                </div>-->
                 <div class="form-group col-md-5">
                     <label>Email</label>
                     <h:outputLabel styleClass="form-control" value="#{UserProfileView.user.email}" />
@@ -60,7 +58,16 @@
         <div class="container well">
             <h:form>
                 <h2>Products for sale</h2>
-                <h:commandButton action="#" styleClass="btn btn-primary" value="Add a product" />
+                <h:commandButton action="flow-productCreation" styleClass="btn btn-primary" value="Add a product" />
+                <ui:repeat value="#{UserProfileView.user.listings}" var="productListing">
+                    <h:commandLink action="#{productOverView.toProductDescription(productListing)}">
+                        <div style="margin-top: 1em">
+                            <h:graphicImage value="/image/productListing/#{productListing.id}" height="150"/>
+                            #{productListing.product.name}
+                            <br />
+                        </div>
+                    </h:commandLink> 
+                </ui:repeat>
             </h:form>
         </div>
     </h:body>

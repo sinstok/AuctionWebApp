@@ -7,7 +7,9 @@ package my.presentation;
 
 import boundary.AuctionUserFacade;
 import entities.AuctionUser;
+import entities.ProductListing;
 import java.io.IOException;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
@@ -68,5 +70,9 @@ public class UserProfileView {
 
     public AuctionUser getUser() {
         return user;
+    }
+    
+    public List<ProductListing> getProductListings(){
+        return user.getListings();
     }
 }
