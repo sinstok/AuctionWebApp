@@ -44,7 +44,7 @@
                         </c:if>
                         <c:if test="#{user != null}">
                             <li>
-                                <h:commandLink action="#{UserProfileView.findUser(user)}" value="My Profile" />
+                                <h:commandLink action="#{LoginView.toUserProfile}" value="My Profile" />
                             </li>
                             <li>
                                 <h:commandLink action="#{LoginView.logOut()}">
