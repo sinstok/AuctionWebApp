@@ -2,7 +2,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <title>Register user</title>
         <link rel="stylesheet" href="resources/css/bootstrap.css" />
@@ -46,14 +47,18 @@
                 <div class="row">
                     <div class="form-group col-md-3">
                         <label>Name</label>
-                        <h:inputText id="name" styleClass="form-control" value="#{RegisterUserView.newUser.name}" required="true" requiredMessage="Enter your name" a:placeholder="Name" />
+                        <h:inputText id="name" styleClass="form-control" value="#{RegisterUserView.newUser.name}" required="true" requiredMessage="Enter your name" a:placeholder="Name">
+                            <f:validateLength minimum="2" maximum="30" for="name" />
+                        </h:inputText>
                         <h:message for="name" style="color: red" />
                     </div>
                 </div>
                 <div class="row">
                     <div class="form-group col-md-3">
                         <label>Phone number</label>
-                        <h:inputText id="phone" styleClass="form-control" value="#{RegisterUserView.newUser.phone}" required="true" requiredMessage="Enter your phone number" a:placeholder="000 00 000" />
+                        <h:inputText id="phone" styleClass="form-control" value="#{RegisterUserView.newUser.phone}" required="true" requiredMessage="Enter your phone number" a:placeholder="000 00 000">
+                            <f:validateLength minimum="8" maximum="8" for="phone" />
+                        </h:inputText>
                         <h:message for="phone" style="color: red" />
                     </div>
                 </div>
@@ -67,14 +72,18 @@
                 <div class="row">
                     <div class="form-group col-md-3">
                         <label>Password</label>
-                        <h:inputSecret id="password" styleClass="form-control" value="#{RegisterUserView.newUser.password}" required="true" requiredMessage="Enter your password" a:placeholder="Password" />
+                        <h:inputSecret id="password" styleClass="form-control" value="#{RegisterUserView.newUser.password}" required="true" requiredMessage="Enter your password" a:placeholder="Password">
+                            <f:validateLongRange minimum="6" maximum="30" for="password" /> 
+                        </h:inputSecret>
                         <h:message for="password" style="color: red" />
                     </div>
                 </div>
                 <div class="row">
                     <div class="form-group col-md-3">
                         <label>Confirm password</label>
-                        <h:inputSecret id="confPassword" styleClass="form-control" value="#{RegisterUserView.confPassword}" required="true" requiredMessage="Confirm your password" a:placeholder="Confirm password" />
+                        <h:inputSecret id="confPassword" styleClass="form-control" value="#{RegisterUserView.confPassword}" required="true" requiredMessage="Confirm your password" a:placeholder="Confirm password">
+                            <f:validateLongRange minimum="6" maximum="30" for="confPassword" /> 
+                        </h:inputSecret>
                         <h:message for="confPassword" style="color: red" />
                     </div>
                 </div>
