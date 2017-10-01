@@ -14,7 +14,7 @@
         <nav class="navbar navbar-inverse">
             <div class="container-fluid">
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="#">WebSiteName</a>
+                    <a class="navbar-brand" href="index.xhtml">WebSiteName</a>
                 </div>
                 <ul class="nav navbar-nav">
                     <li class="active"><a href="#">Home</a></li>
@@ -55,6 +55,23 @@
         </div>
         <div class="container well">
             <h2>Current bids</h2>
+
+            <h:form>
+                <ui:repeat value="#{UserProfileView.user.bids}" var="productListing">
+                    <div class="col-md-10">
+                        <h:commandLink action="#{productOverView.toProductDescription(productListing)}">
+                            <div style="margin-top: 1em">
+                                <h:graphicImage value="/image/productListing/#{productListing.id}" height="150"/>
+                                #{productListing.product.name}
+                                <br />
+                            </div>
+                        </h:commandLink>
+                    </div>
+                    <div class="col-md-2" style="margin-top: 5em">
+                        <h:outputLabel value="#{UserProfileView.isHighestBidder(productListing)}" />
+                    </div>
+                </ui:repeat>
+            </h:form>
         </div>
         <div class="container well">
             <h:form>

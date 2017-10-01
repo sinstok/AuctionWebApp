@@ -190,6 +190,9 @@ public class ProductDescriptionView implements Serializable {
         Bid newBid = new Bid();
         newBid.setAmount(this.newBidValue);
         newBid.setUser(bidder);
+        
+        bidder.getBids().add(pl);
+        auctionUserFacade.edit(bidder);
 
         List<Bid> bids = pl.getBids();
         bids.add(newBid);
