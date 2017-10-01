@@ -73,7 +73,7 @@
                     <div class="form-group col-md-3">
                         <label>Password</label>
                         <h:inputSecret id="password" styleClass="form-control" value="#{RegisterUserView.newUser.password}" required="true" requiredMessage="Enter your password" a:placeholder="Password">
-                            <f:validateLongRange minimum="6" maximum="30" for="password" /> 
+                            <f:validateLength minimum="6" maximum="30" for="password" /> 
                         </h:inputSecret>
                         <h:message for="password" style="color: red" />
                     </div>
@@ -82,7 +82,7 @@
                     <div class="form-group col-md-3">
                         <label>Confirm password</label>
                         <h:inputSecret id="confPassword" styleClass="form-control" value="#{RegisterUserView.confPassword}" required="true" requiredMessage="Confirm your password" a:placeholder="Confirm password">
-                            <f:validateLongRange minimum="6" maximum="30" for="confPassword" /> 
+                            <f:validateLength minimum="6" maximum="30" for="confPassword" /> 
                         </h:inputSecret>
                         <h:message for="confPassword" style="color: red" />
                     </div>
