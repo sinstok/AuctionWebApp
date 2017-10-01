@@ -55,6 +55,18 @@
         </div>
         <div class="container well">
             <h2>Current bids</h2>
+            <h:form>
+                <ui:repeat value="#{UserProfileView.user.bids}" var="productListing">
+                    <h:commandLink action="#{productOverView.toProductDescription(productListing)}">
+                        <div style="margin-top: 1em">
+                            <h:graphicImage value="/image/productListing/#{productListing.id}" height="150"/>
+                            #{productListing.product.name}
+                            <h:outputLabel value="#{UserProfileView.isHighestBidder(productListing)}" />
+                            <br />
+                        </div>
+                    </h:commandLink>
+                </ui:repeat>
+            </h:form>
         </div>
         <div class="container well">
             <h:form>

@@ -8,8 +8,10 @@ package my.presentation;
 import boundary.AuctionUserFacade;
 import boundary.ProductListingFacade;
 import entities.AuctionUser;
+import entities.Bid;
 import entities.ProductListing;
 import java.io.IOException;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
@@ -63,6 +65,23 @@ public class UserProfileView {
 
     public AuctionUser getUser() {
         return user;
+    }
+
+    public String isHighestBidder(ProductListing listing) {
+        List<Bid> bids = listing.getBids();
+        Bid highestBid = null;
+        double bidPrice = listing.getBasePrice();
+        for (int i = 0; i < bids.size(); i++) {
+            if (bids.get(i).getAmount() > bidPrice) {
+                bidPrice = bids.get(i).getAmount();
+                highestBid = bids.get(i);
+            }
+        }
+        if (highestBid.getId().equals(highestBid.getId())) {
+            return "Highest bidder!";
+        } else {
+            return "Not the highest bidder longer!";
+        }
     }
 
     public void removeListing(Long id) {
