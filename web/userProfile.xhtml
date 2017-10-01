@@ -44,8 +44,12 @@
                     <h:outputLabel styleClass="form-control" value="#{UserProfileView.user.name}" />
                 </div>
                 <div class="form-group col-md-5">
-                    <label>?</label>
-                    <h:outputLabel styleClass="form-control" value="#{UserProfileView.user.id}" />
+                    <label>Phone</label>
+                    <h:outputLabel styleClass="form-control" value="#{UserProfileView.user.phone}" />
+                </div>
+                <div class="form-group col-md-5">
+                    <label>Address</label>
+                    <h:outputLabel styleClass="form-control" value="#{UserProfileView.user.address}" />
                 </div>
             </h:form>
         </div>
@@ -64,6 +68,7 @@
                             <br />
                         </div>
                     </h:commandLink> 
+                    <h:commandButton styleClass="btn btn-danger" value="Remove" action="#{UserProfileView.removeListing(productListing.id)}" />
                 </ui:repeat>
             </h:form>
         </div>

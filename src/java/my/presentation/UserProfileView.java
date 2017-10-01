@@ -6,10 +6,10 @@
 package my.presentation;
 
 import boundary.AuctionUserFacade;
+import boundary.ProductListingFacade;
 import entities.AuctionUser;
 import entities.ProductListing;
 import java.io.IOException;
-import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
@@ -27,6 +27,8 @@ public class UserProfileView {
 
     @EJB
     private AuctionUserFacade auctionUserFacade;
+    @EJB
+    private ProductListingFacade productListingFacade;
     private AuctionUser user;
 
     /**
@@ -59,20 +61,22 @@ public class UserProfileView {
         return user.getName();
     }
 
-    public String findUser(Long id) {
-        if (id != null) {
-            this.user = auctionUserFacade.find(id);
-            return "userProfile";
-        } else {
-            return "index?faces-redirect=true";
-        }
-    }
-
     public AuctionUser getUser() {
         return user;
     }
-    
-    public List<ProductListing> getProductListings(){
-        return user.getListings();
+
+    public void removeListing(Long id) {
+        //return user.getListings();
+        ProductListing listing = null;
+        for (int i = 0; i < user.getListings().size(); i++) {
+            if (user.getListings().get(i).getId().equals(id)) {
+                listing = user.getListings().get(i);
+                user.getListings().remove(i);
+            }
+        }
+        auctionUserFacade.edit(user);
+        if (listing != null) {
+            productListingFacade.remove(listing);
+        }
     }
 }
