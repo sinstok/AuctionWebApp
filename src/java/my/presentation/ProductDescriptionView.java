@@ -266,6 +266,7 @@ public class ProductDescriptionView implements Serializable {
 
         AuctionUser rater = auctionUserFacade.find(login.getUserId());
         AuctionUser seller = this.getSeller();
+        Feedback oldFeedback = seller.getFeedbackOfUser(rater.getId());        
         if (seller == null) {
             FacesMessage msg = new FacesMessage("seller is null", "ERROR MSG");
             FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -274,6 +275,9 @@ public class ProductDescriptionView implements Serializable {
             FacesMessage msg = new FacesMessage("Can't give a rating to yourself", "ERROR MSG");
             FacesContext.getCurrentInstance().addMessage(null, msg);
             return "index";
+        } else if (oldFeedback != null){
+            oldFeedback.setRating(Double.parseDouble(this.getSellerRating()));
+            feedbackFacade.edit(oldFeedback);
         } else {
             Feedback feed = new Feedback();
 

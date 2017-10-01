@@ -45,16 +45,27 @@ public class AuctionUser implements Serializable {
     @JoinTable(name="auctionuser_biddedproductlisting")
     private List<ProductListing> bids;
 
+    public Feedback getFeedbackOfUser(long userId){
+        Feedback result = null;
+        
+        for(Feedback fb : feedbacks){
+            if(fb.getRater().getId() == userId){
+                return fb;
+            }
+        }
+        return result;
+    }
+    
     public void addFeedback(Feedback feedback) {
         if (feedbacks == null) {
-            feedbacks = new ArrayList<Feedback>();
+            feedbacks = new ArrayList<>();
         }
         feedbacks.add(feedback);
     }
 
     public void addListing(ProductListing listing) {
         if (listings == null) {
-            listings = new ArrayList<ProductListing>();
+            listings = new ArrayList<>();
         }
         listings.add(listing);
     }
