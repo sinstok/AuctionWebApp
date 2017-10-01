@@ -80,7 +80,7 @@ public class UserProfileView {
         if (highestBid.getUser().getId().equals(user.getId())) {
             return "You are the Highest bidder!";
         } else {
-            return "Not the highest bidder longer!";
+            return "You are no longer the highest bidder!";
         }
     }
 
