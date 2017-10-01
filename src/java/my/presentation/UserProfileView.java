@@ -77,8 +77,8 @@ public class UserProfileView {
                 highestBid = bids.get(i);
             }
         }
-        if (highestBid.getId().equals(highestBid.getId())) {
-            return "Highest bidder!";
+        if (highestBid.getUser().getId().equals(user.getId())) {
+            return "You are the Highest bidder!";
         } else {
             return "Not the highest bidder longer!";
         }
