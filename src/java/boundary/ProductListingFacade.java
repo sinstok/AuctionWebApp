@@ -38,4 +38,5 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
         return productListings;
     }
     
+    
 }
