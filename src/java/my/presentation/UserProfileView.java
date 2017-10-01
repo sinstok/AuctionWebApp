@@ -48,7 +48,7 @@ public class UserProfileView {
             try {
                 ec.redirect("loginPage.xhtml");
             } catch (IOException e) {
-
+                
             }
         } else {
             this.user = auctionUserFacade.find(userId);
