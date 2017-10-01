@@ -52,6 +52,20 @@
                 </div>
                 <div class="row">
                     <div class="form-group col-md-3">
+                        <label>Phone number</label>
+                        <h:inputText id="phone" styleClass="form-control" value="#{RegisterUserView.newUser.phone}" required="true" requiredMessage="Enter your phone number" a:placeholder="000 00 000" />
+                        <h:message for="phone" style="color: red" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-3">
+                        <label>Adress</label>
+                        <h:inputText id="adress" styleClass="form-control" value="#{RegisterUserView.newUser.address}" required="true" requiredMessage="Enter your name adress" a:placeholder="Adress" />
+                        <h:message for="adress" style="color: red" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-3">
                         <label>Password</label>
                         <h:inputSecret id="password" styleClass="form-control" value="#{RegisterUserView.newUser.password}" required="true" requiredMessage="Enter your password" a:placeholder="Password" />
                         <h:message for="password" style="color: red" />
