@@ -70,7 +70,7 @@
                     </div>
                     <div class="col-md-9">
                         <p style="font-size: 2em"><h:outputLabel value="#{PDView.pl.product.name}" /> </p>
-                        <p> Product rating: <h:outputText value="#{PDView.productRating}" /></p>
+                        <p> Product rating: <h:outputText value="#{PDView.avergeProductRating}" /></p>
                         <p> Starting price: <h:outputText value="#{PDView.pl.basePrice} $" /></p>
                         <p style="font-size: 2em">Current Bid: <h:outputLabel value="#{PDView.highestBid.amount} $" /></p>
                         <p style="font-size: 1em">Place your bid in dollar</p>
@@ -103,8 +103,8 @@
                 <div class="row" style="padding-top: 1em">
                     <div class="col-md-10">
                         <h:form>
-                            <p> Write Comment
-                                <h:selectOneMenu value="#{PDView.rating}">
+                            <p> Select a rating for product:  
+                                <h:selectOneMenu value="#{PDView.productRating}">
                                     <f:selectItem itemValue="1.0" itemLabel="1 Star" />
                                     <f:selectItem itemValue="2.0" itemLabel="2 Stars" />
                                     <f:selectItem itemValue="3.0" itemLabel="3 Stars" />
@@ -123,9 +123,22 @@
             <div class="col-md-4" >
                 <div class="container-fluid well">
                     <p style="font-size: 2em">Seller: <h:outputText value="#{PDView.seller.name}" /></p>
+                    <p>Seller rating: <h:outputText value="#{PDView.avergeSellerRating}" /></p>
                     <p>Email: <h:outputText value="#{PDView.seller.email}" /></p>
                     <p>Phone: <h:outputText value="#{PDView.seller.phone}" /></p>
                     <p>Adress: <h:outputText value="#{PDView.seller.address}" /></p>
+                    <h:form>
+                        <p> Select a rating for Seller:  
+                            <h:selectOneMenu value="#{PDView.sellerRating}">
+                                <f:selectItem itemValue="1.0" itemLabel="1 Star" />
+                                <f:selectItem itemValue="2.0" itemLabel="2 Stars" />
+                                <f:selectItem itemValue="3.0" itemLabel="3 Stars" />
+                                <f:selectItem itemValue="4.0" itemLabel="4 Stars" />
+                                <f:selectItem itemValue="5.0" itemLabel="5 Stars" />
+                            </h:selectOneMenu>
+                        </p>
+                        <p><h:commandButton action="#{PDView.addSellerRating(PDView.ID)}" value=" Send seller rating" /></p>
+                    </h:form>
                 </div>
             </div>
         </div>

@@ -63,7 +63,8 @@ public class ProductDescriptionView implements Serializable {
     private Product product;
     private double newBidValue;
     private String comment;
-    private String rating;
+    private String productRating;
+    private String sellerRating;
     private ProductListing pl;
     private int plID;
 
@@ -88,7 +89,7 @@ public class ProductDescriptionView implements Serializable {
         return proList;
     }
     /**
-     * Returns the ID of the Seller of this productlisting
+     * Returns the AuctionUser who are the Seller of this productlisting
      * @return 
      */
     public AuctionUser getSeller() {
@@ -100,10 +101,35 @@ public class ProductDescriptionView implements Serializable {
      * or the string "No ratings" if the product has not recived any ratings
      * @return 
      */
-    public String getProductRating() {
+    public String getAvergeProductRating() {
         //Product prod = this.getProduct();
         Product prod = pl.getProduct();
         List<Feedback> feeds = prod.getFeedbacks();
+        List<Double> ratings = new ArrayList<>();
+        int size = feeds.size();
+        if (size > 0) {
+            for (int i = 0; i < size; i++) {
+                if (feeds.get(i).getRating() != 0.0) {
+                    ratings.add(feeds.get(i).getRating());
+                }
+            }
+            RatingCalculator rc = new RatingCalculator();
+            Double rating = rc.calcuatedRating(ratings);
+            if (rating > 0) {
+                return rating.toString();
+            }
+        }
+        return "No ratings";
+    }
+    
+    /**
+     * Returns a string value of the average rating of the product,
+     * or the string "No ratings" if the product has not recived any ratings
+     * @return 
+     */
+    public String getAvergeSellerRating() {
+        AuctionUser seller = this.getSeller();
+        List<Feedback> feeds = seller.getFeedbacks();
         List<Double> ratings = new ArrayList<>();
         int size = feeds.size();
         if (size > 0) {
@@ -197,7 +223,7 @@ public class ProductDescriptionView implements Serializable {
         
         Feedback oldFeedback = pl.getProduct().getFeedbackOfUser(rater.getId());
         if(oldFeedback != null){
-            oldFeedback.setRating(Double.parseDouble(this.getRating()));
+            oldFeedback.setRating(Double.parseDouble(this.getProductRating()));
             oldFeedback.setFeedback(comment);
             feedbackFacade.edit(oldFeedback);
             return null;    
@@ -214,7 +240,7 @@ public class ProductDescriptionView implements Serializable {
             String com = this.getComment();
 
             feed.setRater(rater);
-            feed.setRating(Double.parseDouble(this.getRating()));
+            feed.setRating(Double.parseDouble(this.getProductRating()));
             feed.setFeedback(com);
             List<Feedback> feeds = prod.getFeedbacks();
             feeds.add(feed);
@@ -222,9 +248,32 @@ public class ProductDescriptionView implements Serializable {
             productFacade.edit(prod);
             feedbackFacade.create(feed);
         }
-
         return null;
+    }
+    
+    public String addSellerRating(int pID){
+        if (!login.isLoggedIn()) {
+            return "loginPage";
+        }
 
+        AuctionUser rater = auctionUserFacade.find(login.getUserId());
+        AuctionUser seller = this.getSeller();
+        if (seller == null) {
+            FacesMessage msg = new FacesMessage("seller is null", "ERROR MSG");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            return "index";
+        } else {
+            Feedback feed = new Feedback();
+
+            feed.setRater(rater);
+            feed.setRating(Double.parseDouble(this.getSellerRating()));
+            List<Feedback> feeds = seller.getFeedbacks();
+            feeds.add(feed);
+            seller.setFeedbacks(feeds);
+            auctionUserFacade.edit(seller);
+            feedbackFacade.create(feed);
+        }       
+        return null;
     }
 
     /**
@@ -316,11 +365,19 @@ public class ProductDescriptionView implements Serializable {
         this.comment = comment;
     }
 
-    public String getRating() {
-        return rating;
+    public String getProductRating() {
+        return productRating;
     }
 
-    public void setRating(String rating) {
-        this.rating = rating;
+    public void seProductRating(String productRating) {
+        this.productRating = productRating;
+    }
+    
+    public String getSellerRating() {
+        return sellerRating;
+    }
+
+    public void setSellerRating(String sellerRating) {
+        this.sellerRating = sellerRating;
     }
 }
