@@ -2,25 +2,37 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:head>
-        <title>Facelet Title</title>
+        <title>Product Select</title>
         <link rel="stylesheet" href="resources/css/bootstrap.css" />
         <link rel="stylesheet" href="resources/css/blog.css" />
-        <h:outputStylesheet library="css" name="bootstrap.css"/>
+        <h:outputStylesheet library="css" name="bootstrap.css" />
         <h:outputStylesheet library="css" name="blog.css"/>
     </h:head>
     <h:body>
-        <ui:insert name="content"><ui:include src="../Navbar.xhtml"/></ui:insert>
-        <h:form>
-        Select the product you want to add a listing for. If it does not exist, 
-            you can <h:commandLink action="newProduct" value="create" />  one
-        </h:form>
-        <h:form>
-            <ui:repeat value="#{createProductListingView.allProducts}" var="product">
-                <h:commandButton action="#{createProductListingView.selectProduct(product.id)}" value="#{product.name}" /> <br />
-            </ui:repeat>
-        </h:form>
+      <ui:insert name="content"><ui:include src="../Navbar.xhtml"/></ui:insert>
+        <div class="container well">
+            <h2>Select Product</h2>
+            <h:form>
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        Select the product you want to add a listing for. If it does not exist, 
+                        you can <h:commandLink action="newProduct" value="create" />  one
+                    </div>
+                </div>
+            </h:form>
+            <h:form>
+                <div class="row">
+                    <div class="form-group col-md-1">
+                        <ui:repeat value="#{createProductListingView.allProducts}" var="product">
+                            <h:commandButton action="#{createProductListingView.selectProduct(product.id)}" value="#{product.name}" /> <br />
+                        </ui:repeat>
+                    </div>
+                </div>
+            </h:form>
+        </div>
     </h:body>
 </html>
 
