@@ -292,7 +292,7 @@ public class ProductDescriptionView implements Serializable {
         }
         
         //Går gjennom all seller sine prosukt lister
-        for (int i = 0; i <= sellerListings.size(); i++) {
+        for (int i = 0; i < sellerListings.size(); i++) {
             //Sjekker om biding er over
             if (!allowed) {
                 if (sellerListings.get(i).getClosing().before(now)) {
@@ -305,7 +305,7 @@ public class ProductDescriptionView implements Serializable {
                             highestBid = bids.get(j);
                         }
                     }
-                    if (highestBid.getUser() == seller) {
+                    if (highestBid.getUser().getId() == rater.getId()) {
                         allowed = true;
                     }
                 }
