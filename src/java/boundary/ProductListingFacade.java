@@ -37,6 +37,12 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
     
     @Inject
     ProductListingFacade plFacade;
+    
+    @Inject
+    ProductFacade productFacade;
+    
+    @Inject
+    FeedbackFacade feedbackFacade;
 
     @Override
     protected EntityManager getEntityManager() {
@@ -185,6 +191,46 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
             }
         }
         return highestBid;
+    }
+
+    public String addFeedback(AuctionUser rater, ProductListing pl, Bid highestBid, String rating, String comment, Product product) {
+        Date now = new Date();
+        Date closing = pl.getClosing();
+
+        if (highestBid.getUser() == null || highestBid.getUser().getId() != rater.getId() || closing.after(now)) {
+            FacesMessage msg = new FacesMessage("You must purchase the product before adding feedback", "ERROR MSG");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            return null;
+        }
+
+        Feedback oldFeedback = pl.getProduct().getFeedbackOfUser(rater.getId());
+        if (oldFeedback != null) {
+            oldFeedback.setRating(Double.parseDouble(rating));
+            oldFeedback.setFeedback(comment);
+            feedbackFacade.edit(oldFeedback);
+            return null;
+        }
+
+        Product prod = null;
+        if (product == null) {
+            FacesMessage msg = new FacesMessage("product is null", "ERROR MSG");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            return "index";
+        } else {
+            prod = product;
+            Feedback feed = new Feedback();
+            String com = comment;
+
+            feed.setRater(rater);
+            feed.setRating(Double.parseDouble(rating));
+            feed.setFeedback(com);
+            List<Feedback> feeds = prod.getFeedbacks();
+            feeds.add(feed);
+            prod.setFeedbacks(feeds);
+            productFacade.edit(prod);
+            feedbackFacade.create(feed);
+        }
+        return null;
     }
     
     
