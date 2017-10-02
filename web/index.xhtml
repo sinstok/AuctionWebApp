@@ -14,50 +14,8 @@
         <h:outputStylesheet library="css" name="blog.css"/>
     </h:head>
     <h:body>
-        <nav class="navbar navbar-inverse">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="#">AuctionWebApp</a>
-                </div>
-                <ul class="nav navbar-nav">
-                    <li class="active"><a href="#">Home</a></li>
-                    <li><a href="#">Page 1</a></li>
-                    <li><a href="#">Page 2</a></li>
-                </ul>
-                <h:form styleClass="navbar-form navbar-left">
-                    <div class="input-group">
-                        <h:inputText value="#{productOverView.search}" class="form-control" a:placeholder="Search" />
-                        <div class="input-group-btn">
-                            <h:commandLink class="btn btn-default" action="index">
-                                <i class="glyphicon glyphicon-search"></i>
-                            </h:commandLink>
-                        </div>
-                    </div>
-                </h:form>   
-                <h:form>
-                    <ul class="nav navbar-nav navbar-right">
-                        <c:if test="#{user == null}">
-                            <li>
-                                <h:commandLink action="loginPage">
-                                    <span class="glyphicon glyphicon-log-in" /> Login
-                                </h:commandLink>
-                            </li>
-                        </c:if>
-                        <c:if test="#{user != null}">
-                            <li>
-                                <h:commandLink action="#{LoginView.toUserProfile}" value="My Profile" />
-                            </li>
-                            <li>
-                                <h:commandLink action="#{LoginView.logOut()}">
-                                    Logout <span class="glyphicon glyphicon-log-out" />
-                                </h:commandLink>
-                            </li>
-                        </c:if>
-                        <!--<li><h:commandLink action="productdescription"></h:commandLink></li>-->
-                    </ul>
-                </h:form>
-            </div>
-        </nav>
+       
+        <ui:insert name="content"><ui:include src="Navbar.xhtml"/></ui:insert>
         <div class="row col-md-12">
             <div class="col-md-2">
                 <h:form>

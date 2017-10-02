@@ -5,8 +5,13 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:head>
         <title>Facelet Title</title>
+        <link rel="stylesheet" href="resources/css/bootstrap.css" />
+        <link rel="stylesheet" href="resources/css/blog.css" />
+        <h:outputStylesheet library="css" name="bootstrap.css"/>
+        <h:outputStylesheet library="css" name="blog.css"/>
     </h:head>
     <h:body>
+        <ui:insert name="content"><ui:include src="../Navbar.xhtml"/></ui:insert>
         <h:form>
         Select the product you want to add a listing for. If it does not exist, 
             you can <h:commandLink action="newProduct" value="create" />  one
