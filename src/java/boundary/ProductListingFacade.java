@@ -231,4 +231,65 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
         }
         return null;
     }
+
+    public String addSellerRating(AuctionUser rater, AuctionUser seller, String sellerRating) {
+        Bid highestBid = new Bid();
+        Feedback oldFeedback = seller.getFeedbackOfUser(rater.getId());
+        Date now = new Date();
+        List<ProductListing> sellerListings = seller.getListings();
+        boolean allowed = false;
+
+        if (seller == null) {
+            FacesMessage msg = new FacesMessage("seller is null", "ERROR MSG");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            return "index";
+        } else if (rater.getId().equals(seller.getId())) {
+            FacesMessage msg = new FacesMessage("Can't give a rating to yourself", "ERROR MSG");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            return "index";
+        }
+
+        //Goes through every seller's productlistings
+        for (int i = 0; i < sellerListings.size(); i++) {
+            //Check if bidding is done
+            if (!allowed) {
+                if (sellerListings.get(i).getClosing().before(now)) {
+                    List<Bid> bids = sellerListings.get(i).getBids();
+                    //Goes through every bids to the productlisting and the finds highest bid
+                    for (int j = 0; j < bids.size(); j++) {
+                        double bidPrice = 0;
+                        if (bids.get(j).getAmount() > bidPrice) {
+                            bidPrice = bids.get(j).getAmount();
+                            highestBid = bids.get(j);
+                        }
+                    }
+                    if (highestBid.getUser().getId() == rater.getId()) {
+                        allowed = true;
+                    }
+                }
+            }
+        }
+
+        if (!(allowed)) {
+            FacesMessage msg = new FacesMessage("You must buy a produt from the seller to give a rating", "ERROR MSG");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            return "index";
+        }
+
+        if (oldFeedback != null) {
+            oldFeedback.setRating(Double.parseDouble(sellerRating));
+            feedbackFacade.edit(oldFeedback);
+        } else {
+            Feedback feed = new Feedback();
+
+            feed.setRater(rater);
+            feed.setRating(Double.parseDouble(sellerRating));
+            List<Feedback> feeds = seller.getFeedbacks();
+            feeds.add(feed);
+            seller.setFeedbacks(feeds);
+            auctionUserFacade.edit(seller);
+            feedbackFacade.create(feed);
+        }
+        return null;
+    }
 }

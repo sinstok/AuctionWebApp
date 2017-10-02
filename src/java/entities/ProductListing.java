@@ -22,7 +22,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 /**
- *
+ * Instance of Product that users can bid on
  * @author Tomas
  */
 @Entity
