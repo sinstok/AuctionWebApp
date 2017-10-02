@@ -18,7 +18,7 @@ import javax.faces.context.FacesContext;
 
 /**
  *
- * @author Joakim
+ * @author Ragnhild
  */
 @Named(value = "productOverView")
 @RequestScoped
@@ -57,7 +57,6 @@ public class ProductOverView {
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
         ec.getRequestMap().put("productListing", pl);
         return "productdescription";
-        //return "viewProductListing";
     }
     
     public Category getCategory() {
