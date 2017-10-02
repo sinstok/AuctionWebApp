@@ -7,14 +7,17 @@
     
      <nav class="navbar navbar-inverse">
             <div class="container-fluid">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="#">AuctionWebApp</a>
-                </div>
+                <h:form>
+                    <h:commandLink action="index" class="navbar-brand">
+                        AuctionWebApp
+                    </h:commandLink>
+                
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="#">Home</a></li>
-                    <li><a href="#">Page 1</a></li>
-                    <li><a href="#">Page 2</a></li>
+                    <li><h:commandLink action="#{productOverView.toProductCreation()}">
+                        Add product
+                    </h:commandLink></li>
                 </ul>
+                    </h:form>
                 <h:form styleClass="navbar-form navbar-left">
                     <div class="input-group">
                         <h:inputText value="#{productOverView.search}" class="form-control" />

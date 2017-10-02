@@ -8,6 +8,7 @@ package my.presentation;
 import boundary.ProductListingFacade;
 import entities.ProductListing;
 import helpers.Category;
+import helpers.LoginBean;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
@@ -15,6 +16,7 @@ import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 
 /**
  *
@@ -26,6 +28,8 @@ public class ProductOverView {
     
     @EJB
     ProductListingFacade plFacade;
+    @Inject 
+    LoginBean login;
     
     private Category category;
     private String search;
@@ -43,6 +47,14 @@ public class ProductOverView {
             list = plFacade.getBiddables();
         }
         return list;
+    }
+    
+    public String toProductCreation(){
+        if(!login.isLoggedIn()){
+            return "loginPage";
+        }
+        
+        return "flow-productCreation";
     }
     
     public List<String> getCategories() {
