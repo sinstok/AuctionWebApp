@@ -16,7 +16,6 @@ import helpers.LoginBean;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
