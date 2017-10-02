@@ -49,8 +49,7 @@ public class ProductOverView {
     }
     
     public List<String> getCategories() {
-        List<String> categories;
-        categories = new ArrayList<>();
+        List<String> categories = new ArrayList<>();
         for(Category c : Category.values()) {
             categories.add(c.toString());
         }
