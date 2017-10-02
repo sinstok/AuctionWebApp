@@ -129,7 +129,14 @@ public class ProductDescriptionView implements Serializable {
         }
 
         AuctionUser bidder = auctionUserFacade.find(login.getUserId());
-        return plFacade.addBid(bidder, pl, getSeller(), getHighestBid(), newBidValue);
+        String msgs = plFacade.addBid(bidder, pl, getSeller(), getHighestBid(), newBidValue);
+        if(msgs == null){
+            return null;
+        }else{
+            FacesMessage msg = new FacesMessage(msgs , "ERROR MSG");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            return null;
+        }
     }
 
     /**
@@ -145,7 +152,20 @@ public class ProductDescriptionView implements Serializable {
         }
         AuctionUser rater = auctionUserFacade.find(login.getUserId());
         Bid highestBid = getHighestBid();
-        return plFacade.addFeedback(rater, pl, highestBid, this.getProductRating(), this.comment, this.getProduct());
+        String msgs = plFacade.addFeedback(rater, pl, highestBid, this.getProductRating(), this.comment, this.getProduct());
+        String a = "Product is null";
+        
+        if(msgs == null){
+            return null;
+        }else if (msgs.equals(a)){
+            FacesMessage msg = new FacesMessage(msgs , "ERROR MSG");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            return "index";
+        }else{
+            FacesMessage msg = new FacesMessage(msgs , "ERROR MSG");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            return null;
+        }
     }
 
     /**
@@ -162,7 +182,14 @@ public class ProductDescriptionView implements Serializable {
         AuctionUser rater = auctionUserFacade.find(login.getUserId());
         AuctionUser seller = this.getSeller();
         
-        return plFacade.addSellerRating(rater, seller, this.getSellerRating());
+        String msgs = plFacade.addSellerRating(rater, seller, this.getSellerRating());
+        if(msgs == null){
+            return null;
+        }else{
+            FacesMessage msg = new FacesMessage(msgs , "ERROR MSG");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            return "index";
+        }
     }
 
     /**

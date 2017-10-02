@@ -126,30 +126,20 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
 
     public String addBid(AuctionUser bidder, ProductListing pl, AuctionUser seller, Bid highestBid, double newBidValue) {
         if (bidder.getId() == seller.getId()) {
-            FacesMessage msg = new FacesMessage("You cannot bid on your own product", "ERROR MSG");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-            return null;
+            return "You cannot bid on your own product";
         }
 
         if (pl == null) {
-            FacesMessage msg = new FacesMessage("No productlisting", "ERROR MSG");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-            return null;
+            return "No productlisting";
         }
         if (pl.getClosing().before(new Date())) {
-            FacesMessage msg = new FacesMessage("Bidding has closed", "ERROR MSG");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-            return null;
+            return "Bidding has closed";
         }
 
         if (newBidValue < highestBid.getAmount()) {
-            FacesMessage msg = new FacesMessage("Bid too low", "ERROR MSG");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-            return null;
+            return "Bid too low";
         } else if (newBidValue == highestBid.getAmount() && highestBid.getUser() != null) {
-            FacesMessage msg = new FacesMessage("Someone already made that bid", "ERROR MSG");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-            return null;
+            return "Someone already made that bid";
         }
         Bid newBid = new Bid();
         newBid.setAmount(newBidValue);
@@ -197,9 +187,7 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
         Date closing = pl.getClosing();
 
         if (highestBid.getUser() == null || highestBid.getUser().getId() != rater.getId() || closing.after(now)) {
-            FacesMessage msg = new FacesMessage("You must purchase the product before adding feedback", "ERROR MSG");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-            return null;
+            return "You must purchase the product before adding feedback";
         }
 
         Feedback oldFeedback = pl.getProduct().getFeedbackOfUser(rater.getId());
@@ -212,9 +200,7 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
 
         Product prod = null;
         if (product == null) {
-            FacesMessage msg = new FacesMessage("product is null", "ERROR MSG");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-            return "index";
+            return "Product is null";
         } else {
             prod = product;
             Feedback feed = new Feedback();
@@ -240,13 +226,9 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
         boolean allowed = false;
 
         if (seller == null) {
-            FacesMessage msg = new FacesMessage("seller is null", "ERROR MSG");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-            return "index";
+            return "Seller is null";
         } else if (rater.getId().equals(seller.getId())) {
-            FacesMessage msg = new FacesMessage("Can't give a rating to yourself", "ERROR MSG");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-            return "index";
+            return "Can't give a rating to yourself";
         }
 
         //Goes through every seller's productlistings
@@ -271,9 +253,7 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
         }
 
         if (!(allowed)) {
-            FacesMessage msg = new FacesMessage("You must buy a produt from the seller to give a rating", "ERROR MSG");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-            return "index";
+            return "You must buy a produt from the seller to give a rating";
         }
 
         if (oldFeedback != null) {
