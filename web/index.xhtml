@@ -26,11 +26,11 @@
                 </ul>
                 <h:form styleClass="navbar-form navbar-left">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search" />
+                        <h:inputText value="#{productOverView.search}" class="form-control" a:placeholder="Search" />
                         <div class="input-group-btn">
-                            <button class="btn btn-default" type="submit">
+                            <h:commandLink class="btn btn-default" action="index">
                                 <i class="glyphicon glyphicon-search"></i>
-                            </button>
+                            </h:commandLink>
                         </div>
                     </div>
                 </h:form>   
@@ -63,8 +63,11 @@
                 <h:form>
                     <label>Categories</label>
                     <ul class="nav nav-pills nav-stacked">
+                        <li><h:commandLink action="#{productOverView.setCategory(null)}">
+                                    All
+                                </h:commandLink></li>
                         <ui:repeat value="#{productOverView.categories}" var="category">
-                            <li><h:commandLink action="#{productListingsView.filterByCategory(category)}">
+                            <li><h:commandLink action="#{productOverView.setCategory(category)}">
                                     #{category}
                                 </h:commandLink></li>
                         </ui:repeat>
