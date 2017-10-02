@@ -60,11 +60,11 @@ public class CreateProductListingView implements Serializable {
         product = new Product();
         category = 0;
     }
-
+    
     public String postProductListing() throws IOException {
 
         if (!login.isLoggedIn()) {
-            FacesMessage msg = new FacesMessage("       You must be logged in in order to add a product", "ERROR MSG");
+            FacesMessage msg = new FacesMessage("You must be logged in in order to add a product", "ERROR MSG");
             FacesContext.getCurrentInstance().addMessage(null, msg);
             return "returnFromproductCreation";
         }

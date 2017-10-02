@@ -143,46 +143,9 @@ public class ProductDescriptionView implements Serializable {
         if (!login.isLoggedIn()) {
             return "loginPage";
         }
-
         AuctionUser rater = auctionUserFacade.find(login.getUserId());
-        Date now = new Date();
-        Date closing = pl.getClosing();
         Bid highestBid = getHighestBid();
-
-        if (highestBid.getUser() == null || highestBid.getUser().getId() != rater.getId() || closing.after(now)) {
-            FacesMessage msg = new FacesMessage("You must purchase the product before adding feedback", "ERROR MSG");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-            return null;
-        }
-
-        Feedback oldFeedback = pl.getProduct().getFeedbackOfUser(rater.getId());
-        if (oldFeedback != null) {
-            oldFeedback.setRating(Double.parseDouble(this.getProductRating()));
-            oldFeedback.setFeedback(comment);
-            feedbackFacade.edit(oldFeedback);
-            return null;
-        }
-
-        Product prod = null;
-        if (this.getProduct() == null) {
-            FacesMessage msg = new FacesMessage("product is null", "ERROR MSG");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-            return "index";
-        } else {
-            prod = this.getProduct();
-            Feedback feed = new Feedback();
-            String com = this.getComment();
-
-            feed.setRater(rater);
-            feed.setRating(Double.parseDouble(this.getProductRating()));
-            feed.setFeedback(com);
-            List<Feedback> feeds = prod.getFeedbacks();
-            feeds.add(feed);
-            prod.setFeedbacks(feeds);
-            productFacade.edit(prod);
-            feedbackFacade.create(feed);
-        }
-        return null;
+        return plFacade.addFeedback(rater, pl, highestBid, this.getProductRating(), this.comment, this.getProduct());
     }
 
     /**
