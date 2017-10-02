@@ -91,7 +91,8 @@
                               <h:commandLink action="#{productOverView.toProductDescription(productListing)}">
                                 <div class="row well">
                                     <h:graphicImage value="/image/productListing/#{productListing.id}" height="150"/>
-                                    #{productListing.product.name}
+                                    <h2>#{productListing.product.name}</h2>
+                                    <p>#{productListing.description}</p>
                                 </div>
                                 <br />
                             </h:commandLink> 
