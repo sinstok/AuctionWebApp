@@ -6,6 +6,7 @@
 package helpers;
 
 import java.security.MessageDigest;
+import java.security.SecureRandom;
 
 /**
  *
@@ -36,5 +37,19 @@ public class PasswordHash {
 //    	System.out.println("Hex format : " + hexString.toString());
         return hexString;
 
+    }
+
+    public String generateSalt() {
+        StringBuilder buf = new StringBuilder();
+        SecureRandom sr = new SecureRandom();
+        for (int i = 0; i < 6; i++) {// log2(52^6)=34.20... so, this is about 32bit strong.
+            boolean upper = sr.nextBoolean();
+            char ch = (char) (sr.nextInt(26) + 'a');
+            if (upper) {
+                ch = Character.toUpperCase(ch);
+            }
+            buf.append(ch);
+        }
+        return buf.toString();
     }
 }

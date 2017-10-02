@@ -36,14 +36,14 @@
                 </h:form>   
                 <h:form>
                     <ul class="nav navbar-nav navbar-right">
-                        <c:if test="#{user == null}">
+                        <ui:fragment rendered="#{user == null}">
                             <li>
                                 <h:commandLink action="loginPage">
                                     <span class="glyphicon glyphicon-log-in" /> Login
                                 </h:commandLink>
                             </li>
-                        </c:if>
-                        <c:if test="#{user != null}">
+                        </ui:fragment>
+                        <ui:fragment rendered="#{user != null}">
                             <li>
                                 <h:commandLink action="#{LoginView.toUserProfile}" value="My Profile" />
                             </li>
@@ -52,8 +52,7 @@
                                     Logout <span class="glyphicon glyphicon-log-out" />
                                 </h:commandLink>
                             </li>
-                        </c:if>
-                        <!--<li><h:commandLink action="productdescription"></h:commandLink></li>-->
+                        </ui:fragment>
                     </ul>
                 </h:form>
             </div>

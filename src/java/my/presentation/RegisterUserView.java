@@ -9,6 +9,9 @@ import boundary.AuctionUserFacade;
 import entities.AuctionUser;
 import helpers.LoginBean;
 import helpers.PasswordHash;
+import java.security.SecureRandom;
+import java.util.Base64;
+import java.util.Random;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
@@ -56,7 +59,8 @@ public class RegisterUserView {
         if (!auctionUserFacade.register("email", this.newUser.getEmail())) {
             if (this.confPassword.equals(this.newUser.getPassword())) {
                 try {
-                    String hashedPassword = hashing.hashPassword(this.newUser.getPassword()).toString();
+                    this.newUser.setSalt(hashing.generateSalt());
+                    String hashedPassword = hashing.hashPassword(this.newUser.getPassword() + this.newUser.getSalt()).toString();
                     this.newUser.setPassword(hashedPassword);
                     auctionUserFacade.create(this.newUser);
                     context.getExternalContext().getSessionMap().put("user", this.newUser.getId());

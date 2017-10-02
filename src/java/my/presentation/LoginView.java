@@ -6,6 +6,7 @@
 package my.presentation;
 
 import boundary.AuctionUserFacade;
+import entities.AuctionUser;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import helpers.LoginBean;
@@ -43,12 +44,10 @@ public class LoginView {
     }
 
     public String login() {
+        AuctionUser user = auctionUserFacade.login(email, password);
         long id = 0;
-        try {
-            id = auctionUserFacade.login(email, hash.hashPassword(password).toString());
-        } catch (Exception e) {
+        id = user.getId();
 
-        }
         if (id != 0) {
             if (loginBean.login(id)) {
                 return "index?faces-redirect=true";
@@ -58,7 +57,7 @@ public class LoginView {
                 return "loginPage";
             }
         } else {
-            FacesMessage msg = new FacesMessage("Wrong user input!", "ERROR MSG");
+            FacesMessage msg = new FacesMessage(user.getSalt(), "ERROR MSG");
             FacesContext.getCurrentInstance().addMessage(null, msg);
             return "loginPage";
         }
