@@ -13,14 +13,16 @@
         <h:outputStylesheet library="css" name="blog.css"/>
     </h:head>
     <h:body>
-      <ui:insert name="content"><ui:include src="Navbar.xhtml"/></ui:insert>
+        <ui:insert name="content"><ui:include src="Navbar.xhtml"/></ui:insert>
         <h:form id="RegisterForm">
             <div class="container well">
                 <div class="row" style="padding-top: 5px">
                     <h:messages styleClass="alert-danger" globalOnly="true" />
                     <div class="form-group col-md-3">
                         <label>Email</label>
-                        <h:inputText id="email" styleClass="form-control" value="#{RegisterUserView.newUser.email}" required="true" requiredMessage="Enter yout email" a:placeholder="Email" />
+                        <h:inputText id="email" styleClass="form-control" value="#{RegisterUserView.newUser.email}" required="true" requiredMessage="Enter yout email" a:placeholder="Email" validatorMessage="Email is not valid!" >
+                            <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
+                        </h:inputText>
                         <h:message for="email" style="color: red" />
                     </div>
                 </div>

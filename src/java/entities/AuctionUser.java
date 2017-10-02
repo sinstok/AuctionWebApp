@@ -33,6 +33,7 @@ public class AuctionUser implements Serializable {
     private String email;
     private String address;
     private String password;
+    private String salt;
 
     @OneToMany(cascade = PERSIST)
     private List<Feedback> feedbacks;
@@ -141,6 +142,14 @@ public class AuctionUser implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
 
     @Override

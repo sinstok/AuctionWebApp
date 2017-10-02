@@ -6,6 +6,9 @@
 package boundary;
 
 import entities.AuctionUser;
+import entities.Bid;
+import entities.ProductListing;
+import helpers.PasswordHash;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -20,6 +23,7 @@ public class AuctionUserFacade extends AbstractFacade<AuctionUser> {
 
     @PersistenceContext(unitName = "AuctionWebAppPU")
     private EntityManager em;
+    private PasswordHash hash;
 
     @Override
     protected EntityManager getEntityManager() {
@@ -28,9 +32,8 @@ public class AuctionUserFacade extends AbstractFacade<AuctionUser> {
 
     public AuctionUserFacade() {
         super(AuctionUser.class);
-        
+
     }
-    
 
     public AuctionUser getSeller(Long id) {
         List<AuctionUser> users = em.createQuery("SELECT a FROM AuctionUser a JOIN a.listings p WHERE p.id = :val ", AuctionUser.class).setParameter("val", id).getResultList();
@@ -40,25 +43,48 @@ public class AuctionUserFacade extends AbstractFacade<AuctionUser> {
 
             user = users.get(0);
         }
-        
+
         return user;
     }
 
     public synchronized boolean register(String fieldName, Object value) {
         List<AuctionUser> list = em.createQuery("SELECT t FROM " + AuctionUser.class.getSimpleName() + " t WHERE t." + fieldName + " " + "=" + " :val ORDER BY t.id ASC", AuctionUser.class).setParameter("val", value.toString()).getResultList();
-        if (list.size() != 1) {
-            return false;
-        }
-        return true;
+        return list.size() == 1;
     }
 
-    public synchronized long login(String username, String password) {
-        AuctionUser user = null;
-        user = em.createQuery("SELECT t FROM AuctionUser t WHERE t.email = :val AND t.password = :vall", AuctionUser.class).setParameter("val", username).setParameter("vall", password).getSingleResult();
+    public synchronized AuctionUser login(String username, String password) {
+        AuctionUser user = em.createQuery("SELECT t FROM AuctionUser t WHERE t.email = :val", AuctionUser.class).setParameter("val", username).getSingleResult();
 
         if (user == null) {
-            return 0;
+            return null;
         }
-        return user.getId();
+        try {
+            String hashed = hash.hashPassword(password + user.getSalt()).toString();
+            if (user.getPassword().equals(hashed)) {
+                return user;
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            
+        }
+        return user;
+    }
+
+    public String isHighestBidder(ProductListing listing, AuctionUser user) {
+        List<Bid> bids = listing.getBids();
+        Bid highestBid = null;
+        double bidPrice = listing.getBasePrice();
+        for (int i = 0; i < bids.size(); i++) {
+            if (bids.get(i).getAmount() > bidPrice) {
+                bidPrice = bids.get(i).getAmount();
+                highestBid = bids.get(i);
+            }
+        }
+        if (highestBid.getUser().getId().equals(user.getId())) {
+            return "You are the Highest bidder!";
+        } else {
+            return "You are no longer the highest bidder!";
+        }
     }
 }

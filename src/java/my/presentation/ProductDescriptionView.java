@@ -80,7 +80,6 @@ public class ProductDescriptionView implements Serializable {
         this.pl = (ProductListing) ec.getRequestMap().get("productListing");
     }
 
-    //From productlisting
     public ProductListing getProductListing(int id) {
         Long proListId = Long.valueOf(id);
         ProductListing proList = plFacade.find(proListId);
@@ -103,23 +102,7 @@ public class ProductDescriptionView implements Serializable {
      * @return
      */
     public String getAvergeProductRating() {
-        Product prod = pl.getProduct();
-        List<Feedback> feeds = prod.getFeedbacks();
-        List<Double> ratings = new ArrayList<>();
-        int size = feeds.size();
-        if (size > 0) {
-            for (int i = 0; i < size; i++) {
-                if (feeds.get(i).getRating() != 0.0) {
-                    ratings.add(feeds.get(i).getRating());
-                }
-            }
-            RatingCalculator rc = new RatingCalculator();
-            Double rating = rc.calcuatedRating(ratings);
-            if (rating > 0) {
-                return rating.toString();
-            }
-        }
-        return "No ratings";
+        return plFacade.getAverageProductRating(pl.getProduct());
     }
 
     /**
@@ -129,23 +112,7 @@ public class ProductDescriptionView implements Serializable {
      * @return
      */
     public String getAvergeSellerRating() {
-        AuctionUser seller = this.getSeller();
-        List<Feedback> feeds = seller.getFeedbacks();
-        List<Double> ratings = new ArrayList<>();
-        int size = feeds.size();
-        if (size > 0) {
-            for (int i = 0; i < size; i++) {
-                if (feeds.get(i).getRating() != 0.0) {
-                    ratings.add(feeds.get(i).getRating());
-                }
-            }
-            RatingCalculator rc = new RatingCalculator();
-            Double rating = rc.calcuatedRating(ratings);
-            if (rating > 0) {
-                return rating.toString();
-            }
-        }
-        return "No ratings";
+        return plFacade.getAvergeSellerRating(this.getSeller());
     }
 
     /**
@@ -162,46 +129,7 @@ public class ProductDescriptionView implements Serializable {
         }
 
         AuctionUser bidder = auctionUserFacade.find(login.getUserId());
-        if (bidder.getId() == getSeller().getId()) {
-            FacesMessage msg = new FacesMessage("You cannot bid on your own product", "ERROR MSG");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-            return null;
-        }
-
-        if (pl == null) {
-            FacesMessage msg = new FacesMessage("No productlisting", "ERROR MSG");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-            return null;
-        }
-        if (pl.getClosing().before(new Date())) {
-            FacesMessage msg = new FacesMessage("Bidding has closed", "ERROR MSG");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-            return null;
-        }
-
-        Bid highestBid = getHighestBid();
-        if (newBidValue < highestBid.getAmount()) {
-            FacesMessage msg = new FacesMessage("Bid too low", "ERROR MSG");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-            return null;
-        } else if (newBidValue == highestBid.getAmount() && highestBid.getUser() != null) {
-            FacesMessage msg = new FacesMessage("Someone already made that bid", "ERROR MSG");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-            return null;
-        }
-        Bid newBid = new Bid();
-        newBid.setAmount(this.newBidValue);
-        newBid.setUser(bidder);
-
-        bidder.getBids().add(pl);
-        auctionUserFacade.edit(bidder);
-
-        List<Bid> bids = pl.getBids();
-        bids.add(newBid);
-        pl.setBids(bids);
-        plFacade.edit(pl);
-       
-        return null;
+        return plFacade.addBid(bidder, pl, getSeller(), getHighestBid(), newBidValue);
     }
 
     /**
@@ -275,7 +203,7 @@ public class ProductDescriptionView implements Serializable {
         Date now = new Date();
         List<ProductListing> sellerListings = seller.getListings();
         boolean allowed = false;
-        
+
         if (seller == null) {
             FacesMessage msg = new FacesMessage("seller is null", "ERROR MSG");
             FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -285,7 +213,7 @@ public class ProductDescriptionView implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, msg);
             return "index";
         }
-        
+
         //Går gjennom all seller sine prosukt lister
         for (int i = 0; i < sellerListings.size(); i++) {
             //Sjekker om biding er over
@@ -307,12 +235,12 @@ public class ProductDescriptionView implements Serializable {
             }
         }
 
-        if(!(allowed)){
+        if (!(allowed)) {
             FacesMessage msg = new FacesMessage("You must buy a produt from the seller to give a rating", "ERROR MSG");
             FacesContext.getCurrentInstance().addMessage(null, msg);
             return "index";
         }
-        
+
         if (oldFeedback != null) {
             oldFeedback.setRating(Double.parseDouble(this.getSellerRating()));
             feedbackFacade.edit(oldFeedback);
@@ -351,19 +279,7 @@ public class ProductDescriptionView implements Serializable {
      * @return
      */
     public Bid getHighestBid() {
-        List<Bid> bids = this.pl.getBids();
-        Bid highestBid = new Bid();
-        highestBid.setAmount(pl.getBasePrice());
-
-        if (!(bids.isEmpty())) {
-            for (int i = 0; i < bids.size(); i++) {
-                double current = bids.get(i).getAmount();
-                if (current > highestBid.getAmount()) {
-                    highestBid = bids.get(i);
-                }
-            }
-        }
-        return highestBid;
+        return plFacade.getHighestBid(this.pl.getBids(), pl);
     }
 
     /**
@@ -373,15 +289,7 @@ public class ProductDescriptionView implements Serializable {
      * @return
      */
     public List<String> getAllComments() {
-        Product prod = this.pl.getProduct();
-        List<Feedback> feeds = prod.getFeedbacks();
-        List<String> comments = new ArrayList<>();
-        if (!(feeds.isEmpty())) {
-            for (int i = 0; i < feeds.size(); i++) {
-                comments.add(feeds.get(i).getRater().getName() + ": " + feeds.get(i).getFeedback());
-            }
-        }
-        return comments;
+        return plFacade.getAllComments(this.pl.getProduct());
     }
 
     //GETTERS & SETTERS

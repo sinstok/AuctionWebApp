@@ -14,7 +14,6 @@
         <h:outputStylesheet library="css" name="blog.css"/>
     </h:head>
     <h:body>
-       
         <ui:insert name="content"><ui:include src="Navbar.xhtml"/></ui:insert>
         <div class="row col-md-12">
             <div class="col-md-2">
@@ -22,8 +21,8 @@
                     <label>Categories</label>
                     <ul class="nav nav-pills nav-stacked">
                         <li><h:commandLink action="#{productOverView.Category(null)}">
-                                    All
-                                </h:commandLink></li>
+                                All
+                            </h:commandLink></li>
                         <ui:repeat value="#{productOverView.categories}" var="category">
                             <li><h:commandLink action="#{productOverView.Category(category)}">
                                     #{category}
@@ -32,11 +31,11 @@
                     </ul>
                 </h:form>
             </div>
-            <div class="container-fluid col-md-10">
+            <div class="container-fluid col-md-8">
                 <h:form>
                     <ui:repeat value="#{productOverView.getProductListings()}" var="productListing"> 
                         <ui:fragment rendered="#{productListing.published != null}">
-                              <h:commandLink action="#{productOverView.toProductDescription(productListing)}">
+                            <h:commandLink action="#{productOverView.toProductDescription(productListing)}">
                                 <div class="row well">
                                     <h:graphicImage value="/image/productListing/#{productListing.id}" height="150"/>
                                     <h2>#{productListing.product.name}</h2>
