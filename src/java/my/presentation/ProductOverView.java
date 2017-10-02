@@ -26,25 +26,22 @@ public class ProductOverView {
     
     @EJB
     ProductListingFacade plFacade;
+    
+    private Category category;
+    private String search;
 
     public ProductOverView() {
     }
     
-    public String test(){
-        List<ProductListing> pls = plFacade.findAll();
-        int size = pls.size();
-        ProductListing pl = new ProductListing();
-        if(size > 0) {
-           pl  = pls.get(size - 1);         
+    public List<ProductListing> getProductListings() {
+        List<ProductListing> list;
+        if(category != null) {
+            list = plFacade.getBiddableProductListingsByCategory(category);
+        } else if(search != null) {
+            list = plFacade.searchBiddable(search);
+        } else {
+            list = plFacade.getBiddables();
         }
-        
-        return "hehe";
-    }
-    
-    public List<ProductListing> getProductListings() {        
-        //List<ProductListing> list = plFacade.findAll();
-        //List<ProductListing> list = plFacade.getProductListingsByCategory(Category.Instruments);
-        List<ProductListing> list = plFacade.getBiddables();
         return list;
     }
     
@@ -61,6 +58,27 @@ public class ProductOverView {
         ec.getRequestMap().put("productListing", pl);
         return "productdescription";
         //return "viewProductListing";
+    }
+    
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+    
+    public String Category(Category category) {
+        this.category = category;
+        return "index";
+    }
+    
+    public String getSearch() {
+        return search;
+    }
+    
+    public void setSearch(String search) {
+        this.search = search;
     }
     
 }
