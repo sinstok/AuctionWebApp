@@ -37,6 +37,9 @@ public class ProductOverView {
     public ProductOverView() {
     }
     
+    /**
+     * @return List of ProductListing based on search or category or all ProductListings
+     */
     public List<ProductListing> getProductListings() {
         List<ProductListing> list;
         if(category != null) {
@@ -49,6 +52,10 @@ public class ProductOverView {
         return list;
     }
     
+    /**
+     * 
+     * @return Path to flow-productCreation
+     */
     public String toProductCreation(){
         if(!login.isLoggedIn()){
             return "loginPage";
@@ -57,6 +64,9 @@ public class ProductOverView {
         return "flow-productCreation";
     }
     
+    /**
+     * @return List of categories
+     */
     public List<String> getCategories() {
         List<String> categories = new ArrayList<>();
         for(Category c : Category.values()) {
@@ -65,29 +75,55 @@ public class ProductOverView {
         return categories;
     }
     
-    public String toProductDescription(ProductListing pl) {
+    /**
+     * 
+     * @param productListing
+     * @return Path to productdescription
+     */
+    public String toProductDescription(ProductListing productListing) {
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-        ec.getRequestMap().put("productListing", pl);
+        ec.getRequestMap().put("productListing", productListing);
         return "productdescription";
     }
     
+    /**
+     * Get category
+     * @return category
+     */
     public Category getCategory() {
         return category;
     }
 
+    /**
+     * Set category
+     * @param category 
+     */
     public void setCategory(Category category) {
         this.category = category;
     }
     
+    /**
+     * Set category
+     * @param category
+     * @return Path to index
+     */
     public String Category(Category category) {
         this.category = category;
         return "index";
     }
     
+    /**
+     * Get search
+     * @return search
+     */
     public String getSearch() {
         return search;
     }
     
+    /**
+     * Set search
+     * @param search 
+     */
     public void setSearch(String search) {
         this.search = search;
     }
