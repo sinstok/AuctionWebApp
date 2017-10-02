@@ -7,6 +7,8 @@ package boundary;
 
 import entities.Product;
 import entities.ProductListing;
+import helpers.Category;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -31,9 +33,36 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
         super(ProductListing.class);
     }
     
-    public List<ProductListing> search(String search) 
+    public List<ProductListing> getBiddables(){
+         Date now = new Date();
+         List<ProductListing> productListings = em.createQuery(
+               "SELECT pl "
+               + "FROM ProductListing pl "
+               + "WHERE pl.closing > :now", ProductListing.class).setParameter("now", now).getResultList();
+         return productListings;
+         
+    }
+    
+    public List<ProductListing> searchBiddable(String search) 
     {
-       List<ProductListing> productListings = em.createQuery("SELECT pl FROM ProductListing pl JOIN pl.product p WHERE lower(pl.description) LIKE :search OR lower(p.name) LIKE :search OR lower(p.features) LIKE :search", ProductListing.class).setParameter("search", search.toLowerCase()).getResultList();
+       Date now = new Date();
+       List<ProductListing> productListings = em.createQuery(
+               "SELECT pl "
+               + "FROM ProductListing pl JOIN pl.product p "
+               + "WHERE lower(pl.description) LIKE :search OR "
+               + "lower(p.name) LIKE :search OR "
+               + "lower(p.features) LIKE :search AND"
+               + "pl.closing > :now", ProductListing.class).setParameter("search", search.toLowerCase()).setParameter("now", now).getResultList();
+
+        return productListings;
+    }
+    
+    public List<ProductListing> getBiddableProductListingsByCategory(Category category) 
+    {
+       List<ProductListing> productListings = em.createQuery(
+               "SELECT pl "
+               + "FROM ProductListing pl JOIN pl.product p "
+               + "WHERE p.category = :category", ProductListing.class).setParameter("category", category).getResultList();
 
         return productListings;
     }

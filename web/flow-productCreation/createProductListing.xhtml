@@ -85,8 +85,8 @@
                 <div class="row">
                     <div class="form-group col-md-3">
                         <h:outputLabel value="Closing date: " />
-                        <h:inputText value="#{createProductListingView.productListing.closing}" p:placeholder="yyyy-MM-dd">
-                            <f:convertDateTime pattern="yyyy-MM-dd"/>  
+                        <h:inputText value="#{createProductListingView.productListing.closing}" p:placeholder="yyyy-MM-dd HH:mm">
+                            <f:convertDateTime pattern="yyyy-MM-dd HH:mm" timeZone="GMT+2"/>  
                         </h:inputText>
                     </div>
                 </div>

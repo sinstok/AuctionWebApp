@@ -42,13 +42,14 @@ public class ProductOverView {
     }
     
     public List<ProductListing> getProductListings() {        
-        List<ProductListing> list = plFacade.findAll();
+        //List<ProductListing> list = plFacade.findAll();
+        //List<ProductListing> list = plFacade.getProductListingsByCategory(Category.Instruments);
+        List<ProductListing> list = plFacade.getBiddables();
         return list;
     }
     
     public List<String> getCategories() {
-        List<String> categories;
-        categories = new ArrayList<>();
+        List<String> categories = new ArrayList<>();
         for(Category c : Category.values()) {
             categories.add(c.toString());
         }
