@@ -52,7 +52,7 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
                + "WHERE lower(pl.description) LIKE :search OR "
                + "lower(p.name) LIKE :search OR "
                + "lower(p.features) LIKE :search AND "
-               + "pl.closing > :now", ProductListing.class).setParameter("search", search.toLowerCase()).setParameter("now", now).getResultList();
+               + "pl.closing > :now", ProductListing.class).setParameter("search", "%" + search.toLowerCase() + "%").setParameter("now", now).getResultList();
 
         return productListings;
     }
