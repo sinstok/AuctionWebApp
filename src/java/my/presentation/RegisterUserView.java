@@ -65,6 +65,7 @@ public class RegisterUserView {
                     loginBean.login(this.newUser.getId());
                     return "index?faces-redirect=true";
                 } catch (Exception e) {
+                    System.out.println("There was a problem hashing the password " + e.getMessage());
                     context.addMessage(null, new FacesMessage("Woops. Some of the input you wrote is wrong."));
                     return null;
                 }
