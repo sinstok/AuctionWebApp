@@ -20,9 +20,7 @@ import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.inject.Named;
 import javax.faces.application.FacesMessage;
-import javax.enterprise.context.RequestScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -105,7 +103,6 @@ public class ProductDescriptionView implements Serializable {
      * @return
      */
     public String getAvergeProductRating() {
-        //Product prod = this.getProduct();
         Product prod = pl.getProduct();
         List<Feedback> feeds = prod.getFeedbacks();
         List<Double> ratings = new ArrayList<>();
@@ -171,7 +168,6 @@ public class ProductDescriptionView implements Serializable {
             return null;
         }
 
-        //ProductListing prolis = this.getProductListing(this.plID);
         if (pl == null) {
             FacesMessage msg = new FacesMessage("No productlisting", "ERROR MSG");
             FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -204,8 +200,7 @@ public class ProductDescriptionView implements Serializable {
         bids.add(newBid);
         pl.setBids(bids);
         plFacade.edit(pl);
-        //bidFacade.create(newBid);
-
+       
         return null;
     }
 
@@ -240,7 +235,7 @@ public class ProductDescriptionView implements Serializable {
             return null;
         }
 
-        Product prod = null; //this.getProduct();
+        Product prod = null;
         if (this.getProduct() == null) {
             FacesMessage msg = new FacesMessage("product is null", "ERROR MSG");
             FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -378,7 +373,6 @@ public class ProductDescriptionView implements Serializable {
      * @return
      */
     public List<String> getAllComments() {
-        //Product prod = this.getProduct();
         Product prod = this.pl.getProduct();
         List<Feedback> feeds = prod.getFeedbacks();
         List<String> comments = new ArrayList<>();
