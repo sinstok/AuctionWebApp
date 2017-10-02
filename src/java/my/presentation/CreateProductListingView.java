@@ -87,6 +87,7 @@ public class CreateProductListingView implements Serializable {
         byte[] targetArray = new byte[is.available()];
         is.read(targetArray);
         productListing.setImage(targetArray);
+        productListing.setPublished(null);
 
         productListingFacade.create(productListing);
         product.addListing(productListing);

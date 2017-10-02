@@ -74,7 +74,9 @@
                 <div class="row">
                     <div class="form-group col-md-3">
                         <h:outputLabel value="Description: " />
-                        <h:inputTextarea value="#{createProductListingView.productListing.description}" />
+                        <h:inputTextarea value="#{createProductListingView.productListing.description}">
+                            <f:validateLength maximum="200" />
+                        </h:inputTextarea>
                     </div>
                 </div>
                 <div class="row">
