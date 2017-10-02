@@ -63,11 +63,11 @@
                 <h:form>
                     <label>Categories</label>
                     <ul class="nav nav-pills nav-stacked">
-                        <li><h:commandLink action="#{productOverView.setCategory(null)}">
+                        <li><h:commandLink action="#{productOverView.Category(null)}">
                                     All
                                 </h:commandLink></li>
                         <ui:repeat value="#{productOverView.categories}" var="category">
-                            <li><h:commandLink action="#{productOverView.setCategory(category)}">
+                            <li><h:commandLink action="#{productOverView.Category(category)}">
                                     #{category}
                                 </h:commandLink></li>
                         </ui:repeat>

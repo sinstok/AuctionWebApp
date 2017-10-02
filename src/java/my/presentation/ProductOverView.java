@@ -33,17 +33,6 @@ public class ProductOverView {
     public ProductOverView() {
     }
     
-    public String test(){
-        List<ProductListing> pls = plFacade.findAll();
-        int size = pls.size();
-        ProductListing pl = new ProductListing();
-        if(size > 0) {
-           pl  = pls.get(size - 1);         
-        }
-        
-        return "hehe";
-    }
-    
     public List<ProductListing> getProductListings() {
         List<ProductListing> list;
         if(category != null) {
@@ -75,7 +64,11 @@ public class ProductOverView {
         return category;
     }
 
-    public String setCategory(Category category) {
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+    
+    public String Category(Category category) {
         this.category = category;
         return "index";
     }
