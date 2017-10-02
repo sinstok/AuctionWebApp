@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <h:form>
+                <h:commandLink action="index" class="navbar-brand">
+                    AuctionWebApp
+                </h:commandLink>
+                <ul class="nav navbar-nav">
+                    <li><h:commandLink action="#{productOverView.toProductCreation()}">
+                            Add product
+                        </h:commandLink></li>
+                </ul>
+            </h:form>
+            <h:form styleClass="navbar-form navbar-left">
+                <div class="input-group">
+                    <h:inputText value="#{productOverView.search}" class="form-control" />
+                    <div class="input-group-btn">
+                        <h:commandLink class="btn btn-default" action="index">
+                            <i class="glyphicon glyphicon-search"></i>
+                        </h:commandLink>
+                    </div>
+                </div>
+            </h:form>   
+        </div>
+    </nav>
+
+</html>
+
