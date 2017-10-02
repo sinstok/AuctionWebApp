@@ -10,7 +10,6 @@ import entities.Bid;
 import entities.Feedback;
 import entities.Product;
 import entities.ProductListing;
-import static entities.Product_.id;
 import helpers.Category;
 import helpers.RatingCalculator;
 import java.util.ArrayList;
