@@ -160,6 +160,32 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
        
         return null;
     }
+
+    public List<String> getAllComments(Product prod) {
+        List<Feedback> feeds = prod.getFeedbacks();
+        List<String> comments = new ArrayList<>();
+        if (!(feeds.isEmpty())) {
+            for (int i = 0; i < feeds.size(); i++) {
+                comments.add(feeds.get(i).getRater().getName() + ": " + feeds.get(i).getFeedback());
+            }
+        }
+        return comments;
+    }
+
+    public Bid getHighestBid(List<Bid> bids, ProductListing pl) {
+        Bid highestBid = new Bid();
+        highestBid.setAmount(pl.getBasePrice());
+
+        if (!(bids.isEmpty())) {
+            for (int i = 0; i < bids.size(); i++) {
+                double current = bids.get(i).getAmount();
+                if (current > highestBid.getAmount()) {
+                    highestBid = bids.get(i);
+                }
+            }
+        }
+        return highestBid;
+    }
     
     
 }

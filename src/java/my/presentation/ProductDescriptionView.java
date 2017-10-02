@@ -279,19 +279,7 @@ public class ProductDescriptionView implements Serializable {
      * @return
      */
     public Bid getHighestBid() {
-        List<Bid> bids = this.pl.getBids();
-        Bid highestBid = new Bid();
-        highestBid.setAmount(pl.getBasePrice());
-
-        if (!(bids.isEmpty())) {
-            for (int i = 0; i < bids.size(); i++) {
-                double current = bids.get(i).getAmount();
-                if (current > highestBid.getAmount()) {
-                    highestBid = bids.get(i);
-                }
-            }
-        }
-        return highestBid;
+        return plFacade.getHighestBid(this.pl.getBids(), pl);
     }
 
     /**
@@ -301,15 +289,7 @@ public class ProductDescriptionView implements Serializable {
      * @return
      */
     public List<String> getAllComments() {
-        Product prod = this.pl.getProduct();
-        List<Feedback> feeds = prod.getFeedbacks();
-        List<String> comments = new ArrayList<>();
-        if (!(feeds.isEmpty())) {
-            for (int i = 0; i < feeds.size(); i++) {
-                comments.add(feeds.get(i).getRater().getName() + ": " + feeds.get(i).getFeedback());
-            }
-        }
-        return comments;
+        return plFacade.getAllComments(this.pl.getProduct());
     }
 
     //GETTERS & SETTERS
