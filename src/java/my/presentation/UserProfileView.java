@@ -11,6 +11,7 @@ import entities.AuctionUser;
 import entities.Bid;
 import entities.ProductListing;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -97,5 +98,10 @@ public class UserProfileView {
         if (listing != null) {
             productListingFacade.remove(listing);
         }
+    }
+    
+    public void publishListing(ProductListing listing){
+        listing.setPublished(new Date());
+        productListingFacade.edit(listing);
     }
 }
