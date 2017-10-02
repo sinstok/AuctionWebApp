@@ -75,7 +75,12 @@
                 </div>
                 <div class="row">
                     <div class="cold-md-10">
-                        <p style="font-size: 1em"><h:outputText value="#{PDView.allComments}" /></p> 
+                        <ui:repeat value="#{PDView.allComments}" var="comment"> 
+                            <div class="row well">
+                                <p>#{comment}</p>
+                            </div>
+                            <br />
+                        </ui:repeat>
                     </div> 
                 </div>
             </div>
