@@ -88,18 +88,21 @@ public class ProductDescriptionView implements Serializable {
         ProductListing proList = plFacade.find(proListId);
         return proList;
     }
+
     /**
      * Returns the AuctionUser who are the Seller of this productlisting
-     * @return 
+     *
+     * @return
      */
     public AuctionUser getSeller() {
         return auctionUserFacade.getSeller(pl.getId());
     }
 
     /**
-     * Returns a string value of the average rating of the product,
-     * or the string "No ratings" if the product has not recived any ratings
-     * @return 
+     * Returns a string value of the average rating of the product, or the
+     * string "No ratings" if the product has not recived any ratings
+     *
+     * @return
      */
     public String getAvergeProductRating() {
         //Product prod = this.getProduct();
@@ -121,11 +124,12 @@ public class ProductDescriptionView implements Serializable {
         }
         return "No ratings";
     }
-    
+
     /**
-     * Returns a string value of the average rating of the seller,
-     * or the string "No ratings" if the seller has not recived any ratings
-     * @return 
+     * Returns a string value of the average rating of the seller, or the string
+     * "No ratings" if the seller has not recived any ratings
+     *
+     * @return
      */
     public String getAvergeSellerRating() {
         AuctionUser seller = this.getSeller();
@@ -148,10 +152,12 @@ public class ProductDescriptionView implements Serializable {
     }
 
     /**
-     * Adds a Bid from the loged in AuctionUser. 
-     * If the bid is not larger then the current highest bid, the bid will not be added and a error message will be displayed
+     * Adds a Bid from the loged in AuctionUser. If the bid is not larger then
+     * the current highest bid, the bid will not be added and a error message
+     * will be displayed
+     *
      * @param pID
-     * @return 
+     * @return
      */
     public String addBid(int pID) {
         if (!login.isLoggedIn()) {
@@ -171,12 +177,12 @@ public class ProductDescriptionView implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, msg);
             return null;
         }
-        if(pl.getClosing().before(new Date())){
-             FacesMessage msg = new FacesMessage("Bidding has closed", "ERROR MSG");
+        if (pl.getClosing().before(new Date())) {
+            FacesMessage msg = new FacesMessage("Bidding has closed", "ERROR MSG");
             FacesContext.getCurrentInstance().addMessage(null, msg);
             return null;
         }
-        
+
         Bid highestBid = getHighestBid();
         if (newBidValue < highestBid.getAmount()) {
             FacesMessage msg = new FacesMessage("Bid too low", "ERROR MSG");
@@ -190,7 +196,7 @@ public class ProductDescriptionView implements Serializable {
         Bid newBid = new Bid();
         newBid.setAmount(this.newBidValue);
         newBid.setUser(bidder);
-        
+
         bidder.getBids().add(pl);
         auctionUserFacade.edit(bidder);
 
@@ -204,9 +210,11 @@ public class ProductDescriptionView implements Serializable {
     }
 
     /**
-     * Make a Feedback from the values from the user inputs, if the Auction User have bought the product
+     * Make a Feedback from the values from the user inputs, if the Auction User
+     * have bought the product
+     *
      * @param pID
-     * @return 
+     * @return
      */
     public String addFeedback(int pID) {
         if (!login.isLoggedIn()) {
@@ -223,13 +231,13 @@ public class ProductDescriptionView implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, msg);
             return null;
         }
-        
+
         Feedback oldFeedback = pl.getProduct().getFeedbackOfUser(rater.getId());
-        if(oldFeedback != null){
+        if (oldFeedback != null) {
             oldFeedback.setRating(Double.parseDouble(this.getProductRating()));
             oldFeedback.setFeedback(comment);
             feedbackFacade.edit(oldFeedback);
-            return null;    
+            return null;
         }
 
         Product prod = null; //this.getProduct();
@@ -253,29 +261,64 @@ public class ProductDescriptionView implements Serializable {
         }
         return null;
     }
-    
+
     /**
      * Adds a rating to the seller from user input
+     *
      * @param pID
-     * @return 
+     * @return
      */
-    public String addSellerRating(int pID){
+    public String addSellerRating(int pID) {
         if (!login.isLoggedIn()) {
             return "loginPage";
         }
 
+        Bid highestBid = new Bid();
         AuctionUser rater = auctionUserFacade.find(login.getUserId());
         AuctionUser seller = this.getSeller();
-        Feedback oldFeedback = seller.getFeedbackOfUser(rater.getId());        
+        Feedback oldFeedback = seller.getFeedbackOfUser(rater.getId());
+        Date now = new Date();
+        List<ProductListing> sellerListings = seller.getListings();
+        boolean allowed = false;
+        
         if (seller == null) {
             FacesMessage msg = new FacesMessage("seller is null", "ERROR MSG");
             FacesContext.getCurrentInstance().addMessage(null, msg);
             return "index";
-        } else if (rater.getId().equals(seller.getId())){
+        } else if (rater.getId().equals(seller.getId())) {
             FacesMessage msg = new FacesMessage("Can't give a rating to yourself", "ERROR MSG");
             FacesContext.getCurrentInstance().addMessage(null, msg);
             return "index";
-        } else if (oldFeedback != null){
+        }
+        
+        //Går gjennom all seller sine prosukt lister
+        for (int i = 0; i <= sellerListings.size(); i++) {
+            //Sjekker om biding er over
+            if (!allowed) {
+                if (sellerListings.get(i).getClosing().before(now)) {
+                    List<Bid> bids = sellerListings.get(i).getBids();
+                    //Går gjennom alle bidene til listen og finner høyest bid
+                    for (int j = 0; j < bids.size(); j++) {
+                        double bidPrice = 0;
+                        if (bids.get(j).getAmount() > bidPrice) {
+                            bidPrice = bids.get(j).getAmount();
+                            highestBid = bids.get(j);
+                        }
+                    }
+                    if (highestBid.getUser() == seller) {
+                        allowed = true;
+                    }
+                }
+            }
+        }
+
+        if(!(allowed)){
+            FacesMessage msg = new FacesMessage("You must buy a produt from the seller to give a rating", "ERROR MSG");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            return "index";
+        }
+        
+        if (oldFeedback != null) {
             oldFeedback.setRating(Double.parseDouble(this.getSellerRating()));
             feedbackFacade.edit(oldFeedback);
         } else {
@@ -288,13 +331,15 @@ public class ProductDescriptionView implements Serializable {
             seller.setFeedbacks(feeds);
             auctionUserFacade.edit(seller);
             feedbackFacade.create(feed);
-        }       
+        }
         return null;
     }
 
     /**
-     * Returns a string that will tell the remainig bidding time of this productlisting
-     * @return 
+     * Returns a string that will tell the remainig bidding time of this
+     * productlisting
+     *
+     * @return
      */
     public String getTimeLeft() {
         Date closing = this.pl.getClosing();
@@ -305,9 +350,10 @@ public class ProductDescriptionView implements Serializable {
     }
 
     /**
-     * Returns the largest bidding amount if it exsits
-     * else it will return the productlistings baseprice
-     * @return 
+     * Returns the largest bidding amount if it exsits else it will return the
+     * productlistings baseprice
+     *
+     * @return
      */
     public Bid getHighestBid() {
         List<Bid> bids = this.pl.getBids();
@@ -324,10 +370,12 @@ public class ProductDescriptionView implements Serializable {
         }
         return highestBid;
     }
-    
+
     /**
-     * Returns a list of strings that includes a AuctionUser's Name and their comment
-     * @return 
+     * Returns a list of strings that includes a AuctionUser's Name and their
+     * comment
+     *
+     * @return
      */
     public List<String> getAllComments() {
         //Product prod = this.getProduct();
@@ -388,7 +436,7 @@ public class ProductDescriptionView implements Serializable {
     public void seProductRating(String productRating) {
         this.productRating = productRating;
     }
-    
+
     public String getSellerRating() {
         return sellerRating;
     }
