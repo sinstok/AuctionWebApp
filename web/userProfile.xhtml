@@ -65,7 +65,6 @@
                             <br />
                         </div>
                     </h:commandLink> 
-                    <h:commandButton styleClass="btn btn-danger" value="Remove" style="margin-top: 0.5em" action="#{UserProfileView.removeListing(productListing.id)}" />
                     <ui:fragment rendered="#{productListing.published == null}">
                         <h:commandButton styleClass="btn btn-info" value="Publish" style="margin-top: 0.5em; margin-left: 0.5em" action="#{UserProfileView.publishListing(productListing)}" />
                     </ui:fragment>
