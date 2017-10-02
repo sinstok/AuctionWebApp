@@ -66,7 +66,7 @@ public class AuctionUserFacade extends AbstractFacade<AuctionUser> {
                 return null;
             }
         } catch (Exception e) {
-
+            
         }
         return user;
     }
