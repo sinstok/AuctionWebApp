@@ -42,8 +42,9 @@ public class ProductOverView {
     }
     
     public List<ProductListing> getProductListings() {        
-        List<ProductListing> list = plFacade.findAll();
+        //List<ProductListing> list = plFacade.findAll();
         //List<ProductListing> list = plFacade.getProductListingsByCategory(Category.Instruments);
+        List<ProductListing> list = plFacade.getBiddables();
         return list;
     }
     
