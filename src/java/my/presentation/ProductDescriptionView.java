@@ -158,67 +158,11 @@ public class ProductDescriptionView implements Serializable {
         if (!login.isLoggedIn()) {
             return "loginPage";
         }
-
-        Bid highestBid = new Bid();
+        
         AuctionUser rater = auctionUserFacade.find(login.getUserId());
         AuctionUser seller = this.getSeller();
-        Feedback oldFeedback = seller.getFeedbackOfUser(rater.getId());
-        Date now = new Date();
-        List<ProductListing> sellerListings = seller.getListings();
-        boolean allowed = false;
-
-        if (seller == null) {
-            FacesMessage msg = new FacesMessage("seller is null", "ERROR MSG");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-            return "index";
-        } else if (rater.getId().equals(seller.getId())) {
-            FacesMessage msg = new FacesMessage("Can't give a rating to yourself", "ERROR MSG");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-            return "index";
-        }
-
-        //Går gjennom all seller sine prosukt lister
-        for (int i = 0; i < sellerListings.size(); i++) {
-            //Sjekker om biding er over
-            if (!allowed) {
-                if (sellerListings.get(i).getClosing().before(now)) {
-                    List<Bid> bids = sellerListings.get(i).getBids();
-                    //Går gjennom alle bidene til listen og finner høyest bid
-                    for (int j = 0; j < bids.size(); j++) {
-                        double bidPrice = 0;
-                        if (bids.get(j).getAmount() > bidPrice) {
-                            bidPrice = bids.get(j).getAmount();
-                            highestBid = bids.get(j);
-                        }
-                    }
-                    if (highestBid.getUser().getId() == rater.getId()) {
-                        allowed = true;
-                    }
-                }
-            }
-        }
-
-        if (!(allowed)) {
-            FacesMessage msg = new FacesMessage("You must buy a produt from the seller to give a rating", "ERROR MSG");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-            return "index";
-        }
-
-        if (oldFeedback != null) {
-            oldFeedback.setRating(Double.parseDouble(this.getSellerRating()));
-            feedbackFacade.edit(oldFeedback);
-        } else {
-            Feedback feed = new Feedback();
-
-            feed.setRater(rater);
-            feed.setRating(Double.parseDouble(this.getSellerRating()));
-            List<Feedback> feeds = seller.getFeedbacks();
-            feeds.add(feed);
-            seller.setFeedbacks(feeds);
-            auctionUserFacade.edit(seller);
-            feedbackFacade.create(feed);
-        }
-        return null;
+        
+        return plFacade.addSellerRating(rater, seller, this.getSellerRating());
     }
 
     /**
