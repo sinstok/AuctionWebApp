@@ -34,7 +34,6 @@ public class PasswordHash {
             }
             hexString.append(hex);
         }
-//    	System.out.println("Hex format : " + hexString.toString());
         return hexString;
 
     }
@@ -42,7 +41,7 @@ public class PasswordHash {
     public String generateSalt() {
         StringBuilder buf = new StringBuilder();
         SecureRandom sr = new SecureRandom();
-        for (int i = 0; i < 6; i++) {// log2(52^6)=34.20... so, this is about 32bit strong.
+        for (int i = 0; i < 6; i++) {
             boolean upper = sr.nextBoolean();
             char ch = (char) (sr.nextInt(26) + 'a');
             if (upper) {

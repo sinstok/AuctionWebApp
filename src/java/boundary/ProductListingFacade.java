@@ -10,6 +10,7 @@ import entities.Bid;
 import entities.Feedback;
 import entities.Product;
 import entities.ProductListing;
+import static entities.Product_.id;
 import helpers.Category;
 import helpers.RatingCalculator;
 import java.util.ArrayList;
@@ -31,10 +32,10 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
 
     @PersistenceContext(unitName = "AuctionWebAppPU")
     private EntityManager em;
-    
+
     @Inject
     AuctionUserFacade auctionUserFacade;
-    
+
     @Inject
     ProductListingFacade plFacade;
     
@@ -52,37 +53,35 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
     public ProductListingFacade() {
         super(ProductListing.class);
     }
-    
-    public List<ProductListing> getBiddables(){
-         Date now = new Date();
-         List<ProductListing> productListings = em.createQuery(
-               "SELECT pl "
-               + "FROM ProductListing pl "
-               + "WHERE pl.closing > :now", ProductListing.class).setParameter("now", now).getResultList();
-         return productListings;
-         
+
+    public List<ProductListing> getBiddables() {
+        Date now = new Date();
+        List<ProductListing> productListings = em.createQuery(
+                "SELECT pl "
+                + "FROM ProductListing pl "
+                + "WHERE pl.closing > :now", ProductListing.class).setParameter("now", now).getResultList();
+        return productListings;
+
     }
-    
-    public List<ProductListing> searchBiddable(String search) 
-    {
-       Date now = new Date();
-       List<ProductListing> productListings = em.createQuery(
-               "SELECT pl "
-               + "FROM ProductListing pl JOIN pl.product p "
-               + "WHERE lower(pl.description) LIKE :search OR "
-               + "lower(p.name) LIKE :search OR "
-               + "lower(p.features) LIKE :search AND "
-               + "pl.closing > :now", ProductListing.class).setParameter("search", "%" + search.toLowerCase() + "%").setParameter("now", now).getResultList();
+
+    public List<ProductListing> searchBiddable(String search) {
+        Date now = new Date();
+        List<ProductListing> productListings = em.createQuery(
+                "SELECT pl "
+                + "FROM ProductListing pl JOIN pl.product p "
+                + "WHERE lower(pl.description) LIKE :search OR "
+                + "lower(p.name) LIKE :search OR "
+                + "lower(p.features) LIKE :search AND "
+                + "pl.closing > :now", ProductListing.class).setParameter("search", "%" + search.toLowerCase() + "%").setParameter("now", now).getResultList();
 
         return productListings;
     }
-    
-    public List<ProductListing> getBiddableProductListingsByCategory(Category category) 
-    {
-       List<ProductListing> productListings = em.createQuery(
-               "SELECT pl "
-               + "FROM ProductListing pl JOIN pl.product p "
-               + "WHERE p.category = :category", ProductListing.class).setParameter("category", category).getResultList();
+
+    public List<ProductListing> getBiddableProductListingsByCategory(Category category) {
+        List<ProductListing> productListings = em.createQuery(
+                "SELECT pl "
+                + "FROM ProductListing pl JOIN pl.product p "
+                + "WHERE p.category = :category", ProductListing.class).setParameter("category", category).getResultList();
 
         return productListings;
     }
@@ -163,7 +162,7 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
         bids.add(newBid);
         pl.setBids(bids);
         plFacade.edit(pl);
-       
+
         return null;
     }
 
@@ -232,6 +231,4 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
         }
         return null;
     }
-    
-    
 }

@@ -69,35 +69,7 @@ public class UserProfileView {
     }
 
     public String isHighestBidder(ProductListing listing) {
-        List<Bid> bids = listing.getBids();
-        Bid highestBid = null;
-        double bidPrice = listing.getBasePrice();
-        for (int i = 0; i < bids.size(); i++) {
-            if (bids.get(i).getAmount() > bidPrice) {
-                bidPrice = bids.get(i).getAmount();
-                highestBid = bids.get(i);
-            }
-        }
-        if (highestBid.getUser().getId().equals(user.getId())) {
-            return "You are the Highest bidder!";
-        } else {
-            return "You are no longer the highest bidder!";
-        }
-    }
-
-    public void removeListing(Long id) {
-        //return user.getListings();
-        ProductListing listing = null;
-        for (int i = 0; i < user.getListings().size(); i++) {
-            if (user.getListings().get(i).getId().equals(id)) {
-                listing = user.getListings().get(i);
-                user.getListings().remove(i);
-            }
-        }
-        auctionUserFacade.edit(user);
-        if (listing != null) {
-            productListingFacade.remove(listing);
-        }
+        return auctionUserFacade.isHighestBidder(listing, user);
     }
     
     public void publishListing(ProductListing listing){
