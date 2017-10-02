@@ -433,7 +433,7 @@ public class ProductDescriptionView implements Serializable {
         return productRating;
     }
 
-    public void seProductRating(String productRating) {
+    public void setProductRating(String productRating) {
         this.productRating = productRating;
     }
 
