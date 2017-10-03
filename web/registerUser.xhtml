@@ -38,7 +38,7 @@
                 <div class="row">
                     <div class="form-group col-md-3">
                         <label>Phone number</label>
-                        <h:inputText id="phone" styleClass="form-control" value="#{RegisterUserView.newUser.phone}" required="true" requiredMessage="Enter your phone number" a:placeholder="000 00 000">
+                        <h:inputText id="phone" styleClass="form-control" value="#{RegisterUserView.newUser.phone}" required="true" requiredMessage="Enter your phone number" a:placeholder="00000000">
                             <f:validateLength minimum="8" maximum="8" for="phone" />
                         </h:inputText>
                         <h:message for="phone" style="color: red" />
