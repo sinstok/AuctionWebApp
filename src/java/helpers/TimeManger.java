@@ -18,6 +18,12 @@ public class TimeManger {
 
     }
 
+    /**
+     * Finds the remaining time before a productlistings bidding closes
+     * @param closing
+     * @param now
+     * @return String
+     */
     public String getTimeRemaining(Date closing, Date now) {
         String time;
         if (closing.after(now)) {

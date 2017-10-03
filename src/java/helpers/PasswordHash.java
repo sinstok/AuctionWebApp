@@ -17,7 +17,12 @@ public class PasswordHash {
     public PasswordHash() {
 
     }
-
+    /**
+     * Encrypts password to a hash-function
+     * @param n
+     * @return StringBuffer
+     * @throws Exception 
+     */
     public StringBuffer hashPassword(String n) throws Exception {
         String password = n;
         MessageDigest md = MessageDigest.getInstance("SHA-256");
@@ -37,7 +42,10 @@ public class PasswordHash {
         return hexString;
 
     }
-
+    /**
+     * Generate salt for a password
+     * @return String
+     */
     public String generateSalt() {
         StringBuilder buf = new StringBuilder();
         SecureRandom sr = new SecureRandom();
