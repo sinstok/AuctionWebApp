@@ -8,5 +8,5 @@ The aim of this assignment is to get familiar with:
  - Enterprise Java Beans (EJB)
 
 ## Configuration
-To configure this project press the "Clone or download". This will give you the option to download as a zip file. Download and unzip this file. Then open the prosject in NetBeans IDE.
+Clone the project and build it. 
 
