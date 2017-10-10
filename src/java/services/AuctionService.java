@@ -62,7 +62,13 @@ public class AuctionService {
            
            bid.setUser(auctionUserFacade.find(bidObj.getUserId()));
            
-           return bidFacade.addBid(bid,pl);
+           String returnMessage = bidFacade.addBid(bid,pl);
+           if(returnMessage == null){
+               return "Bid has been successfully placed!";
+           } else {
+               return returnMessage;    
+           }
+           
     }
     
     @WebMethod(operationName = "test")
