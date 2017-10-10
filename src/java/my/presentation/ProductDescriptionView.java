@@ -97,7 +97,12 @@ public class ProductDescriptionView implements Serializable {
         }
 
         AuctionUser bidder = auctionUserFacade.find(login.getUserId());
-        String msgs = plFacade.addBid(bidder, pl, getSeller(), getHighestBid(), newBidValue);
+        //String msgs = plFacade.addBid(bidder, pl, getSeller(), getHighestBid(), newBidValue);
+        Bid bid = new Bid();
+        bid.setAmount(newBidValue);
+        bid.setBidDate(new Date());
+        bid.setUser(bidder);
+        String msgs = bidFacade.addBid(bid, pl);
         if(msgs == null){
             return null;
         }else{
@@ -175,7 +180,7 @@ public class ProductDescriptionView implements Serializable {
     }
 
     public Bid getHighestBid() {
-        return plFacade.getHighestBid(this.pl.getBids(), pl);
+        return plFacade.getHighestBid(pl);
     }
     
     public AuctionUser getSeller() {

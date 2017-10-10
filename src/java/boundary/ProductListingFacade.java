@@ -32,9 +32,6 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
 
     @Inject
     AuctionUserFacade auctionUserFacade;
-
-    @Inject
-    ProductListingFacade plFacade;
     
     @Inject
     ProductFacade productFacade;
@@ -140,47 +137,6 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
     }
     
     /**
-     * Place a new bid for a productlisting
-     * @param bidder
-     * @param pl
-     * @param seller
-     * @param highestBid
-     * @param newBidValue
-     * @return String of a potensial error message or null
-     */
-    public String addBid(AuctionUser bidder, ProductListing pl, AuctionUser seller, Bid highestBid, double newBidValue) {
-        if (bidder.getId() == seller.getId()) {
-            return "You cannot bid on your own product";
-        }
-
-        if (pl == null) {
-            return "No productlisting";
-        }
-        if (pl.getClosing().before(new Date())) {
-            return "Bidding has closed";
-        }
-
-        if (newBidValue < highestBid.getAmount()) {
-            return "Bid too low";
-        } else if (newBidValue == highestBid.getAmount() && highestBid.getUser() != null) {
-            return "Someone already made that bid";
-        }
-        Bid newBid = new Bid();
-        newBid.setAmount(newBidValue);
-        newBid.setUser(bidder);
-
-        bidder.getBids().add(pl);
-        auctionUserFacade.edit(bidder);
-
-        List<Bid> bids = pl.getBids();
-        bids.add(newBid);
-        pl.setBids(bids);
-        plFacade.edit(pl);
-
-        return null;
-    }
-    
-    /**
      * Finds all comments a product has recieved
      * @param prod
      * @return List<String> 
@@ -202,7 +158,8 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
      * @param pl
      * @return Bid
      */
-    public Bid getHighestBid(List<Bid> bids, ProductListing pl) {
+    public Bid getHighestBid(ProductListing pl) {
+        List<Bid> bids = pl.getBids();
         Bid highestBid = new Bid();
         highestBid.setAmount(pl.getBasePrice());
 
