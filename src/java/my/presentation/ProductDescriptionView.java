@@ -55,12 +55,12 @@ public class ProductDescriptionView implements Serializable {
     @Inject
     private DBean dbi;
 
+    private ProductListing pl;
     private Product product;
     private double newBidValue;
     private String comment;
     private String productRating;
     private String sellerRating;
-    private ProductListing pl;
     private int plID;
 
     /**
@@ -84,41 +84,12 @@ public class ProductDescriptionView implements Serializable {
     }
 
     /**
-     * Returns the AuctionUser who are the Seller of this productlisting
-     *
-     * @return
-     */
-    public AuctionUser getSeller() {
-        return auctionUserFacade.getSeller(pl.getId());
-    }
-
-    /**
-     * Returns a string value of the average rating of the product, or the
-     * string "No ratings" if the product has not recived any ratings
-     *
-     * @return
-     */
-    public String getAvergeProductRating() {
-        return plFacade.getAverageProductRating(pl.getProduct());
-    }
-
-    /**
-     * Returns a string value of the average rating of the seller, or the string
-     * "No ratings" if the seller has not recived any ratings
-     *
-     * @return
-     */
-    public String getAvergeSellerRating() {
-        return plFacade.getAvergeSellerRating(this.getSeller());
-    }
-
-    /**
      * Adds a Bid from the loged in AuctionUser. If the bid is not larger then
      * the current highest bid, the bid will not be added and a error message
      * will be displayed
      *
      * @param pID
-     * @return
+     * @return String of a webpage or null
      */
     public String addBid(int pID) {
         if (!login.isLoggedIn()) {
@@ -141,7 +112,7 @@ public class ProductDescriptionView implements Serializable {
      * have bought the product
      *
      * @param pID
-     * @return
+     * @return String of a webpage or null
      */
     public String addFeedback(int pID) {
         if (!login.isLoggedIn()) {
@@ -169,7 +140,7 @@ public class ProductDescriptionView implements Serializable {
      * Adds a rating to the seller from user input
      *
      * @param pID
-     * @return
+     * @return String of a webpage or null
      */
     public String addSellerRating(int pID) {
         if (!login.isLoggedIn()) {
@@ -193,7 +164,7 @@ public class ProductDescriptionView implements Serializable {
      * Returns a string that will tell the remainig bidding time of this
      * productlisting
      *
-     * @return
+     * @return String
      */
     public String getTimeLeft() {
         Date closing = this.pl.getClosing();
@@ -203,27 +174,28 @@ public class ProductDescriptionView implements Serializable {
         return time;
     }
 
-    /**
-     * Returns the largest bidding amount if it exsits else it will return the
-     * productlistings baseprice
-     *
-     * @return
-     */
     public Bid getHighestBid() {
         return plFacade.getHighestBid(this.pl.getBids(), pl);
     }
+    
+    public AuctionUser getSeller() {
+        return auctionUserFacade.getSeller(pl.getId());
+    }
 
-    /**
-     * Returns a list of strings that includes a AuctionUser's Name and their
-     * comment
-     *
-     * @return
-     */
+    public String getAvergeProductRating() {
+        return plFacade.getAverageProductRating(pl.getProduct());
+    }
+
+    public String getAvergeSellerRating() {
+        return plFacade.getAvergeSellerRating(this.getSeller());
+    }
+
     public List<String> getAllComments() {
         return plFacade.getAllComments(this.pl.getProduct());
     }
 
     //GETTERS & SETTERS
+    
     public ProductListing getPl() {
         return pl;
     }
@@ -236,7 +208,6 @@ public class ProductDescriptionView implements Serializable {
         return plID;
     }
 
-    //From product
     public Product getProduct() {
         return this.pl.getProduct();
     }
@@ -245,7 +216,8 @@ public class ProductDescriptionView implements Serializable {
         return this.getProductListing(pID).getProduct();
     }
 
-    //From userinput
+    //GETTER & SETTER From userinputs
+    
     public double getValue() {
         return newBidValue;
     }

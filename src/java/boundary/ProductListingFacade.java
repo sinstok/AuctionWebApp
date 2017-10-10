@@ -16,8 +16,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -84,7 +82,12 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
 
         return productListings;
     }
-
+    
+    /**
+     * Find the average rating value to a product
+     * @param prod
+     * @return String of the rating value, or "No ratings"
+     */
     public String getAverageProductRating(Product prod) {
         List<Feedback> feeds = prod.getFeedbacks();
         List<Double> ratings = new ArrayList<>();
@@ -103,7 +106,12 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
         }
         return "No ratings";
     }
-
+    
+    /**
+     * Find the average rating value to a seller
+     * @param seller
+     * @return String of the rating value, or "No ratings"
+     */
     public String getAvergeSellerRating(AuctionUser seller) {
         List<Feedback> feeds = seller.getFeedbacks();
         List<Double> ratings = new ArrayList<>();
@@ -122,7 +130,16 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
         }
         return "No ratings";
     }
-
+    
+    /**
+     * Place a new bid for a productlisting
+     * @param bidder
+     * @param pl
+     * @param seller
+     * @param highestBid
+     * @param newBidValue
+     * @return String of a potensial error message or null
+     */
     public String addBid(AuctionUser bidder, ProductListing pl, AuctionUser seller, Bid highestBid, double newBidValue) {
         if (bidder.getId() == seller.getId()) {
             return "You cannot bid on your own product";
@@ -154,7 +171,12 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
 
         return null;
     }
-
+    
+    /**
+     * Finds all comments a product has recieved
+     * @param prod
+     * @return List<String> 
+     */
     public List<String> getAllComments(Product prod) {
         List<Feedback> feeds = prod.getFeedbacks();
         List<String> comments = new ArrayList<>();
@@ -166,6 +188,12 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
         return comments;
     }
 
+    /**
+     * Finds the higest bid of a productlisting
+     * @param bids
+     * @param pl
+     * @return Bid
+     */
     public Bid getHighestBid(List<Bid> bids, ProductListing pl) {
         Bid highestBid = new Bid();
         highestBid.setAmount(pl.getBasePrice());
@@ -181,6 +209,16 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
         return highestBid;
     }
 
+    /**
+     * Place or edits a feedback to the database
+     * @param rater
+     * @param pl
+     * @param highestBid
+     * @param rating
+     * @param comment
+     * @param product
+     * @return String of a potensial error message or null
+     */
     public String addFeedback(AuctionUser rater, ProductListing pl, Bid highestBid, String rating, String comment, Product product) {
         Date now = new Date();
         Date closing = pl.getClosing();
@@ -217,6 +255,13 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
         return null;
     }
 
+    /**
+     * Place a seller rating in the database
+     * @param rater
+     * @param seller
+     * @param sellerRating
+     * @return String of a potensial error message or null
+     */
     public String addSellerRating(AuctionUser rater, AuctionUser seller, String sellerRating) {
         Bid highestBid = new Bid();
         Feedback oldFeedback = seller.getFeedbackOfUser(rater.getId());

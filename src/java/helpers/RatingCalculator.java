@@ -16,7 +16,11 @@ public class RatingCalculator {
     public RatingCalculator() {
 
     }
-
+    /**
+     * Calculates the average sum from a list of ratings
+     * @param ratings
+     * @return double
+     */
     public Double calcuatedRating(List<Double> ratings) {
         int size = ratings.size();
         if (size != 0) {
