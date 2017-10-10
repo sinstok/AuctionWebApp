@@ -9,6 +9,8 @@ import entities.AuctionUser;
 import entities.Bid;
 import entities.ProductListing;
 import helpers.PasswordHash;
+import helpers.TimeManger;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -33,7 +35,6 @@ public class AuctionUserFacade extends AbstractFacade<AuctionUser> {
 
     public AuctionUserFacade() {
         super(AuctionUser.class);
-
     }
 
     /**
@@ -109,6 +110,7 @@ public class AuctionUserFacade extends AbstractFacade<AuctionUser> {
      * product or if he's no longer the highest bidder.
      */
     public String isHighestBidder(ProductListing listing, AuctionUser user) {
+        TimeManger tm = new TimeManger();
         List<Bid> bids = listing.getBids();
         Bid highestBid = null;
         double bidPrice = listing.getBasePrice();
@@ -119,7 +121,12 @@ public class AuctionUserFacade extends AbstractFacade<AuctionUser> {
             }
         }
         if (highestBid.getUser().getId().equals(user.getId())) {
-            return "You are the Highest bidder!";
+            String closed = tm.getTimeRemaining(listing.getClosing(), new Date());
+            if(closed.equals("Biding is closed")){
+                return "Congratulations. You have won the bidding!";
+            } else {
+                return "You are the Highest bidder!";
+            }
         } else {
             return "You are no longer the highest bidder!";
         }
