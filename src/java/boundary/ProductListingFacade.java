@@ -56,7 +56,9 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
         List<ProductListing> productListings = em.createQuery(
                 "SELECT pl "
                 + "FROM ProductListing pl "
-                + "WHERE pl.closing > :now", ProductListing.class).setParameter("now", now).getResultList();
+                + "WHERE pl.closing > :now", 
+                ProductListing.class).setParameter("now", now)
+                                     .getResultList();
         return productListings;
 
     }
@@ -69,17 +71,23 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
                 + "WHERE lower(pl.description) LIKE :search OR "
                 + "lower(p.name) LIKE :search OR "
                 + "lower(p.features) LIKE :search AND "
-                + "pl.closing > :now", ProductListing.class).setParameter("search", "%" + search.toLowerCase() + "%").setParameter("now", now).getResultList();
-
+                + "pl.closing > :now", 
+                ProductListing.class).setParameter("search", "%" + search.toLowerCase() + "%")
+                                     .setParameter("now", now)
+                                     .getResultList();
         return productListings;
     }
 
     public List<ProductListing> getBiddableProductListingsByCategory(Category category) {
+        Date now = new Date();
         List<ProductListing> productListings = em.createQuery(
                 "SELECT pl "
                 + "FROM ProductListing pl JOIN pl.product p "
-                + "WHERE p.category = :category", ProductListing.class).setParameter("category", category).getResultList();
-
+                + "WHERE p.category = :category AND "
+                + "pl.closing > :now", 
+                ProductListing.class).setParameter("category", category)
+                                     .setParameter("now", now)
+                                     .getResultList();
         return productListings;
     }
     
