@@ -34,7 +34,7 @@ public class BidObject {
     public BidObject(Bid bid){
         id = bid.getId();
         amount = bid.getAmount();
-        //bidDate = bid.getBidDate();
+        bidDate = bid.getBidDate();
         userId = bid.getUser().getId();
     }
 
