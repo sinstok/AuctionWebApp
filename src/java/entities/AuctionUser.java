@@ -15,12 +15,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author Joakim
  */
 @Entity
+@XmlRootElement
 public class AuctionUser implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -96,14 +99,17 @@ public class AuctionUser implements Serializable {
         this.bids = bids;
     }
 
+    @XmlTransient
     public List<ProductListing> getListings() {
         return listings;
     }
 
+    @XmlTransient
     public List<ProductListing> getBids() {
         return bids;
     }
 
+    @XmlTransient
     public List<Feedback> getFeedbacks() {
         return feedbacks;
     }
