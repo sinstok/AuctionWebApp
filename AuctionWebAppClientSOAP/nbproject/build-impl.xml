@@ -19,7 +19,7 @@
         - cleanup
 
         -->
-<project xmlns:carproject="http://www.netbeans.org/ns/car-project/1" basedir=".." default="default" name="AuctionWebAppClient-impl">
+<project xmlns:carproject="http://www.netbeans.org/ns/car-project/1" basedir=".." default="default" name="AuctionWebAppClientSOAP-impl">
     <import file="jaxws-build.xml"/>
     <import file="ant-deploy.xml"/>
     <fail message="Please build using Ant 1.7.1 or higher.">
@@ -401,7 +401,7 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
                     </fileset>
                 </union>
                 <taskdef classname="org.testng.TestNGAntTask" classpath="${run.test.classpath}" name="testng"/>
-                <testng classfilesetref="test.set" failureProperty="tests.failed" listeners="org.testng.reporters.VerboseReporter" methods="${testng.methods.arg}" mode="${testng.mode}" outputdir="${build.test.results.dir}" suitename="AuctionWebAppClient" testname="TestNG tests" workingDir="${work.dir}">
+                <testng classfilesetref="test.set" failureProperty="tests.failed" listeners="org.testng.reporters.VerboseReporter" methods="${testng.methods.arg}" mode="${testng.mode}" outputdir="${build.test.results.dir}" suitename="AuctionWebAppClientSOAP" testname="TestNG tests" workingDir="${work.dir}">
                     <xmlfileset dir="${build.test.classes.dir}" includes="@{testincludes}"/>
                     <propertyset>
                         <propertyref prefix="test-sys-prop."/>
@@ -547,7 +547,7 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
                 <condition else="-testclass @{testClass}" property="test.class.or.method" value="-methods @{testClass}.@{testMethod}">
                     <isset property="test.method"/>
                 </condition>
-                <condition else="-suitename AuctionWebAppClient -testname @{testClass} ${test.class.or.method}" property="testng.cmd.args" value="@{testClass}">
+                <condition else="-suitename AuctionWebAppClientSOAP -testname @{testClass} ${test.class.or.method}" property="testng.cmd.args" value="@{testClass}">
                     <matches pattern=".*\.xml" string="@{testClass}"/>
                 </condition>
                 <delete dir="${build.test.results.dir}" quiet="true"/>
@@ -759,7 +759,7 @@ exists or setup the property manually. For example like this:
             -->
     <target name="-check-main-class">
         <fail>
-                    Main class must be set. Go to AuctionWebAppClient project properties -&gt; Run and set the main class there.
+                    Main class must be set. Go to AuctionWebAppClientSOAP project properties -&gt; Run and set the main class there.
                     <condition>
                 <not>
                     <or>
@@ -938,17 +938,17 @@ exists or setup the property manually. For example like this:
         </macrodef>
     </target>
     <target if="j2ee.appclient.mainclass.args" name="-as-retrieve-option-workaround" unless="j2ee.clientName">
-        <property name="client.jar" value="${dist.dir}/AuctionWebAppClientClient.jar"/>
+        <property name="client.jar" value="${dist.dir}/AuctionWebAppClientSOAPClient.jar"/>
         <sleep seconds="3"/>
-        <copy failonerror="false" file="${wa.copy.client.jar.from}/AuctionWebAppClient/AuctionWebAppClientClient.jar" todir="${dist.dir}"/>
+        <copy failonerror="false" file="${wa.copy.client.jar.from}/AuctionWebAppClientSOAP/AuctionWebAppClientSOAPClient.jar" todir="${dist.dir}"/>
         <copy failonerror="false" flatten="true" todir="${dist.dir}/">
-            <fileset dir="${wa.copy.client.jar.from}/AuctionWebAppClient" includes="**/AuctionWebAppClientClient.jar"/>
+            <fileset dir="${wa.copy.client.jar.from}/AuctionWebAppClientSOAP" includes="**/AuctionWebAppClientSOAPClient.jar"/>
         </copy>
-        <copy flatten="true" todir="${dist.dir}/AuctionWebAppClientClient">
-            <fileset dir="${wa.copy.client.jar.from}/AuctionWebAppClient" includes="**/*.*ar"/>
+        <copy flatten="true" todir="${dist.dir}/AuctionWebAppClientSOAPClient">
+            <fileset dir="${wa.copy.client.jar.from}/AuctionWebAppClientSOAP" includes="**/*.*ar"/>
         </copy>
-        <copy failonerror="false" flatten="false" todir="${dist.dir}/AuctionWebAppClientClient">
-            <fileset dir="${dist.dir}/gfdeploy/AuctionWebAppClient" includes="**/*.jar"/>
+        <copy failonerror="false" flatten="false" todir="${dist.dir}/AuctionWebAppClientSOAPClient">
+            <fileset dir="${dist.dir}/gfdeploy/AuctionWebAppClientSOAP" includes="**/*.jar"/>
         </copy>
     </target>
     <target name="pre-run-deploy">

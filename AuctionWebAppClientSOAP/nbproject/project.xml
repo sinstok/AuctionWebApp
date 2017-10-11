@@ -8,7 +8,7 @@
             </extension>
         </buildExtensions>
         <data xmlns="http://www.netbeans.org/ns/car-project/1">
-            <name>AuctionWebAppClient</name>
+            <name>AuctionWebAppClientSOAP</name>
             <minimum-ant-version>1.6.5</minimum-ant-version>
             <source-roots>
                 <root id="src.dir" name="Source Packages"/>

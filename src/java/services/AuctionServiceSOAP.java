@@ -28,7 +28,7 @@ import serializers.ProductListingObject;
  * @author Joakim
  */
 @WebService(serviceName = "AuctionService")
-public class AuctionService {
+public class AuctionServiceSOAP {
 
     @EJB
     private AuctionUserFacade auctionUserFacade;
