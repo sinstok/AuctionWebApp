@@ -12,12 +12,24 @@ import services.AuctionService_Service;
 import services.BidObject;
 import services.ProductListingObject;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.annotation.Resource;
+import javax.jms.ConnectionFactory;
+import javax.jms.JMSContext;
+import javax.jms.Queue;
+
 /**
  *
  * @author Joakim
  */
 public class Main {
-
+    
+    @Resource(lookup = "java:comp/DefaultJMSConnectionFactory")
+    private static ConnectionFactory connectionFactory;
+    @Resource(lookup = "jms/dest")
+    private static Queue queue;
+    
     @WebServiceRef(wsdlLocation = "META-INF/wsdl/localhost_8080/AuctionWebApp/AuctionService.wsdl")
     private static AuctionService_Service service;
 
@@ -27,6 +39,20 @@ public class Main {
     public static void main(String[] args) {
         // TODO code application logic here
         ProductListingObject sax = getBiddables().get(0);
+        
+        String text;
+        try (JMSContext context = connectionFactory.createContext();) {
+
+            text = "---- START EMAIL to customer Sean Bean ----\n"
+                    + "Dear Sean Bean,\n"
+                    + "Congratulations! You have won in bidding for product Saxophone.\n"
+                    + "You can access the product using the following link:\n"
+                    + "URL=<LINK>\n"
+                    + "---- END EMAIL to customer Sean Bean ----";
+            context.createProducer().send(queue, text);
+
+        } catch (Exception e) {
+        }
         
         System.out.println(makeBid(667.0, sax.getId()));
     
@@ -50,5 +76,4 @@ public class Main {
       
         return port.makeBid(bid,productListingId);
     }
-    //test  
 }
