@@ -30,6 +30,8 @@ public class Main {
     @Resource(lookup = "jms/dest")
     private static Queue queue;
     
+    static final Logger logger = Logger.getLogger("Main");
+    
     @WebServiceRef(wsdlLocation = "META-INF/wsdl/localhost_8080/AuctionWebApp/AuctionService.wsdl")
     private static AuctionService_Service service;
 
@@ -52,6 +54,7 @@ public class Main {
             context.createProducer().send(queue, text);
 
         } catch (Exception e) {
+            logger.log(Level.SEVERE, "Exception occurred: {0}", e.toString());
         }
         
         System.out.println(makeBid(667.0, sax.getId()));

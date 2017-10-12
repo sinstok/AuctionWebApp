@@ -24,15 +24,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 
-/*
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.annotation.Resource;
-import javax.jms.ConnectionFactory;
-import javax.jms.JMSContext;
-import javax.jms.Queue;
-*/
-
 /**
  *
  * @author Tomas
@@ -71,13 +62,6 @@ public class ProductDescriptionView implements Serializable {
     private String productRating;
     private String sellerRating;
     private int plID;
-    
-    /*
-    @Resource(lookup = "java:comp/DefaultJMSConnectionFactory")
-    private ConnectionFactory connectionFactory;
-    @Resource(lookup = "jms/dest")
-    private Queue queue;
-    */
 
     /**
      * Creates a new instance of SomeView
@@ -119,28 +103,6 @@ public class ProductDescriptionView implements Serializable {
         bid.setBidDate(new Date());
         bid.setUser(bidder);
         String msgs = bidFacade.addBid(bid, pl);
-
-        //Placeholder Client
-        /*
-        String text;
-        try (JMSContext context = connectionFactory.createContext();) {
-
-            Bid b = this.getHighestBid();
-            Product p = this.getProduct();
-            AuctionUser u = b.getUser();
-
-            text = "---- START EMAIL to customer " + u.getName() + " ----\n"
-                    + "Dear " + u.getName() + ",\n"
-                    + "Congratulations! You have won in bidding for product " + p.getName() + ".\n"
-                    + "You can access the product using the following link:\n"
-                    + "URL=<LINK>\n"
-                    + "---- END EMAIL to customer " + u.getName() + " ----";
-            context.createProducer().send(queue, text);
-
-        } catch (Exception e) {
-        }
-        */
-        //
 
         if (msgs == null) {
             return null;
