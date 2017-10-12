@@ -20,12 +20,15 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * Instance of Product that users can bid on
  * @author Tomas
  */
 @Entity
+@XmlRootElement
 public class ProductListing implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -114,6 +117,7 @@ public class ProductListing implements Serializable {
         this.published = published;
     }
 
+    @XmlTransient
     public List<Bid> getBids() {
         return bids;
     }

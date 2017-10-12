@@ -18,12 +18,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * 
  * @author Sindre
  */
 @Entity
+@XmlRootElement
 public class Product implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -63,6 +66,7 @@ public class Product implements Serializable {
         productListings.add(productListing);
     }
 
+    @XmlTransient
     public List<Feedback> getFeedbacks() {
         return feedbacks;
     }
@@ -71,6 +75,7 @@ public class Product implements Serializable {
         this.feedbacks = feedbacks;
     }
 
+    @XmlTransient
     public List<ProductListing> getProductListings() {
         return productListings;
     }
