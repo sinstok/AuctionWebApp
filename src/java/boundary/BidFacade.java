@@ -10,8 +10,15 @@ import entities.Bid;
 import entities.ProductListing;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.jms.ConnectionFactory;
+import javax.jms.JMSContext;
+import javax.jms.Queue;
+import javax.jms.QueueConnectionFactory;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -33,6 +40,14 @@ public class BidFacade extends AbstractFacade<Bid> {
     
     @Inject
     ProductListingFacade productListingFacade;
+    
+    @Resource(lookup = "java:comp/DefaultJMSConnectionFactory")
+    private ConnectionFactory connectionFactory;
+    
+    @Resource(lookup = "jms/dest")
+    private Queue queue;
+    
+    static final Logger logger = Logger.getLogger("Main");
 
     @Override
     protected EntityManager getEntityManager() {
@@ -54,6 +69,22 @@ public class BidFacade extends AbstractFacade<Bid> {
      * @return String of a potensial error message or null
      */
     public String addBid(Bid bid, ProductListing pl) {
+        
+        String text;
+        try (JMSContext context = connectionFactory.createContext();) {
+
+            text = "---- START EMAIL to customer Sean Bean ----\n"
+                    + "Dear Sean Bean,\n"
+                    + "Congratulations! You have won in bidding for product Saxophone.\n"
+                    + "You can access the product using the following link:\n"
+                    + "URL=<LINK>\n"
+                    + "---- END EMAIL to customer Sean Bean ----";
+            context.createProducer().send(queue, text);
+
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Exception occurred: {0}", e.toString());
+        }
+        
         AuctionUser seller = auctionUserFacade.getSeller(pl.getId());
         AuctionUser bidder = bid.getUser();
         Bid highestBid = productListingFacade.getHighestBid(pl);
