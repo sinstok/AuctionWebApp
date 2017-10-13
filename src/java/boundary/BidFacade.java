@@ -44,11 +44,11 @@ public class BidFacade extends AbstractFacade<Bid> {
     @Resource(lookup = "java:comp/DefaultJMSConnectionFactory")
     private ConnectionFactory connectionFactory;
     
-    @Resource(lookup = "jms/dest")
+    @Resource(lookup = "jms/MyQueue")
     private Queue queue;
     
     static final Logger logger = Logger.getLogger("Main");
-
+    
     @Override
     protected EntityManager getEntityManager() {
         return em;
@@ -69,6 +69,7 @@ public class BidFacade extends AbstractFacade<Bid> {
      * @return String of a potensial error message or null
      */
     public String addBid(Bid bid, ProductListing pl) {
+        
         
         String text;
         try (JMSContext context = connectionFactory.createContext();) {

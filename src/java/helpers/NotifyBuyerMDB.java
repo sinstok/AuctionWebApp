@@ -20,17 +20,21 @@ import javax.jms.TextMessage;
  *
  * @author Tomas
  */
+
+
 @MessageDriven(activationConfig = {
-    @ActivationConfigProperty(propertyName = "destinationLookup", propertyValue = "jms/dest")
+    @ActivationConfigProperty(propertyName = "destinationLookup", propertyValue = "jms/MyQueue")
     ,
     @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue")
 })
+
 public class NotifyBuyerMDB implements MessageListener {
 
+    
     @Resource
     private MessageDrivenContext mdc;
     static final Logger logger = Logger.getLogger("NotifyBuyerMDB");
-
+    
     public NotifyBuyerMDB() {
 
     }
