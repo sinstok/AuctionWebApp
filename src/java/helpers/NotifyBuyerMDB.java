@@ -23,7 +23,7 @@ import javax.jms.TextMessage;
 
 
 @MessageDriven(activationConfig = {
-    @ActivationConfigProperty(propertyName = "destinationLookup", propertyValue = "jms/MyQueue")
+    @ActivationConfigProperty(propertyName = "destinationLookup", propertyValue = "jms/myQueue")
     ,
     @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue")
 })
