@@ -41,12 +41,6 @@ public class BidFacade extends AbstractFacade<Bid> {
     @Inject
     ProductListingFacade productListingFacade;
     
-    @Resource(lookup = "java:comp/DefaultJMSConnectionFactory")
-    private ConnectionFactory connectionFactory;
-    
-    @Resource(lookup = "jms/MyQueue")
-    private Queue queue;
-    
     static final Logger logger = Logger.getLogger("Main");
     
     @Override
@@ -69,22 +63,6 @@ public class BidFacade extends AbstractFacade<Bid> {
      * @return String of a potensial error message or null
      */
     public String addBid(Bid bid, ProductListing pl) {
-        
-        
-        String text;
-        try (JMSContext context = connectionFactory.createContext();) {
-
-            text = "---- START EMAIL to customer Sean Bean ----\n"
-                    + "Dear Sean Bean,\n"
-                    + "Congratulations! You have won in bidding for product Saxophone.\n"
-                    + "You can access the product using the following link:\n"
-                    + "URL=<LINK>\n"
-                    + "---- END EMAIL to customer Sean Bean ----";
-            context.createProducer().send(queue, text);
-
-        } catch (Exception e) {
-            logger.log(Level.SEVERE, "Exception occurred: {0}", e.toString());
-        }
         
         AuctionUser seller = auctionUserFacade.getSeller(pl.getId());
         AuctionUser bidder = bid.getUser();

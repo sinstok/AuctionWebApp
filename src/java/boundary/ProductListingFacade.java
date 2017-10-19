@@ -5,6 +5,7 @@
  */
 package boundary;
 
+import static boundary.BidFacade.logger;
 import entities.AuctionUser;
 import entities.Bid;
 import entities.Feedback;
@@ -15,8 +16,17 @@ import helpers.RatingCalculator;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import javax.annotation.Resource;
 import javax.ejb.Stateless;
+import javax.ejb.Timeout;
+import javax.ejb.Timer;
+import javax.ejb.TimerConfig;
+import javax.ejb.TimerService;
 import javax.inject.Inject;
+import javax.jms.ConnectionFactory;
+import javax.jms.JMSContext;
+import javax.jms.Queue;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -32,12 +42,21 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
 
     @Inject
     AuctionUserFacade auctionUserFacade;
-    
+
     @Inject
     ProductFacade productFacade;
-    
+
     @Inject
     FeedbackFacade feedbackFacade;
+
+    @Resource
+    TimerService timerService;
+
+    @Resource(lookup = "java:comp/DefaultJMSConnectionFactory")
+    private ConnectionFactory connectionFactory;
+
+    @Resource(lookup = "jms/myQueue")
+    private Queue queue;
 
     @Override
     protected EntityManager getEntityManager() {
@@ -48,14 +67,43 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
         super(ProductListing.class);
     }
 
+    @Timeout
+    public void timeout(Timer timer) {
+        String text;
+        JMSContext context = connectionFactory.createContext();
+        
+        ProductListing pl = find((long)timer.getInfo());
+        Bid bid = getHighestBid(pl);
+        
+        if(bid.getUser() == null) return;
+
+        text = "---- START EMAIL to customer " + bid.getUser().getName() + " ----\n"
+                + "Dear " + bid.getUser().getName() + ",\n"
+                + "Congratulations! You have won in bidding for product " + pl.getProduct().getName() + ".\n"
+                + "You can access the product using the following link:\n"
+                + " \n"
+                + "---- END EMAIL to customer " + bid.getUser() + " ----";
+        context.createProducer().send(queue, text);
+
+    }
+
+    @Override
+    public void create(ProductListing productListing) {
+        
+        em.persist(productListing);
+        TimerConfig tc = new TimerConfig();
+        tc.setInfo(productListing.getId());
+        Timer timer = timerService.createSingleActionTimer(productListing.getClosing(), tc);
+    }
+
     public List<ProductListing> getBiddables() {
         Date now = new Date();
         List<ProductListing> productListings = em.createQuery(
                 "SELECT pl "
                 + "FROM ProductListing pl "
-                + "WHERE pl.closing > :now", 
+                + "WHERE pl.closing > :now",
                 ProductListing.class).setParameter("now", now)
-                                     .getResultList();
+                .getResultList();
         return productListings;
 
     }
@@ -68,10 +116,10 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
                 + "WHERE lower(pl.description) LIKE :search OR "
                 + "lower(p.name) LIKE :search OR "
                 + "lower(p.features) LIKE :search AND "
-                + "pl.closing > :now", 
+                + "pl.closing > :now",
                 ProductListing.class).setParameter("search", "%" + search.toLowerCase() + "%")
-                                     .setParameter("now", now)
-                                     .getResultList();
+                .setParameter("now", now)
+                .getResultList();
         return productListings;
     }
 
@@ -81,15 +129,16 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
                 "SELECT pl "
                 + "FROM ProductListing pl JOIN pl.product p "
                 + "WHERE p.category = :category AND "
-                + "pl.closing > :now", 
+                + "pl.closing > :now",
                 ProductListing.class).setParameter("category", category)
-                                     .setParameter("now", now)
-                                     .getResultList();
+                .setParameter("now", now)
+                .getResultList();
         return productListings;
     }
-    
+
     /**
      * Find the average rating value to a product
+     *
      * @param prod
      * @return String of the rating value, or "No ratings"
      */
@@ -111,9 +160,10 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
         }
         return "No ratings";
     }
-    
+
     /**
      * Find the average rating value to a seller
+     *
      * @param seller
      * @return String of the rating value, or "No ratings"
      */
@@ -135,11 +185,12 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
         }
         return "No ratings";
     }
-    
+
     /**
      * Finds all comments a product has recieved
+     *
      * @param prod
-     * @return List<String> 
+     * @return List<String>
      */
     public List<String> getAllComments(Product prod) {
         List<Feedback> feeds = prod.getFeedbacks();
@@ -154,6 +205,7 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
 
     /**
      * Finds the higest bid of a productlisting
+     *
      * @param bids
      * @param pl
      * @return Bid
@@ -176,6 +228,7 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
 
     /**
      * Place or edits a feedback to the database
+     *
      * @param rater
      * @param pl
      * @param highestBid
@@ -222,6 +275,7 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
 
     /**
      * Place a seller rating in the database
+     *
      * @param rater
      * @param seller
      * @param sellerRating
