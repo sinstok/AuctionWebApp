@@ -27,6 +27,7 @@ import javax.inject.Inject;
 import javax.jms.ConnectionFactory;
 import javax.jms.JMSContext;
 import javax.jms.Queue;
+import javax.jms.Topic;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -57,6 +58,8 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
 
     @Resource(lookup = "jms/myQueue")
     private Queue queue;
+    @Resource(lookup = "jms/myTopic")
+    private Topic topic;
 
     @Override
     protected EntityManager getEntityManager() {
@@ -84,6 +87,7 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
                 + " \n"
                 + "---- END EMAIL to customer " + bid.getUser() + " ----";
         context.createProducer().send(queue, text);
+        context.createProducer().send(topic, text);
 
     }
 

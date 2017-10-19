@@ -35,6 +35,7 @@ public class ProductListingObject {
     private Date published = new Date();
     private List<BidObject> bids;
     private long productId;
+    private String productName;
     
     public ProductListingObject(ProductListing pl){
         id = pl.getId();
@@ -50,6 +51,7 @@ public class ProductListingObject {
         }
  
         productId = pl.getId();
+        productName = pl.getProduct().getName();
     }
 
     public Long getId() {
@@ -114,6 +116,14 @@ public class ProductListingObject {
 
     public void setProductId(long productId) {
         this.productId = productId;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
     

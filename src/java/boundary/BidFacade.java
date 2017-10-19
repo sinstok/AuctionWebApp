@@ -71,6 +71,10 @@ public class BidFacade extends AbstractFacade<Bid> {
         if (bidder.getId() == seller.getId()) {
             return "You cannot bid on your own product";
         }
+        
+        if(highestBid.getUser() != null && bid.getUser().getId() == highestBid.getUser().getId()){
+            return "You already have the highest bid";
+        }
 
         if (pl == null) {
             return "No productlisting";
