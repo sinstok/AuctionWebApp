@@ -4,9 +4,9 @@
 In this assignment we have created an Auction Web Application.
 The aim of this assignment is to get familiar with:
  - SOAP-based web services as supported by JAX-WS
- – RESTful web services as supported by JAX-RS
- – Java Message Service (JMS)
- – Basic Java EE declarative security mechanisms
+ - RESTful web services as supported by JAX-RS
+ - Java Message Service (JMS)
+ - Basic Java EE declarative security mechanisms
 
 
 ## Configuration
