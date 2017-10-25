@@ -85,7 +85,7 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
                 + "Congratulations! You have won in bidding for product " + pl.getProduct().getName() + ".\n"
                 + "You can access the product using the following link:\n"
                 + " \n"
-                + "---- END EMAIL to customer " + bid.getUser() + " ----";
+                + "---- END EMAIL to customer " + bid.getUser().getName() + " ----";
         context.createProducer().send(queue, text);
         context.createProducer().send(topic, text);
 
