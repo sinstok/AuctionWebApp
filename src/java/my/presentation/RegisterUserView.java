@@ -74,7 +74,7 @@ public class RegisterUserView {
                     AuctionUser user = auctionUserFacade.registerUser(this.newUser, this.password);
                     //request.login(user.getEmail(), this.password + user.getSalt());
                     loginBean.login(user.getId());
-                    return "index?faces-redirect=true";
+                    return "/faces/index?faces-redirect=true";
                 } catch (Exception e) {
                     System.out.println("There was a problem hashing the password " + e.getMessage());
                     context.addMessage(null, new FacesMessage("Woops. Some of the input you wrote is wrong."));

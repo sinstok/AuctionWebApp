@@ -43,9 +43,9 @@ public class UserProfileView {
     public void init() {
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
         Long userId = (Long) ec.getRequestMap().get("userId");
-        if (userId == null) {
+        if (userId == null /*!ec.isUserInRole("user")*/) {
             try {
-                ec.redirect("/faces/loginPage.xhtml");
+                ec.redirect("../loginPage.xhtml");
             } catch (IOException e) {
                 
             }

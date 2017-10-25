@@ -67,7 +67,7 @@ public class AuctionUserFacade extends AbstractFacade<AuctionUser> {
         List<AuctionUser> list = em.createQuery("SELECT t FROM " + AuctionUser.class.getSimpleName() + " t WHERE t." + fieldName + " " + "=" + " :val", AuctionUser.class).setParameter("val", value.toString()).getResultList();
         return list.isEmpty();
     }
-    
+
     public synchronized AuctionUser registerUser(AuctionUser user, String password) {
         hash = new PasswordHash();
         try {
@@ -78,6 +78,10 @@ public class AuctionUserFacade extends AbstractFacade<AuctionUser> {
         } catch (Exception e) {
             System.out.println("her feiler den!" + e.getMessage());
         }
+        /*UserGroup ug = new UserGroup();
+        ug.setUserName(user.getEmail());
+        ug.setUserRole("user");
+        em.persist(ug);*/
         return user;
     }
 
@@ -135,7 +139,7 @@ public class AuctionUserFacade extends AbstractFacade<AuctionUser> {
         }
         if (highestBid.getUser().getId().equals(user.getId())) {
             String closed = tm.getTimeRemaining(listing.getClosing(), new Date());
-            if(closed.equals("Biding is closed")){
+            if (closed.equals("Biding is closed")) {
                 return "Congratulations. You have won the bidding!";
             } else {
                 return "You are the Highest bidder!";

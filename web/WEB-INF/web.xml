@@ -41,7 +41,7 @@
             <transport-guarantee>CONFIDENTIAL</transport-guarantee>
         </user-data-constraint>
     </security-constraint>
-    <!--<security-constraint>
+    <security-constraint>
         <display-name>SecurityRoles</display-name>
         <web-resource-collection>
             <web-resource-name>Restricted access</web-resource-name>
@@ -64,5 +64,5 @@
     <security-role>
         <description/>
         <role-name>user</role-name>
-    </security-role>-->
+    </security-role>
 </web-app>
