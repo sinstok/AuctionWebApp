@@ -90,6 +90,21 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
         context.createProducer().send(topic, text);
 
     }
+    
+    public void test(){
+        String text;
+        JMSContext context = connectionFactory.createContext();
+
+        text = "---- START EMAIL to customer atle ----\n"
+                + "Dear atle ,\n"
+                + "Congratulations! You have won in bidding for product sax .\n"
+                + "You can access the product using the following link:\n"
+                + " \n"
+                + "---- END EMAIL to customer atle ----";
+        context.createProducer().send(queue, text);
+        context.createProducer().send(topic, text);
+    }
+
     @RolesAllowed("user")
     @Override
     public void create(ProductListing productListing) {

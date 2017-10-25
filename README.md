@@ -26,7 +26,9 @@ You are required to run the glassfish server while doing this setup.
 First you need to ensure that the correct database is in the JDBC pool on the glassfish server, in this case it's post-gre-sql_db17_g09_g09Pool. If you don't have this connection pool, you will have to create a new one with pool name post-gre-sql_db17_g09_g09Pool, then select java.sql.datasource as resources type, and last select postgres as database driver vendor. 
 If you have to create the database you need to update some of the properties in the addtional properties button at the top.
 The best solution is to delete all the properties that are there from before and creating new ones.  
+  
 The properties you need are:  
+  
 URL: jdbc:postgresql://data2.hib.no:5433/db17_g09  
 driverClass: org.postgresql.Driver  
 Password: r8W6QVB  

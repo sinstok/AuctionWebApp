@@ -46,7 +46,8 @@
         <web-resource-collection>
             <web-resource-name>all paths</web-resource-name>
             <description/>
-            <url-pattern>/*</url-pattern>
+            <url-pattern>/faces/*</url-pattern>
+            <url-pattern>/</url-pattern>
         </web-resource-collection>
         <user-data-constraint>
             <description>SSL</description>
