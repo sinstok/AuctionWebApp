@@ -88,7 +88,7 @@ public class ProductOverView {
     public String toProductDescription(ProductListing productListing) {
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
         ec.getRequestMap().put("productListing", productListing);
-        return "productdescription";
+        return "/faces/productdescription";
     }
     
     /**

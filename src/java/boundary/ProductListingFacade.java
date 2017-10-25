@@ -5,7 +5,6 @@
  */
 package boundary;
 
-import static boundary.BidFacade.logger;
 import entities.AuctionUser;
 import entities.Bid;
 import entities.Feedback;
@@ -16,7 +15,6 @@ import helpers.RatingCalculator;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import javax.ejb.Timeout;
@@ -285,7 +283,7 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
      * @param sellerRating
      * @return String of a potensial error message or null
      */
-    public String addSellerRating(AuctionUser rater, AuctionUser seller, String sellerRating) {
+    public String addSellerRating(AuctionUser rater, AuctionUser seller, String sellerRating, ProductListing pl) {
         Bid highestBid = new Bid();
         Feedback oldFeedback = seller.getFeedbackOfUser(rater.getId());
         Date now = new Date();
