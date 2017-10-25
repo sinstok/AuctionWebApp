@@ -22,21 +22,21 @@
 <message name="makeBidResponse">
 <part name="parameters" element="tns:makeBidResponse"/>
 </message>
-<portType name="AuctionService">
+<portType name="AuctionServiceSOAP">
 <operation name="test">
-<input wsam:Action="http://services/AuctionService/testRequest" message="tns:test"/>
-<output wsam:Action="http://services/AuctionService/testResponse" message="tns:testResponse"/>
+<input wsam:Action="http://services/AuctionServiceSOAP/testRequest" message="tns:test"/>
+<output wsam:Action="http://services/AuctionServiceSOAP/testResponse" message="tns:testResponse"/>
 </operation>
 <operation name="getBiddables">
-<input wsam:Action="http://services/AuctionService/getBiddablesRequest" message="tns:getBiddables"/>
-<output wsam:Action="http://services/AuctionService/getBiddablesResponse" message="tns:getBiddablesResponse"/>
+<input wsam:Action="http://services/AuctionServiceSOAP/getBiddablesRequest" message="tns:getBiddables"/>
+<output wsam:Action="http://services/AuctionServiceSOAP/getBiddablesResponse" message="tns:getBiddablesResponse"/>
 </operation>
 <operation name="makeBid">
-<input wsam:Action="http://services/AuctionService/makeBidRequest" message="tns:makeBid"/>
-<output wsam:Action="http://services/AuctionService/makeBidResponse" message="tns:makeBidResponse"/>
+<input wsam:Action="http://services/AuctionServiceSOAP/makeBidRequest" message="tns:makeBid"/>
+<output wsam:Action="http://services/AuctionServiceSOAP/makeBidResponse" message="tns:makeBidResponse"/>
 </operation>
 </portType>
-<binding name="AuctionServicePortBinding" type="tns:AuctionService">
+<binding name="AuctionServiceSOAPPortBinding" type="tns:AuctionServiceSOAP">
 <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
 <operation name="test">
 <soap:operation soapAction=""/>
@@ -67,7 +67,7 @@
 </operation>
 </binding>
 <service name="AuctionService">
-<port name="AuctionServicePort" binding="tns:AuctionServicePortBinding">
+<port name="AuctionServiceSOAPPort" binding="tns:AuctionServiceSOAPPortBinding">
 <soap:address location="http://localhost:8080/AuctionWebApp/AuctionService"/>
 </port>
 </service>

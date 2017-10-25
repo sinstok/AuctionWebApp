@@ -103,10 +103,11 @@ public class ProductDescriptionView implements Serializable {
         bid.setBidDate(new Date());
         bid.setUser(bidder);
         String msgs = bidFacade.addBid(bid, pl);
-        if(msgs == null){
+
+        if (msgs == null) {
             return null;
-        }else{
-            FacesMessage msg = new FacesMessage(msgs , "ERROR MSG");
+        } else {
+            FacesMessage msg = new FacesMessage(msgs, "ERROR MSG");
             FacesContext.getCurrentInstance().addMessage(null, msg);
             return null;
         }
@@ -127,15 +128,15 @@ public class ProductDescriptionView implements Serializable {
         Bid highestBid = getHighestBid();
         String msgs = plFacade.addFeedback(rater, pl, highestBid, this.getProductRating(), this.comment, this.getProduct());
         String a = "Product is null";
-        
-        if(msgs == null){
+
+        if (msgs == null) {
             return null;
-        }else if (msgs.equals(a)){
-            FacesMessage msg = new FacesMessage(msgs , "ERROR MSG");
+        } else if (msgs.equals(a)) {
+            FacesMessage msg = new FacesMessage(msgs, "ERROR MSG");
             FacesContext.getCurrentInstance().addMessage(null, msg);
             return "index";
-        }else{
-            FacesMessage msg = new FacesMessage(msgs , "ERROR MSG");
+        } else {
+            FacesMessage msg = new FacesMessage(msgs, "ERROR MSG");
             FacesContext.getCurrentInstance().addMessage(null, msg);
             return null;
         }
@@ -151,15 +152,15 @@ public class ProductDescriptionView implements Serializable {
         if (!login.isLoggedIn()) {
             return "loginPage";
         }
-        
+
         AuctionUser rater = auctionUserFacade.find(login.getUserId());
         AuctionUser seller = this.getSeller();
-        
+
         String msgs = plFacade.addSellerRating(rater, seller, this.getSellerRating());
-        if(msgs == null){
+        if (msgs == null) {
             return null;
-        }else{
-            FacesMessage msg = new FacesMessage(msgs , "ERROR MSG");
+        } else {
+            FacesMessage msg = new FacesMessage(msgs, "ERROR MSG");
             FacesContext.getCurrentInstance().addMessage(null, msg);
             return "index";
         }
@@ -182,7 +183,7 @@ public class ProductDescriptionView implements Serializable {
     public Bid getHighestBid() {
         return plFacade.getHighestBid(pl);
     }
-    
+
     public AuctionUser getSeller() {
         return auctionUserFacade.getSeller(pl.getId());
     }
@@ -200,7 +201,6 @@ public class ProductDescriptionView implements Serializable {
     }
 
     //GETTERS & SETTERS
-    
     public ProductListing getPl() {
         return pl;
     }
@@ -222,7 +222,6 @@ public class ProductDescriptionView implements Serializable {
     }
 
     //GETTER & SETTER From userinputs
-    
     public double getValue() {
         return newBidValue;
     }

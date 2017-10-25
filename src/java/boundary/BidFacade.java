@@ -10,8 +10,15 @@ import entities.Bid;
 import entities.ProductListing;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.jms.ConnectionFactory;
+import javax.jms.JMSContext;
+import javax.jms.Queue;
+import javax.jms.QueueConnectionFactory;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -33,7 +40,9 @@ public class BidFacade extends AbstractFacade<Bid> {
     
     @Inject
     ProductListingFacade productListingFacade;
-
+    
+    static final Logger logger = Logger.getLogger("Main");
+    
     @Override
     protected EntityManager getEntityManager() {
         return em;
@@ -54,12 +63,17 @@ public class BidFacade extends AbstractFacade<Bid> {
      * @return String of a potensial error message or null
      */
     public String addBid(Bid bid, ProductListing pl) {
+        
         AuctionUser seller = auctionUserFacade.getSeller(pl.getId());
         AuctionUser bidder = bid.getUser();
         Bid highestBid = productListingFacade.getHighestBid(pl);
         
         if (bidder.getId() == seller.getId()) {
             return "You cannot bid on your own product";
+        }
+        
+        if(highestBid.getUser() != null && bid.getUser().getId() == highestBid.getUser().getId()){
+            return "You already have the highest bid";
         }
 
         if (pl == null) {

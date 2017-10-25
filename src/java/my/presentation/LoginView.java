@@ -88,7 +88,7 @@ public class LoginView {
      */
     public String logOut() {
         loginBean.logOut();
-        return "index";
+        return "/faces/index";
     }
 
     /**
@@ -136,7 +136,7 @@ public class LoginView {
         if (loginBean.isLoggedIn()) {
             ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
             ec.getRequestMap().put("userId", loginBean.getUserId());
-            return "userProfile";
+            return "/profile/userProfile";
         } else {
             return "index";
         }

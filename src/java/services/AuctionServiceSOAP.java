@@ -56,6 +56,8 @@ public class AuctionServiceSOAP {
            AuctionUser bidder = auctionUserFacade.find(bidObj.getUserId());
            ProductListing pl = ejbRef.find(productListingId);
            
+           if(pl == null) return "no product listing with id " + productListingId + " exists";
+           
            Bid bid = new Bid();
            bid.setAmount(bidObj.getAmount());
            //bid.setBidDate(bidObj.getBidDate());

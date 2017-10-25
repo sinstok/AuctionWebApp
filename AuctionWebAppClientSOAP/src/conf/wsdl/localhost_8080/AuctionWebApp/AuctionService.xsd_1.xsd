@@ -12,16 +12,6 @@
 
 <xs:element name="testResponse" type="tns:testResponse"/>
 
-<xs:complexType name="test">
-<xs:sequence/>
-</xs:complexType>
-
-<xs:complexType name="testResponse">
-<xs:sequence>
-<xs:element name="return" type="xs:string" minOccurs="0"/>
-</xs:sequence>
-</xs:complexType>
-
 <xs:complexType name="makeBid">
 <xs:sequence>
 <xs:element name="arg0" type="tns:bidObject" minOccurs="0"/>
@@ -63,7 +53,18 @@
 <xs:element name="id" type="xs:long" minOccurs="0"/>
 <xs:element name="image" type="xs:string" minOccurs="0"/>
 <xs:element name="productId" type="xs:long"/>
+<xs:element name="productName" type="xs:string" minOccurs="0"/>
 <xs:element name="published" type="xs:dateTime" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="test">
+<xs:sequence/>
+</xs:complexType>
+
+<xs:complexType name="testResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0"/>
 </xs:sequence>
 </xs:complexType>
 </xs:schema>

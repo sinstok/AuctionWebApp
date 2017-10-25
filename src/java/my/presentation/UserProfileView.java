@@ -45,7 +45,7 @@ public class UserProfileView {
         Long userId = (Long) ec.getRequestMap().get("userId");
         if (userId == null) {
             try {
-                ec.redirect("loginPage.xhtml");
+                ec.redirect("/faces/loginPage.xhtml");
             } catch (IOException e) {
                 
             }
