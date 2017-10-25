@@ -65,10 +65,9 @@ public class ProductOverView {
             return "loginPage";
         }*/
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-        /*if(!ec.isUserInRole("user")){
+        if(!ec.isUserInRole("user")){
             return "loginPage";
-        }*/
-        
+        }
         return "flow-productCreation";
     }
     

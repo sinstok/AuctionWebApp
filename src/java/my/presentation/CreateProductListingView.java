@@ -21,6 +21,7 @@ import javax.annotation.security.DeclareRoles;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.faces.flow.FlowScoped;
@@ -70,7 +71,10 @@ public class CreateProductListingView implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, msg);
             return "returnFromproductCreation";
         }*/
-
+        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        if(!ec.isUserInRole("user")){
+            return "returnFromproductCreation";
+        }
         if (product.getId() == null) {
             Category[] categories = Category.values();
             if (category < 0 || categories.length - 1 < category) {
@@ -94,7 +98,8 @@ public class CreateProductListingView implements Serializable {
         productListingFacade.create(productListing);
         product.addListing(productListing);
 
-        AuctionUser au = auctionUserFacade.find(login.getUserId());
+        //AuctionUser au = auctionUserFacade.find(login.getUserId());
+        AuctionUser au = auctionUserFacade.findUserByEmail(ec.getUserPrincipal().getName());
         au.addListing(productListing);
         auctionUserFacade.edit(au);
 
