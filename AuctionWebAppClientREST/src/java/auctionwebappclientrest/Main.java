@@ -19,7 +19,6 @@ public class Main {
      */
     public static void main(String[] args) {
         Client client = ClientBuilder.newClient();
-        WebTarget base = client.target("")
         
     }
     
