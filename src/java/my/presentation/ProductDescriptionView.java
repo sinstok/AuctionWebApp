@@ -16,6 +16,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -92,11 +93,20 @@ public class ProductDescriptionView implements Serializable {
      * @return String of a webpage or null
      */
     public String addBid(int pID) {
-        if (!login.isLoggedIn()) {
+        /*if (!login.isLoggedIn()) {
+            return "loginPage";
+        }*/
+        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        if (!ec.isUserInRole("user")) {
             return "loginPage";
         }
+        /*ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        if(!ec.isUserInRole("user")){
+            return "loginPage";
+        }*/
 
-        AuctionUser bidder = auctionUserFacade.find(login.getUserId());
+        //AuctionUser bidder = auctionUserFacade.find(login.getUserId());
+        AuctionUser bidder = auctionUserFacade.findUserByEmail(ec.getUserPrincipal().getName());
         //String msgs = plFacade.addBid(bidder, pl, getSeller(), getHighestBid(), newBidValue);
         Bid bid = new Bid();
         bid.setAmount(newBidValue);
@@ -121,10 +131,15 @@ public class ProductDescriptionView implements Serializable {
      * @return String of a webpage or null
      */
     public String addFeedback(int pID) {
-        if (!login.isLoggedIn()) {
+        /*if (!login.isLoggedIn()) {
+            return "loginPage";
+        }*/
+        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        if (!ec.isUserInRole("user")) {
             return "loginPage";
         }
-        AuctionUser rater = auctionUserFacade.find(login.getUserId());
+        //AuctionUser rater = auctionUserFacade.find(login.getUserId());
+        AuctionUser rater = auctionUserFacade.findUserByEmail(ec.getUserPrincipal().getName());
         Bid highestBid = getHighestBid();
         String msgs = plFacade.addFeedback(rater, pl, highestBid, this.getProductRating(), this.comment, this.getProduct());
         String a = "Product is null";
@@ -149,13 +164,17 @@ public class ProductDescriptionView implements Serializable {
      * @return String of a webpage or null
      */
     public String addSellerRating(int pID) {
-        if (!login.isLoggedIn()) {
+        /*if (!login.isLoggedIn()) {
+            return "loginPage";
+        }*/
+        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        if (!ec.isUserInRole("user")) {
             return "loginPage";
         }
 
-        AuctionUser rater = auctionUserFacade.find(login.getUserId());
+        //AuctionUser rater = auctionUserFacade.find(login.getUserId());
+        AuctionUser rater = auctionUserFacade.findUserByEmail(ec.getUserPrincipal().getName());
         AuctionUser seller = this.getSeller();
-
         String msgs = plFacade.addSellerRating(rater, seller, this.getSellerRating());
         if (msgs == null) {
             return null;
@@ -164,6 +183,7 @@ public class ProductDescriptionView implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, msg);
             return "index";
         }
+
     }
 
     /**

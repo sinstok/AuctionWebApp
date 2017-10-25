@@ -5,7 +5,6 @@
  */
 package boundary;
 
-import static boundary.BidFacade.logger;
 import entities.AuctionUser;
 import entities.Bid;
 import entities.Feedback;
@@ -16,8 +15,9 @@ import helpers.RatingCalculator;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
 import javax.annotation.Resource;
+import javax.annotation.security.DeclareRoles;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.ejb.Timeout;
 import javax.ejb.Timer;
@@ -105,6 +105,7 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
         context.createProducer().send(topic, text);
     }
 
+    @RolesAllowed("user")
     @Override
     public void create(ProductListing productListing) {
         
@@ -255,6 +256,7 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
      * @param product
      * @return String of a potensial error message or null
      */
+    @RolesAllowed("user")
     public String addFeedback(AuctionUser rater, ProductListing pl, Bid highestBid, String rating, String comment, Product product) {
         Date now = new Date();
         Date closing = pl.getClosing();
@@ -299,6 +301,8 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
      * @param sellerRating
      * @return String of a potensial error message or null
      */
+
+    @RolesAllowed("user")
     public String addSellerRating(AuctionUser rater, AuctionUser seller, String sellerRating) {
         Bid highestBid = new Bid();
         Feedback oldFeedback = seller.getFeedbackOfUser(rater.getId());

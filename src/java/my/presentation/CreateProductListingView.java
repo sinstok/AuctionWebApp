@@ -17,8 +17,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.util.List;
+import javax.annotation.security.DeclareRoles;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.faces.flow.FlowScoped;
@@ -30,6 +33,7 @@ import javax.validation.constraints.NotNull;
  *
  * @author Joakim
  */
+@DeclareRoles({"user"})
 @Named(value = "createProductListingView")
 @FlowScoped(value = "flow-productCreation")
 public class CreateProductListingView implements Serializable {
@@ -59,15 +63,18 @@ public class CreateProductListingView implements Serializable {
         product = new Product();
         category = 0;
     }
-    
+    @RolesAllowed("user")
     public String postProductListing() throws IOException {
 
-        if (!login.isLoggedIn()) {
+        /*if (!login.isLoggedIn()) {
             FacesMessage msg = new FacesMessage("You must be logged in in order to add a product", "ERROR MSG");
             FacesContext.getCurrentInstance().addMessage(null, msg);
             return "returnFromproductCreation";
+        }*/
+        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        if(!ec.isUserInRole("user")){
+            return "returnFromproductCreation";
         }
-
         if (product.getId() == null) {
             Category[] categories = Category.values();
             if (category < 0 || categories.length - 1 < category) {
@@ -91,7 +98,8 @@ public class CreateProductListingView implements Serializable {
         productListingFacade.create(productListing);
         product.addListing(productListing);
 
-        AuctionUser au = auctionUserFacade.find(login.getUserId());
+        //AuctionUser au = auctionUserFacade.find(login.getUserId());
+        AuctionUser au = auctionUserFacade.findUserByEmail(ec.getUserPrincipal().getName());
         au.addListing(productListing);
         auctionUserFacade.edit(au);
 
