@@ -57,9 +57,14 @@ public class ProductOverView {
      * @return Path to flow-productCreation
      */
     public String toProductCreation(){
-        if(!login.isLoggedIn()){
+        /*if(!login.isLoggedIn()){
+            return "loginPage";
+        }*/
+        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        if(!ec.isUserInRole("user")){
             return "loginPage";
         }
+
         
         return "flow-productCreation";
     }

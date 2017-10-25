@@ -92,11 +92,16 @@ public class ProductDescriptionView implements Serializable {
      * @return String of a webpage or null
      */
     public String addBid(int pID) {
-        if (!login.isLoggedIn()) {
+        /*if (!login.isLoggedIn()) {
+            return "loginPage";
+        }*/
+        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        if(!ec.isUserInRole("user")){
             return "loginPage";
         }
 
-        AuctionUser bidder = auctionUserFacade.find(login.getUserId());
+        //AuctionUser bidder = auctionUserFacade.find(login.getUserId());
+        AuctionUser bidder = auctionUserFacade.findUserByEmail(ec.getUserPrincipal().getName());
         //String msgs = plFacade.addBid(bidder, pl, getSeller(), getHighestBid(), newBidValue);
         Bid bid = new Bid();
         bid.setAmount(newBidValue);

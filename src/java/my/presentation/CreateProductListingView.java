@@ -19,6 +19,7 @@ import java.io.Serializable;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.faces.flow.FlowScoped;
@@ -62,11 +63,16 @@ public class CreateProductListingView implements Serializable {
     
     public String postProductListing() throws IOException {
 
-        if (!login.isLoggedIn()) {
+        /*if (!login.isLoggedIn()) {
             FacesMessage msg = new FacesMessage("You must be logged in in order to add a product", "ERROR MSG");
             FacesContext.getCurrentInstance().addMessage(null, msg);
             return "returnFromproductCreation";
+        }*/
+        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        if(!ec.isUserInRole("user")){
+            return "returnFromproductCreation";
         }
+
 
         if (product.getId() == null) {
             Category[] categories = Category.values();
@@ -91,7 +97,8 @@ public class CreateProductListingView implements Serializable {
         productListingFacade.create(productListing);
         product.addListing(productListing);
 
-        AuctionUser au = auctionUserFacade.find(login.getUserId());
+        //AuctionUser au = auctionUserFacade.find(login.getUserId());
+        AuctionUser au = auctionUserFacade.findUserByEmail(ec.getUserPrincipal().getName());
         au.addListing(productListing);
         auctionUserFacade.edit(au);
 
