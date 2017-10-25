@@ -36,6 +36,8 @@ public class Main {
     @WebServiceRef(wsdlLocation = "META-INF/wsdl/localhost_8080/AuctionWebApp/AuctionService.wsdl")
     private static AuctionService service;
 
+  
+
     @Resource(lookup = "java:comp/DefaultJMSConnectionFactory")
     private static ConnectionFactory connectionFactory;
 
@@ -95,14 +97,9 @@ public class Main {
         return highestBid;
     }
 
-    public static java.util.List<services.ProductListingObject> getBiddables() {
-        // Note that the injected javax.xml.ws.Service reference as well as port objects are not thread safe.
-        // If the calling of port operations may lead to race condition some synchronization is required.
-        services.AuctionServiceSOAP port = service.getAuctionServiceSOAPPort();
-        return port.getBiddables();
-    }
 
-    private static String makeBid(double amount, long productListingId) {
+
+    public static String makeBid(double amount, long productListingId) {
         // Note that the injected javax.xml.ws.Service reference as well as port objects are not thread safe.
         // If the calling of port operations may lead to race condition some synchronization is required.
         services.AuctionServiceSOAP port = service.getAuctionServiceSOAPPort();
@@ -112,5 +109,12 @@ public class Main {
         bid.setBidDate(null);
 
         return port.makeBid(bid, productListingId);
+    }
+
+    public static java.util.List<services.ProductListingObject> getBiddables() {
+        // Note that the injected javax.xml.ws.Service reference as well as port objects are not thread safe.
+        // If the calling of port operations may lead to race condition some synchronization is required.
+        services.AuctionServiceSOAP port = service.getAuctionServiceSOAPPort();
+        return port.getBiddables();
     }
 }
