@@ -12,11 +12,15 @@ import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import helpers.LoginBean;
 import helpers.PasswordHash;
+import java.io.IOException;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * This Session bean handles both when a user log in and when a user logs out of
@@ -62,27 +66,38 @@ public class LoginView {
     public String login() {
         plf.test();
         AuctionUser user = auctionUserFacade.login(email, password);
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+        HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
         if (user != null) {
             long id = user.getId();
             if (id != 0) {
-                if (loginBean.login(id)) {
+                try {
+                    request.login(user.getEmail(), password + user.getSalt());
+                    request.authenticate(response);
+                    return "/faces/index?faces-redirect=true";
+                } catch (ServletException e) {
+                    return "/faces/loginPage.xhtml";
+                } catch (IOException i){
+                    return "/faces/loginPage.xhtml";
+                }
+                /*if (loginBean.login(id)) {
                     return "index?faces-redirect=true";
                 } else {
                     FacesMessage msg = new FacesMessage("Wrong user input!", "ERROR MSG");
                     FacesContext.getCurrentInstance().addMessage(null, msg);
                     return "loginPage";
-                }
+                }*/
             } else {
                 FacesMessage msg = new FacesMessage("Wrong user input!", "ERROR MSG");
                 FacesContext.getCurrentInstance().addMessage(null, msg);
-                return "loginPage";
+                return "/faces/loginPage";
             }
         } else {
             FacesMessage msg = new FacesMessage("Wrong user input!", "ERROR MSG");
             FacesContext.getCurrentInstance().addMessage(null, msg);
-            return "loginPage";
+            return "/faces/loginPage";
         }
-
     }
 
     /**
@@ -91,8 +106,15 @@ public class LoginView {
      * @return goes back to the index
      */
     public String logOut() {
-        loginBean.logOut();
-        return "index";
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+        try{
+            request.logout();
+            //loginBean.logOut();
+            return "/faces/index";
+        } catch (ServletException e){
+            return "/faces/index";
+        }
     }
 
     /**
@@ -137,12 +159,12 @@ public class LoginView {
      * @return either index page or the userprofile page
      */
     public String toUserProfile() {
-        if (loginBean.isLoggedIn()) {
-            ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-            ec.getRequestMap().put("userId", loginBean.getUserId());
-            return "userProfile";
+        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        if (/*loginBean.isLoggedIn()*/ ec.isUserInRole("user")) {
+            //ec.getRequestMap().put("userId", loginBean.getUserId());
+            return "/profile/userProfile.xhtml";
         } else {
-            return "index";
+            return "/faces/index";
         }
     }
 }

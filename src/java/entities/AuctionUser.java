@@ -37,6 +37,7 @@ public class AuctionUser implements Serializable {
     private String address;
     private String password;
     private String salt;
+    private String userRole;
 
     @OneToMany(cascade = PERSIST)
     private List<Feedback> feedbacks;
@@ -156,6 +157,14 @@ public class AuctionUser implements Serializable {
 
     public void setSalt(String salt) {
         this.salt = salt;
+    }
+
+    public String getRole() {
+        return userRole;
+    }
+
+    public void setRole(String role) {
+        this.userRole = role;
     }
 
     @Override

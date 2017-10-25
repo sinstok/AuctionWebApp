@@ -54,7 +54,7 @@
                 <div class="row">
                     <div class="form-group col-md-3">
                         <label>Password</label>
-                        <h:inputSecret id="password" styleClass="form-control" value="#{RegisterUserView.newUser.password}" required="true" requiredMessage="Enter your password" a:placeholder="Password">
+                        <h:inputSecret id="password" styleClass="form-control" value="#{RegisterUserView.password}" required="true" requiredMessage="Enter your password" a:placeholder="Password">
                             <f:validateLength minimum="6" maximum="30" for="password" /> 
                         </h:inputSecret>
                         <h:message for="password" style="color: red" />
