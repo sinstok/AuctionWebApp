@@ -6,6 +6,7 @@
 package my.presentation;
 
 import boundary.AuctionUserFacade;
+import boundary.ProductListingFacade;
 import entities.AuctionUser;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
@@ -29,6 +30,8 @@ public class LoginView {
 
     @EJB
     private final AuctionUserFacade auctionUserFacade;
+    @Inject
+    private ProductListingFacade plf;
 
     @Inject
     private LoginBean loginBean;
@@ -57,6 +60,7 @@ public class LoginView {
      * redirected you to the login page.
      */
     public String login() {
+        plf.test();
         AuctionUser user = auctionUserFacade.login(email, password);
         if (user != null) {
             long id = user.getId();

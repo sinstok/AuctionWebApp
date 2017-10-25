@@ -46,33 +46,29 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws JMSException {
-        // TODO code application logic here
+        // TODO code application logic here        
         ArrayList<ProductListingObject> items = (ArrayList) getBiddables();
 
-        //System.out.println(makeBid(667.0, sax.getId()));
         JMSContext context = connectionFactory.createContext();
         JMSConsumer consumer = context.createConsumer(topic);
+        AuctionListener listener = new AuctionListener(items);
+        consumer.setMessageListener(listener);
+
         System.out.println("fetching product listings...");
         printItems(items);
         while (true) {
-            Message m = consumer.receive(1000);
-            if (m != null) {
-                System.out.println("product listings have been updated");
-                items = (ArrayList) getBiddables();
-                printItems(items);
-            }
             System.out.print("Enter item number of the product you want to bid on:");
-                Scanner sc = new Scanner(System.in);
-                int id = sc.nextInt();
-                System.out.print("Enter your bid:");
-                int bid = sc.nextInt();
-                System.out.println(makeBid((double)bid,(long)id));
+            Scanner sc = new Scanner(System.in);
+            int id = sc.nextInt();
+            System.out.print("Enter your bid:");
+            int bid = sc.nextInt();
+            System.out.println(makeBid((double) bid, (long) id));
         }
 
     }
-    
-    private static void printItems(ArrayList<ProductListingObject> items){
-        for(ProductListingObject item : items){
+
+    public static void printItems(ArrayList<ProductListingObject> items) {
+        for (ProductListingObject item : items) {
             BidObject highestBid = getHighestBid(item);
             System.out.println();
             System.out.println("item " + item.getId() + ": ");
@@ -82,7 +78,7 @@ public class Main {
             System.out.println();
         }
     }
-    
+
     public static BidObject getHighestBid(ProductListingObject pl) {
         List<BidObject> bids = pl.getBids();
         BidObject highestBid = new BidObject();
@@ -99,7 +95,7 @@ public class Main {
         return highestBid;
     }
 
-    private static java.util.List<services.ProductListingObject> getBiddables() {
+    public static java.util.List<services.ProductListingObject> getBiddables() {
         // Note that the injected javax.xml.ws.Service reference as well as port objects are not thread safe.
         // If the calling of port operations may lead to race condition some synchronization is required.
         services.AuctionServiceSOAP port = service.getAuctionServiceSOAPPort();
