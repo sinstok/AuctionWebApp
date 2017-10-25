@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Resource;
+import javax.annotation.security.DeclareRoles;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.jms.ConnectionFactory;
@@ -26,6 +28,7 @@ import javax.persistence.PersistenceContext;
  *
  * @author Tomas
  */
+@DeclareRoles({"user"})
 @Stateless
 public class BidFacade extends AbstractFacade<Bid> {
 
@@ -62,6 +65,7 @@ public class BidFacade extends AbstractFacade<Bid> {
      * @param newBidValue
      * @return String of a potensial error message or null
      */
+    @RolesAllowed("user")
     public String addBid(Bid bid, ProductListing pl) {
         
         AuctionUser seller = auctionUserFacade.getSeller(pl.getId());

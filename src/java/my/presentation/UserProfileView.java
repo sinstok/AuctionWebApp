@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.Date;
 import javax.annotation.PostConstruct;
 import javax.annotation.security.DeclareRoles;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -23,7 +24,7 @@ import javax.faces.context.FacesContext;
  *
  * @author Sindre
  */
-@DeclareRoles({"user"})
+@RolesAllowed("user")
 @ManagedBean(name = "UserProfileView")
 @ViewScoped
 public class UserProfileView {
@@ -40,7 +41,7 @@ public class UserProfileView {
     public UserProfileView() {
         user = new AuctionUser();
     }
-
+    
     @PostConstruct
     public void init() {
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();

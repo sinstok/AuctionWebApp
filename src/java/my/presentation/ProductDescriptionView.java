@@ -16,6 +16,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -99,6 +100,10 @@ public class ProductDescriptionView implements Serializable {
         if (!ec.isUserInRole("user")) {
             return "loginPage";
         }
+        /*ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        if(!ec.isUserInRole("user")){
+            return "loginPage";
+        }*/
 
         //AuctionUser bidder = auctionUserFacade.find(login.getUserId());
         AuctionUser bidder = auctionUserFacade.findUserByEmail(ec.getUserPrincipal().getName());
@@ -170,7 +175,7 @@ public class ProductDescriptionView implements Serializable {
         //AuctionUser rater = auctionUserFacade.find(login.getUserId());
         AuctionUser rater = auctionUserFacade.findUserByEmail(ec.getUserPrincipal().getName());
         AuctionUser seller = this.getSeller();
-        String msgs = plFacade.addSellerRating(rater, seller, this.getSellerRating(), this.pl);
+        String msgs = plFacade.addSellerRating(rater, seller, this.getSellerRating());
         if (msgs == null) {
             return null;
         } else {

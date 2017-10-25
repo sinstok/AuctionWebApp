@@ -11,6 +11,8 @@ import helpers.Category;
 import helpers.LoginBean;
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.security.DeclareRoles;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
@@ -24,6 +26,7 @@ import javax.inject.Inject;
  */
 @Named(value = "productOverView")
 @RequestScoped
+@DeclareRoles({"user"})
 public class ProductOverView {
     
     @EJB
@@ -56,6 +59,7 @@ public class ProductOverView {
      * 
      * @return Path to flow-productCreation
      */
+    @RolesAllowed("user")
     public String toProductCreation(){
         /*if(!login.isLoggedIn()){
             return "loginPage";
@@ -64,8 +68,6 @@ public class ProductOverView {
         if(!ec.isUserInRole("user")){
             return "loginPage";
         }
-
-        
         return "flow-productCreation";
     }
     
