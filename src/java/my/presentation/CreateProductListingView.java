@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.util.List;
+import javax.annotation.security.DeclareRoles;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -30,6 +32,7 @@ import javax.validation.constraints.NotNull;
  *
  * @author Joakim
  */
+@DeclareRoles({"user"})
 @Named(value = "createProductListingView")
 @FlowScoped(value = "flow-productCreation")
 public class CreateProductListingView implements Serializable {
@@ -59,14 +62,14 @@ public class CreateProductListingView implements Serializable {
         product = new Product();
         category = 0;
     }
-    
+    @RolesAllowed("user")
     public String postProductListing() throws IOException {
 
-        if (!login.isLoggedIn()) {
+        /*if (!login.isLoggedIn()) {
             FacesMessage msg = new FacesMessage("You must be logged in in order to add a product", "ERROR MSG");
             FacesContext.getCurrentInstance().addMessage(null, msg);
             return "returnFromproductCreation";
-        }
+        }*/
 
         if (product.getId() == null) {
             Category[] categories = Category.values();
