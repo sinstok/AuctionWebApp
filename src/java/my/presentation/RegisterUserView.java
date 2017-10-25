@@ -72,7 +72,7 @@ public class RegisterUserView {
                     String hashedPassword = hashing.hashPassword(this.newUser.getPassword() + this.newUser.getSalt()).toString();
                     this.newUser.setPassword(hashedPassword);*/
                     AuctionUser user = auctionUserFacade.registerUser(this.newUser, this.password);
-                    //request.login(user.getEmail(), this.password + user.getSalt());
+                    request.login(user.getEmail(), this.password + user.getSalt());
                     loginBean.login(user.getId());
                     return "/faces/index?faces-redirect=true";
                 } catch (Exception e) {

@@ -12,6 +12,7 @@ import entities.ProductListing;
 import java.io.IOException;
 import java.util.Date;
 import javax.annotation.PostConstruct;
+import javax.annotation.security.DeclareRoles;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -22,6 +23,7 @@ import javax.faces.context.FacesContext;
  *
  * @author Sindre
  */
+@DeclareRoles({"user"})
 @ManagedBean(name = "UserProfileView")
 @ViewScoped
 public class UserProfileView {
@@ -42,15 +44,17 @@ public class UserProfileView {
     @PostConstruct
     public void init() {
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-        Long userId = (Long) ec.getRequestMap().get("userId");
-        if (userId == null /*!ec.isUserInRole("user")*/) {
+        //Long userId = (Long) ec.getRequestMap().get("userId");
+        
+        if (/*userId == null*/ !ec.isUserInRole("user")) {
             try {
                 ec.redirect("../loginPage.xhtml");
             } catch (IOException e) {
                 
             }
         } else {
-            this.user = auctionUserFacade.find(userId);
+            //this.user = auctionUserFacade.find(userId);
+            this.user = auctionUserFacade.findUserByEmail(ec.getUserPrincipal().getName());
         }
     }
 

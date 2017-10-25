@@ -68,7 +68,7 @@ public class LoginView {
         if (user != null) {
             long id = user.getId();
             if (id != 0) {
-                /*try {
+                try {
                     request.login(user.getEmail(), password + user.getSalt());
                     request.authenticate(response);
                     return "/faces/index?faces-redirect=true";
@@ -76,14 +76,14 @@ public class LoginView {
                     return "/faces/loginPage.xhtml";
                 } catch (IOException i){
                     return "/faces/loginPage.xhtml";
-                }*/
-                if (loginBean.login(id)) {
+                }
+                /*if (loginBean.login(id)) {
                     return "index?faces-redirect=true";
                 } else {
                     FacesMessage msg = new FacesMessage("Wrong user input!", "ERROR MSG");
                     FacesContext.getCurrentInstance().addMessage(null, msg);
                     return "loginPage";
-                }
+                }*/
             } else {
                 FacesMessage msg = new FacesMessage("Wrong user input!", "ERROR MSG");
                 FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -103,14 +103,14 @@ public class LoginView {
      */
     public String logOut() {
         FacesContext context = FacesContext.getCurrentInstance();
-        /*HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-        //try{
-            request.logout();*/
-            loginBean.logOut();
+        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+        try{
+            request.logout();
+            //loginBean.logOut();
             return "/faces/index";
-        /*} catch (ServletException e){
-            //return "/faces/index";
-        }*/
+        } catch (ServletException e){
+            return "/faces/index";
+        }
     }
 
     /**
@@ -156,8 +156,8 @@ public class LoginView {
      */
     public String toUserProfile() {
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-        if (loginBean.isLoggedIn() /*ec.isUserInRole("user")*/) {
-            ec.getRequestMap().put("userId", loginBean.getUserId());
+        if (/*loginBean.isLoggedIn()*/ ec.isUserInRole("user")) {
+            //ec.getRequestMap().put("userId", loginBean.getUserId());
             return "/profile/userProfile.xhtml";
         } else {
             return "/faces/index";

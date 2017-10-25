@@ -67,6 +67,11 @@ public class AuctionUserFacade extends AbstractFacade<AuctionUser> {
         List<AuctionUser> list = em.createQuery("SELECT t FROM " + AuctionUser.class.getSimpleName() + " t WHERE t." + fieldName + " " + "=" + " :val", AuctionUser.class).setParameter("val", value.toString()).getResultList();
         return list.isEmpty();
     }
+    
+    public synchronized AuctionUser findUserByEmail(String email){
+        AuctionUser user = em.createQuery("SELECT t FROM AuctionUser t where t.email = :var", AuctionUser.class).setParameter("var", email).getSingleResult();
+        return user;
+    }
 
     public synchronized AuctionUser registerUser(AuctionUser user, String password) {
         hash = new PasswordHash();

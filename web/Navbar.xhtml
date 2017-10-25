@@ -29,14 +29,14 @@
             </h:form>   
             <h:form>
                 <ul class="nav navbar-nav navbar-right">
-                    <ui:fragment rendered="#{user == null}">
+                    <ui:fragment rendered="#{!request.isUserInRole('user')}">
                         <li>
                             <h:commandLink action="loginPage">
                                 <span class="glyphicon glyphicon-log-in" /> Login
                             </h:commandLink>
                         </li>
                     </ui:fragment>
-                    <ui:fragment rendered="#{user != null}">
+                    <ui:fragment rendered="#{request.isUserInRole('user')}">
                         <li>
                             <h:commandLink action="#{LoginView.toUserProfile}" value="My Profile" />
                         </li>
