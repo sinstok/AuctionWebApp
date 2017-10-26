@@ -75,7 +75,7 @@ public class LoginView {
                     request.login(user.getEmail(), password + user.getSalt());
                     HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
                     request.authenticate(response);
-                    return "/faces/index.xhtml";
+                    return "/faces/index.xhtml?faces-redirect=true";
                     //response.sendRedirect("index.xhtml?faces-redirect=true");
                 } catch (ServletException e) {
                     return "/faces/loginPage.xhtml";

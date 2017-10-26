@@ -107,11 +107,13 @@ public class CreateProductListingView implements Serializable {
         return "returnFromproductCreation";
     }
 
+    
     public String selectProduct(long id) {
         product = productFacade.find(id);
         return "createProductListing";
     }
 
+    
     public List<Product> getAllProducts() {
         return productFacade.findAll();
     }
