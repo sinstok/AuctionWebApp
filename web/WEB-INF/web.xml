@@ -54,13 +54,15 @@
             <transport-guarantee>CONFIDENTIAL</transport-guarantee>
         </user-data-constraint>
     </security-constraint>
-    <!--<security-constraint>
-        <display-name>Exclude</display-name>
+    <security-constraint>
         <web-resource-collection>
-            <web-resource-name>index</web-resource-name>
-            <url-pattern>/faces/index.xhtml</url-pattern>
+            <web-resource-name>SOAP_Endpoint</web-resource-name>
+            <url-pattern>/AuctionService/*</url-pattern>
         </web-resource-collection>
-    </security-constraint>-->
+        <user-data-constraint>
+            <transport-guarantee>NONE</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
     <security-constraint>
         <display-name>SecurityRoles</display-name>
         <web-resource-collection>
@@ -78,6 +80,8 @@
             <role-name>user</role-name>
         </auth-constraint>
     </security-constraint>
+    
+    
     <login-config>
         <auth-method>FORM</auth-method>
         <realm-name>jdbcRealm</realm-name>
