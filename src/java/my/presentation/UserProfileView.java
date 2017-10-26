@@ -9,10 +9,8 @@ import boundary.AuctionUserFacade;
 import boundary.ProductListingFacade;
 import entities.AuctionUser;
 import entities.ProductListing;
-import java.io.IOException;
 import java.util.Date;
 import javax.annotation.PostConstruct;
-import javax.annotation.security.DeclareRoles;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
@@ -24,9 +22,9 @@ import javax.faces.context.FacesContext;
  *
  * @author Sindre
  */
-@RolesAllowed("user")
 @ManagedBean(name = "UserProfileView")
 @ViewScoped
+@RolesAllowed("user")
 public class UserProfileView {
 
     @EJB
@@ -41,22 +39,22 @@ public class UserProfileView {
     public UserProfileView() {
         user = new AuctionUser();
     }
-    
+
     @PostConstruct
     public void init() {
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
         //Long userId = (Long) ec.getRequestMap().get("userId");
-        
-        if (/*userId == null*/ !ec.isUserInRole("user")) {
+
+        /*if (userId == null !ec.isUserInRole("user")) {
             try {
                 ec.redirect("../loginPage.xhtml");
             } catch (IOException e) {
                 
             }
-        } else {
-            //this.user = auctionUserFacade.find(userId);
-            this.user = auctionUserFacade.findUserByEmail(ec.getUserPrincipal().getName());
-        }
+        } else {*/
+        //this.user = auctionUserFacade.find(userId);
+        this.user = auctionUserFacade.findUserByEmail(ec.getUserPrincipal().getName());
+        //}
     }
 
     public String getEmail() {
@@ -74,8 +72,8 @@ public class UserProfileView {
     public String isHighestBidder(ProductListing listing) {
         return auctionUserFacade.isHighestBidder(listing, user);
     }
-    
-    public void publishListing(ProductListing listing){
+
+    public void publishListing(ProductListing listing) {
         listing.setPublished(new Date());
         productListingFacade.edit(listing);
     }

@@ -16,6 +16,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.annotation.security.DeclareRoles;
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -31,6 +33,7 @@ import javax.inject.Inject;
  */
 @ManagedBean(name = "PDView")
 @ViewScoped
+@RolesAllowed("user")
 public class ProductDescriptionView implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -72,12 +75,13 @@ public class ProductDescriptionView implements Serializable {
         this.product = new Product();
     }
 
+    @PermitAll
     @PostConstruct
     public void init() {
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
         this.pl = (ProductListing) ec.getRequestMap().get("productListing");
     }
-
+    @PermitAll
     public ProductListing getProductListing(int id) {
         Long proListId = Long.valueOf(id);
         ProductListing proList = plFacade.find(proListId);
@@ -92,15 +96,16 @@ public class ProductDescriptionView implements Serializable {
      * @param pID
      * @return String of a webpage or null
      */
+    @RolesAllowed("user")
     public String addBid(int pID) {
         /*if (!login.isLoggedIn()) {
             return "loginPage";
         }*/
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-        if (!ec.isUserInRole("user")) {
+        /*if (!ec.isUserInRole("user")) {
             return "loginPage";
-        }
-        /*ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        }*/
+ /*ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
         if(!ec.isUserInRole("user")){
             return "loginPage";
         }*/
@@ -130,6 +135,7 @@ public class ProductDescriptionView implements Serializable {
      * @param pID
      * @return String of a webpage or null
      */
+    @RolesAllowed("user")
     public String addFeedback(int pID) {
         /*if (!login.isLoggedIn()) {
             return "loginPage";
@@ -163,6 +169,7 @@ public class ProductDescriptionView implements Serializable {
      * @param pID
      * @return String of a webpage or null
      */
+    @RolesAllowed("user")
     public String addSellerRating(int pID) {
         /*if (!login.isLoggedIn()) {
             return "loginPage";
@@ -192,6 +199,7 @@ public class ProductDescriptionView implements Serializable {
      *
      * @return String
      */
+    @PermitAll
     public String getTimeLeft() {
         Date closing = this.pl.getClosing();
         Date now = new Date();

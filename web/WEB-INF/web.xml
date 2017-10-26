@@ -8,6 +8,14 @@
         <error-code>404</error-code>
         <location>/faces/errorNotFound.xhtml</location>
     </error-page>
+    <error-page>
+        <error-code>403</error-code>
+        <location>/faces/loginPage.xhtml</location>
+    </error-page>
+    <error-page>
+        <exception-type>javax.faces.application.ViewExpiredException</exception-type>
+        <location>/faces/loginPage.xhtml</location>
+    </error-page>
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
@@ -27,7 +35,7 @@
     </servlet-mapping>
     <session-config>
         <session-timeout>
-            30
+            45
         </session-timeout>
     </session-config>
     <welcome-file-list>
@@ -58,11 +66,38 @@
 </security-constraint>
     
     <security-constraint>
+        <display-name>Exclude</display-name>
+        <web-resource-collection>
+            <web-resource-name>index</web-resource-name>
+            <url-pattern>/faces/index.xhtml</url-pattern>
+        </web-resource-collection>
+    </security-constraint>
+    <security-constraint>
         <display-name>SecurityRoles</display-name>
         <web-resource-collection>
             <web-resource-name>Restricted access</web-resource-name>
             <description/>
-            <url-pattern>/profile/*</url-pattern>
+            <url-pattern>/faces/profile/*</url-pattern>
+        </web-resource-collection>
+        <web-resource-collection>
+            <web-resource-name>Restrict</web-resource-name>
+            <description/>
+            <url-pattern>/faces/flow-productCreation/*</url-pattern>
+        </web-resource-collection>
+        <web-resource-collection>
+            <web-resource-name>Access</web-resource-name>
+            <description/>
+            <url-pattern>/faces/productdescription.xhtml</url-pattern>
+        </web-resource-collection>
+        <web-resource-collection>
+            <web-resource-name>navbar</web-resource-name>
+            <description/>
+            <url-pattern>/faces/Navbar.xhtml</url-pattern>
+        </web-resource-collection>
+        <web-resource-collection>
+            <web-resource-name>navbarS</web-resource-name>
+            <description/>
+            <url-pattern>/faces/NavbarStripped.xhtml</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <description/>
@@ -75,8 +110,8 @@
         <auth-method>FORM</auth-method>
         <realm-name>jdbcRealm</realm-name>
         <form-login-config>
-            <form-login-page>/loginPage.xhtml</form-login-page>
-            <form-error-page>/loginPage.xhtml</form-error-page>
+            <form-login-page>/faces/loginPage.xhtml</form-login-page>
+            <form-error-page>/faces/errorNotFound.xhtml</form-error-page>
         </form-login-config>
     </login-config>
     <security-role>
