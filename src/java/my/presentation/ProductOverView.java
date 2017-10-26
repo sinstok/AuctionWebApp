@@ -12,6 +12,7 @@ import helpers.LoginBean;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.security.DeclareRoles;
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.inject.Named;
@@ -26,7 +27,7 @@ import javax.inject.Inject;
  */
 @Named(value = "productOverView")
 @RequestScoped
-@DeclareRoles({"user"})
+@RolesAllowed("user")
 public class ProductOverView {
     
     @EJB
@@ -43,6 +44,7 @@ public class ProductOverView {
     /**
      * @return List of ProductListing based on search or category or all ProductListings
      */
+    @PermitAll
     public List<ProductListing> getProductListings() {
         List<ProductListing> list;
         if(category != null) {
@@ -64,16 +66,17 @@ public class ProductOverView {
         /*if(!login.isLoggedIn()){
             return "loginPage";
         }*/
-        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        /*ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
         if(!ec.isUserInRole("user")){
             return "loginPage";
-        }
+        }*/
         return "flow-productCreation";
     }
     
     /**
      * @return List of categories
      */
+    @PermitAll
     public List<String> getCategories() {
         List<String> categories = new ArrayList<>();
         for(Category c : Category.values()) {
@@ -87,10 +90,11 @@ public class ProductOverView {
      * @param productListing
      * @return Path to productdescription
      */
+    @PermitAll
     public String toProductDescription(ProductListing productListing) {
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
         ec.getRequestMap().put("productListing", productListing);
-        return "productdescription";
+        return "/faces/productdescription";
     }
     
     /**

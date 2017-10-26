@@ -33,9 +33,9 @@ import javax.validation.constraints.NotNull;
  *
  * @author Joakim
  */
-@DeclareRoles({"user"})
 @Named(value = "createProductListingView")
 @FlowScoped(value = "flow-productCreation")
+@RolesAllowed("user")
 public class CreateProductListingView implements Serializable {
 
     @EJB
@@ -63,7 +63,7 @@ public class CreateProductListingView implements Serializable {
         product = new Product();
         category = 0;
     }
-    @RolesAllowed("user")
+    
     public String postProductListing() throws IOException {
 
         /*if (!login.isLoggedIn()) {

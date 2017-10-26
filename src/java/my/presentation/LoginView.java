@@ -6,6 +6,7 @@
 package my.presentation;
 
 import boundary.AuctionUserFacade;
+import boundary.ProductListingFacade;
 import entities.AuctionUser;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
@@ -33,6 +34,8 @@ public class LoginView {
 
     @EJB
     private final AuctionUserFacade auctionUserFacade;
+    @Inject
+    private ProductListingFacade plf;
 
     @Inject
     private LoginBean loginBean;
@@ -61,17 +64,19 @@ public class LoginView {
      * redirected you to the login page.
      */
     public String login() {
+        plf.test();
         AuctionUser user = auctionUserFacade.login(email, password);
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-        HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
         if (user != null) {
             long id = user.getId();
             if (id != 0) {
                 try {
                     request.login(user.getEmail(), password + user.getSalt());
+                    HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
                     request.authenticate(response);
-                    return "/faces/index?faces-redirect=true";
+                    return "/faces/index.xhtml";
+                    //response.sendRedirect("index.xhtml?faces-redirect=true");
                 } catch (ServletException e) {
                     return "/faces/loginPage.xhtml";
                 } catch (IOException i){
@@ -87,12 +92,12 @@ public class LoginView {
             } else {
                 FacesMessage msg = new FacesMessage("Wrong user input!", "ERROR MSG");
                 FacesContext.getCurrentInstance().addMessage(null, msg);
-                return "/faces/loginPage";
+                return "/faces/loginPage.xhtml";
             }
         } else {
             FacesMessage msg = new FacesMessage("Wrong user input!", "ERROR MSG");
             FacesContext.getCurrentInstance().addMessage(null, msg);
-            return "/faces/loginPage";
+            return "/faces/loginPage.xhtml";
         }
     }
 
@@ -158,7 +163,7 @@ public class LoginView {
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
         if (/*loginBean.isLoggedIn()*/ ec.isUserInRole("user")) {
             //ec.getRequestMap().put("userId", loginBean.getUserId());
-            return "/profile/userProfile.xhtml";
+            return "/faces/profile/userProfile.xhtml";
         } else {
             return "/faces/index";
         }

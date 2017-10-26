@@ -5,7 +5,6 @@
  */
 package boundary;
 
-import static boundary.BidFacade.logger;
 import entities.AuctionUser;
 import entities.Bid;
 import entities.Feedback;
@@ -16,7 +15,6 @@ import helpers.RatingCalculator;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
 import javax.annotation.Resource;
 import javax.annotation.security.DeclareRoles;
 import javax.annotation.security.RolesAllowed;
@@ -92,6 +90,21 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
         context.createProducer().send(topic, text);
 
     }
+    
+    public void test(){
+        String text;
+        JMSContext context = connectionFactory.createContext();
+
+        text = "---- START EMAIL to customer atle ----\n"
+                + "Dear atle ,\n"
+                + "Congratulations! You have won in bidding for product sax .\n"
+                + "You can access the product using the following link:\n"
+                + " \n"
+                + "---- END EMAIL to customer atle ----";
+        context.createProducer().send(queue, text);
+        context.createProducer().send(topic, text);
+    }
+
     @RolesAllowed("user")
     @Override
     public void create(ProductListing productListing) {
@@ -288,6 +301,7 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
      * @param sellerRating
      * @return String of a potensial error message or null
      */
+
     @RolesAllowed("user")
     public String addSellerRating(AuctionUser rater, AuctionUser seller, String sellerRating) {
         Bid highestBid = new Bid();

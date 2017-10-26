@@ -16,6 +16,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.annotation.security.DeclareRoles;
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -31,6 +33,7 @@ import javax.inject.Inject;
  */
 @ManagedBean(name = "PDView")
 @ViewScoped
+@RolesAllowed("user")
 public class ProductDescriptionView implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -72,12 +75,13 @@ public class ProductDescriptionView implements Serializable {
         this.product = new Product();
     }
 
+    @PermitAll
     @PostConstruct
     public void init() {
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
         this.pl = (ProductListing) ec.getRequestMap().get("productListing");
     }
-
+    @PermitAll
     public ProductListing getProductListing(int id) {
         Long proListId = Long.valueOf(id);
         ProductListing proList = plFacade.find(proListId);
@@ -92,15 +96,16 @@ public class ProductDescriptionView implements Serializable {
      * @param pID
      * @return String of a webpage or null
      */
+    @RolesAllowed("user")
     public String addBid(int pID) {
         /*if (!login.isLoggedIn()) {
             return "loginPage";
         }*/
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-        if(!ec.isUserInRole("user")){
+        /*if (!ec.isUserInRole("user")) {
             return "loginPage";
-        }
-        /*ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        }*/
+ /*ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
         if(!ec.isUserInRole("user")){
             return "loginPage";
         }*/
@@ -130,11 +135,17 @@ public class ProductDescriptionView implements Serializable {
      * @param pID
      * @return String of a webpage or null
      */
+    @RolesAllowed("user")
     public String addFeedback(int pID) {
         /*if (!login.isLoggedIn()) {
             return "loginPage";
         }*/
-        AuctionUser rater = auctionUserFacade.find(login.getUserId());
+        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        if (!ec.isUserInRole("user")) {
+            return "loginPage";
+        }
+        //AuctionUser rater = auctionUserFacade.find(login.getUserId());
+        AuctionUser rater = auctionUserFacade.findUserByEmail(ec.getUserPrincipal().getName());
         Bid highestBid = getHighestBid();
         String msgs = plFacade.addFeedback(rater, pl, highestBid, this.getProductRating(), this.comment, this.getProduct());
         String a = "Product is null";
@@ -158,14 +169,19 @@ public class ProductDescriptionView implements Serializable {
      * @param pID
      * @return String of a webpage or null
      */
+    @RolesAllowed("user")
     public String addSellerRating(int pID) {
-        if (!login.isLoggedIn()) {
+        /*if (!login.isLoggedIn()) {
+            return "loginPage";
+        }*/
+        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        if (!ec.isUserInRole("user")) {
             return "loginPage";
         }
 
-        AuctionUser rater = auctionUserFacade.find(login.getUserId());
+        //AuctionUser rater = auctionUserFacade.find(login.getUserId());
+        AuctionUser rater = auctionUserFacade.findUserByEmail(ec.getUserPrincipal().getName());
         AuctionUser seller = this.getSeller();
-
         String msgs = plFacade.addSellerRating(rater, seller, this.getSellerRating());
         if (msgs == null) {
             return null;
@@ -174,6 +190,7 @@ public class ProductDescriptionView implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, msg);
             return "index";
         }
+
     }
 
     /**
@@ -182,6 +199,7 @@ public class ProductDescriptionView implements Serializable {
      *
      * @return String
      */
+    @PermitAll
     public String getTimeLeft() {
         Date closing = this.pl.getClosing();
         Date now = new Date();

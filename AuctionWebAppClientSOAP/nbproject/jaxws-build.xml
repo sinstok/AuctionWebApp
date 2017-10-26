@@ -35,5 +35,22 @@
         <delete dir="${build.generated.dir}/jax-wsCache/AuctionService"/>
         <delete dir="${build.generated.sources.dir}/jax-ws/services"/>
     </target>
-    <target name="wsimport-client-generate" depends="wsimport-client-AuctionService"/>
+    <target name="wsimport-client-AuctionService_1" depends="wsimport-init">
+        <mkdir dir="${build.generated.dir}/jax-wsCache/AuctionService_1"/>
+        <property name="wsdl-AuctionService_1" location="${meta.inf}/xml-resources/web-service-references/AuctionService_1/wsdl/localhost_8181/AuctionWebApp/AuctionService.wsdl"/>
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/AuctionService_1" destdir="${build.generated.dir}/jax-wsCache/AuctionService_1" wsdl="${wsdl-AuctionService_1}" catalog="catalog.xml" encoding="${source.encoding}" extension="true" verbose="true" fork="false" wsdlLocation="https://localhost:8181/AuctionWebApp/AuctionService?WSDL" xnocompile="true" xendorsed="true">
+            <depends file="${wsdl-AuctionService_1}"/>
+            <produces dir="${build.generated.dir}/jax-wsCache/AuctionService_1"/>
+        </wsimport>
+        <copy todir="${build.generated.sources.dir}/jax-ws">
+            <fileset dir="${build.generated.dir}/jax-wsCache/AuctionService_1">
+                <include name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="wsimport-client-clean-AuctionService_1" depends="-init-project">
+        <delete dir="${build.generated.dir}/jax-wsCache/AuctionService_1"/>
+        <delete dir="${build.generated.sources.dir}/jax-ws/services"/>
+    </target>
+    <target name="wsimport-client-generate" depends="wsimport-client-AuctionService, wsimport-client-AuctionService_1"/>
 </project>
