@@ -33,7 +33,7 @@
     <welcome-file-list>
         <welcome-file>faces/index.xhtml</welcome-file>
     </welcome-file-list>
-    <security-constraint>
+   <security-constraint>
         <display-name>SecureCommunication</display-name>
         <web-resource-collection>
             <web-resource-name>all paths</web-resource-name>
@@ -46,6 +46,17 @@
             <transport-guarantee>CONFIDENTIAL</transport-guarantee>
         </user-data-constraint>
     </security-constraint>
+    
+    <security-constraint>
+    <web-resource-collection>
+        <web-resource-name>SOAP_Endpoint</web-resource-name>
+        <url-pattern>/AuctionService/*</url-pattern>
+    </web-resource-collection>
+    <user-data-constraint>
+        <transport-guarantee>NONE</transport-guarantee>
+    </user-data-constraint>
+</security-constraint>
+    
     <security-constraint>
         <display-name>SecurityRoles</display-name>
         <web-resource-collection>
@@ -58,6 +69,8 @@
             <role-name>user</role-name>
         </auth-constraint>
     </security-constraint>
+    
+    
     <login-config>
         <auth-method>FORM</auth-method>
         <realm-name>jdbcRealm</realm-name>
