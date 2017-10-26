@@ -66,13 +66,12 @@
     <security-constraint>
         <display-name>SecurityRoles</display-name>
         <web-resource-collection>
-            
             <web-resource-name>Restricted access</web-resource-name>
             <url-pattern>/faces/flow-productCreation/createProductListing.xhtml</url-pattern>
             <url-pattern>/faces/flow-productCreation/newProduct.xhtml</url-pattern>
             <url-pattern>/faces/flow-productCreation/flow-productCreation.xhtml</url-pattern>
             <url-pattern>/faces/flow-productCreation/flow-productCreation-flow.xml</url-pattern>
-            <url-pattern>/faces/productdescription.xhtml</url-pattern>
+            <!--<url-pattern>/faces/productdescription.xhtml</url-pattern>-->
             <url-pattern>/faces/profile/*</url-pattern>
         </web-resource-collection>
         <auth-constraint>
@@ -80,8 +79,6 @@
             <role-name>user</role-name>
         </auth-constraint>
     </security-constraint>
-    
-    
     <login-config>
         <auth-method>FORM</auth-method>
         <realm-name>jdbcRealm</realm-name>

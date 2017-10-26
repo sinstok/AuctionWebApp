@@ -33,7 +33,6 @@ import javax.inject.Inject;
  */
 @ManagedBean(name = "PDView")
 @ViewScoped
-@RolesAllowed("user")
 public class ProductDescriptionView implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -75,13 +74,14 @@ public class ProductDescriptionView implements Serializable {
         this.product = new Product();
     }
 
-    @PermitAll
+    //@PermitAll
     @PostConstruct
     public void init() {
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
         this.pl = (ProductListing) ec.getRequestMap().get("productListing");
     }
-    @PermitAll
+    
+    //@PermitAll
     public ProductListing getProductListing(int id) {
         Long proListId = Long.valueOf(id);
         ProductListing proList = plFacade.find(proListId);
@@ -96,7 +96,7 @@ public class ProductDescriptionView implements Serializable {
      * @param pID
      * @return String of a webpage or null
      */
-    @RolesAllowed("user")
+    //@RolesAllowed("user")
     public String addBid(int pID) {
         /*if (!login.isLoggedIn()) {
             return "loginPage";
@@ -135,7 +135,7 @@ public class ProductDescriptionView implements Serializable {
      * @param pID
      * @return String of a webpage or null
      */
-    @RolesAllowed("user")
+    //@RolesAllowed("user")
     public String addFeedback(int pID) {
         /*if (!login.isLoggedIn()) {
             return "loginPage";
@@ -169,7 +169,7 @@ public class ProductDescriptionView implements Serializable {
      * @param pID
      * @return String of a webpage or null
      */
-    @RolesAllowed("user")
+    //@RolesAllowed("user")
     public String addSellerRating(int pID) {
         /*if (!login.isLoggedIn()) {
             return "loginPage";
@@ -199,7 +199,7 @@ public class ProductDescriptionView implements Serializable {
      *
      * @return String
      */
-    @PermitAll
+    //@PermitAll
     public String getTimeLeft() {
         Date closing = this.pl.getClosing();
         Date now = new Date();

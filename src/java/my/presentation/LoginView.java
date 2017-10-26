@@ -75,11 +75,17 @@ public class LoginView {
                     request.login(user.getEmail(), password + user.getSalt());
                     HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
                     request.authenticate(response);
-                    return "/faces/index.xhtml?faces-redirect=true";
+                    System.out.println("Context Path: " + request.getRequestURI());
+                    //return (String) context.getExternalContext().getRequestMap().get("FromPage");
+                    //if (context.getExternalContext().getRequestMap().get("FromPage") != null) {
+                        //return "flow-productCreation";
+                    //} else {
+                        return "/faces/index.xhmtl?faces-redirect=true";
+                    //}
                     //response.sendRedirect("index.xhtml?faces-redirect=true");
                 } catch (ServletException e) {
                     return "/faces/loginPage.xhtml";
-                } catch (IOException i){
+                } catch (IOException i) {
                     return "/faces/loginPage.xhtml";
                 }
                 /*if (loginBean.login(id)) {
@@ -109,11 +115,11 @@ public class LoginView {
     public String logOut() {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-        try{
+        try {
             request.logout();
             //loginBean.logOut();
             return "/faces/index";
-        } catch (ServletException e){
+        } catch (ServletException e) {
             return "/faces/index";
         }
     }
@@ -161,7 +167,7 @@ public class LoginView {
      */
     public String toUserProfile() {
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-        if (/*loginBean.isLoggedIn()*/ ec.isUserInRole("user")) {
+        if (/*loginBean.isLoggedIn()*/ec.isUserInRole("user")) {
             //ec.getRequestMap().put("userId", loginBean.getUserId());
             return "/faces/profile/userProfile.xhtml";
         } else {
