@@ -8,19 +8,6 @@
         <error-code>404</error-code>
         <location>/faces/errorNotFound.xhtml</location>
     </error-page>
-    <!--<error-page>
-        <error-code>403</error-code>
-        <location>/faces/loginPage.xhtml</location>
-    </error-page>-->
-    <!--<filter>
-        <description>FilterPages</description>
-        <filter-name>WebFilter</filter-name>
-        <filter-class>helpers.WebFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>WebFilter</filter-name>
-        <url-pattern>/faces/*</url-pattern>
-    </filter-mapping>-->
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>

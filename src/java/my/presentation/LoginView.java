@@ -144,7 +144,7 @@ public class LoginView implements Serializable {
         request.logout();
         //loginBean.logOut();
         //return "/faces/index.xhtml";
-        ec.redirect("index.xhtml");
+        ec.redirect(ec.getRequestContextPath() + "/faces/index.xhtml");
     }
 
     /**
