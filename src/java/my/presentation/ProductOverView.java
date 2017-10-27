@@ -96,10 +96,17 @@ public class ProductOverView {
      * @return Path to productdescription
      */
     @PermitAll
-    public String toProductDescription(ProductListing productListing) {
+    public String toProductDescription(ProductListing productListing) throws IOException {
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
         ec.getRequestMap().put("productListing", productListing);
+        //ec.redirect(ec.getRequestContextPath() + "/faces/productdescription.xhtml");
         return "/faces/productdescription";
+    }
+    
+    @PermitAll
+    public void toIndex() throws IOException{
+        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        ec.redirect(ec.getRequestContextPath() + "/faces/index.xhtml");
     }
     
     /**

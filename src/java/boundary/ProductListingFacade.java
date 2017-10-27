@@ -165,7 +165,7 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
         List<Feedback> feeds = prod.getFeedbacks();
         List<Double> ratings = new ArrayList<>();
         int size = feeds.size();
-        if (size > 0) {
+        if (!ratings.isEmpty()) {
             for (int i = 0; i < size; i++) {
                 if (feeds.get(i).getRating() != 0.0) {
                     ratings.add(feeds.get(i).getRating());

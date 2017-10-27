@@ -64,6 +64,7 @@ public class CreateProductListingView implements Serializable {
         category = 0;
     }
     
+    @RolesAllowed("user")
     public String postProductListing() throws IOException {
 
         /*if (!login.isLoggedIn()) {

@@ -8,8 +8,7 @@ package my.presentation;
 import boundary.AuctionUserFacade;
 import boundary.ProductListingFacade;
 import entities.AuctionUser;
-import javax.inject.Named;
-import javax.enterprise.context.RequestScoped;
+import entities.ProductListing;
 import helpers.LoginBean;
 import helpers.PasswordHash;
 import java.io.IOException;
@@ -62,9 +61,18 @@ public class LoginView implements Serializable {
     @PostConstruct
     public void init() {
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        ProductListing pl = (ProductListing) ec.getSessionMap().get("pl");
+        if (pl != null) {
+            ec.getRequestMap().put("productListing", pl);
+        }
         if (ec.getSessionMap().get("FromPage") != null) {
-            this.path = "flow-productCreation";
-            ec.getSessionMap().remove("FromPage");
+            if (ec.getSessionMap().get("FromPage").equals("flow-productCreation")) {
+                this.path = "flow-productCreation";
+                ec.getSessionMap().remove("FromPage");
+            } else {
+                this.path = ec.getRequestContextPath() + "/faces/" + ec.getSessionMap().get("FromPage");
+                ec.getSessionMap().remove("FromPage");
+            }
         } else {
             this.path = (String) ec.getRequestMap().get(RequestDispatcher.FORWARD_REQUEST_URI);
             if (this.path == null) {
@@ -95,41 +103,53 @@ public class LoginView implements Serializable {
         AuctionUser user = auctionUserFacade.login(email, password);
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
         HttpServletRequest request = (HttpServletRequest) ec.getRequest();
+        //System.out.println();
         if (user != null) {
-            long id = user.getId();
-            if (id != 0) {
-                try {
-                    request.login(user.getEmail(), password + user.getSalt());
-                    HttpServletResponse response = (HttpServletResponse) ec.getResponse();
-                    request.authenticate(response);
-                    System.out.println("This is the path you will be redirected to: " + this.path);
-                    if (this.path.equals("flow-productCreation")) {
-                        return this.path;
-                    } else {
-                        ec.redirect(this.path);
-                        return null;
-                    }
-                } catch (ServletException e) {
-                    return "/faces/loginPage.xhtml";
-                } catch (IOException i) {
-                    return "/faces/loginPage.xhtml";
+            //long id = user.getId();
+            //if (id != 0) {
+            try {
+                request.login(user.getEmail(), password + user.getSalt());
+                HttpServletResponse response = (HttpServletResponse) ec.getResponse();
+                request.authenticate(response);
+
+                System.out.println("This is the path you will be redirected to: " + this.path);
+                if (this.path.equals("flow-productCreation")) {
+                    return this.path;
+                } else {
+                    ec.redirect(this.path);
+                    return null;
                 }
-                /*if (loginBean.login(id)) {
+            } catch (ServletException | IOException e) {
+                return null;
+            }
+            /*if (loginBean.login(id)) {
+                return "index?faces-redirect=true";
+                } else {
+                FacesMessage msg = new FacesMessage("Wrong user input!", "ERROR MSG");
+                FacesContext.getCurrentInstance().addMessage(null, msg);
+                return "loginPage";
+                }*/
+ /*if (loginBean.login(id)) {
                     return "index?faces-redirect=true";
                 } else {
                     FacesMessage msg = new FacesMessage("Wrong user input!", "ERROR MSG");
                     FacesContext.getCurrentInstance().addMessage(null, msg);
                     return "loginPage";
                 }*/
-            } else {
+ /*} else {
                 FacesMessage msg = new FacesMessage("Wrong user input!", "ERROR MSG");
                 FacesContext.getCurrentInstance().addMessage(null, msg);
                 return "/faces/loginPage.xhtml";
-            }
+            }*/
         } else {
-            FacesMessage msg = new FacesMessage("Wrong user input!", "ERROR MSG");
+            FacesMessage msg = new FacesMessage("Username or password is wrong", "ERROR MSG");
             FacesContext.getCurrentInstance().addMessage(null, msg);
-            return "/faces/loginPage.xhtml";
+            try {
+                ec.redirect(ec.getRequestContextPath() + "/faces/loginPage.xhtml");
+            } catch (IOException i) {
+                System.out.println("Problem redirecting from loginPage");
+            }
+            return null;
         }
     }
 
@@ -187,14 +207,20 @@ public class LoginView implements Serializable {
      * parameter so that we can find it in the userprofile view.
      *
      * @return either index page or the userprofile page
+     * @throws java.io.IOException
      */
-    public String toUserProfile() {
+    public void toUserProfile() throws IOException {
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-        if (/*loginBean.isLoggedIn()*/ec.isUserInRole("user")) {
-            //ec.getRequestMap().put("userId", loginBean.getUserId());
-            return "/faces/profile/userProfile.xhtml";
-        } else {
-            return "/faces/index";
-        }
+        ec.redirect(ec.getRequestContextPath() + "/faces/profile/userProfile.xhtml");
+    }
+
+    public void toLoginPage() throws IOException {
+        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        ec.redirect(ec.getRequestContextPath() + "/faces/loginPage.xhtml");
+    }
+
+    public void toRegisterUserPage() throws IOException {
+        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        ec.redirect(ec.getRequestContextPath() + "/faces/registerUser.xhtml");
     }
 }
