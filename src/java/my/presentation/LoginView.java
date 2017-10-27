@@ -13,11 +13,16 @@ import javax.enterprise.context.RequestScoped;
 import helpers.LoginBean;
 import helpers.PasswordHash;
 import java.io.IOException;
+import java.io.Serializable;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,9 +33,10 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Sindre
  */
-@Named(value = "LoginView")
-@RequestScoped
-public class LoginView {
+//@Named(value = "LoginView")
+@ManagedBean(name = "LoginView")
+@ViewScoped
+public class LoginView implements Serializable {
 
     @EJB
     private final AuctionUserFacade auctionUserFacade;
@@ -43,6 +49,7 @@ public class LoginView {
     private final PasswordHash hash;
     private String email;
     private String password;
+    private String path;
 
     /**
      * Creates a new instance of LoginView
@@ -50,6 +57,26 @@ public class LoginView {
     public LoginView() {
         auctionUserFacade = new AuctionUserFacade();
         hash = new PasswordHash();
+    }
+
+    @PostConstruct
+    public void init() {
+        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        if (ec.getSessionMap().get("FromPage") != null) {
+            this.path = "flow-productCreation";
+            ec.getSessionMap().remove("FromPage");
+        } else {
+            this.path = (String) ec.getRequestMap().get(RequestDispatcher.FORWARD_REQUEST_URI);
+            if (this.path == null) {
+                this.path = ec.getRequestContextPath() + "/faces/index.xhtml";
+            } else {
+
+                String originalQuery = (String) ec.getRequestMap().get(RequestDispatcher.FORWARD_QUERY_STRING);
+                if (originalQuery != null) {
+                    this.path += "?" + originalQuery;
+                }
+            }
+        }
     }
 
     /**
@@ -66,23 +93,22 @@ public class LoginView {
     public String login() {
         plf.test();
         AuctionUser user = auctionUserFacade.login(email, password);
-        FacesContext context = FacesContext.getCurrentInstance();
-        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        HttpServletRequest request = (HttpServletRequest) ec.getRequest();
         if (user != null) {
             long id = user.getId();
             if (id != 0) {
                 try {
                     request.login(user.getEmail(), password + user.getSalt());
-                    HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
+                    HttpServletResponse response = (HttpServletResponse) ec.getResponse();
                     request.authenticate(response);
-                    System.out.println("Context Path: " + request.getRequestURI());
-                    //return (String) context.getExternalContext().getRequestMap().get("FromPage");
-                    //if (context.getExternalContext().getRequestMap().get("FromPage") != null) {
-                        //return "flow-productCreation";
-                    //} else {
-                        return "/faces/index.xhmtl?faces-redirect=true";
-                    //}
-                    //response.sendRedirect("index.xhtml?faces-redirect=true");
+                    System.out.println("This is the path you will be redirected to: " + this.path);
+                    if (this.path.equals("flow-productCreation")) {
+                        return this.path;
+                    } else {
+                        ec.redirect(this.path);
+                        return null;
+                    }
                 } catch (ServletException e) {
                     return "/faces/loginPage.xhtml";
                 } catch (IOException i) {
@@ -112,16 +138,13 @@ public class LoginView {
      *
      * @return goes back to the index
      */
-    public String logOut() {
-        FacesContext context = FacesContext.getCurrentInstance();
-        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-        try {
-            request.logout();
-            //loginBean.logOut();
-            return "/faces/index";
-        } catch (ServletException e) {
-            return "/faces/index";
-        }
+    public void logOut() throws IOException, ServletException {
+        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        HttpServletRequest request = (HttpServletRequest) ec.getRequest();
+        request.logout();
+        //loginBean.logOut();
+        //return "/faces/index.xhtml";
+        ec.redirect("index.xhtml");
     }
 
     /**

@@ -67,11 +67,15 @@ public class ProductOverView {
     public String toProductCreation() throws IOException {
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
         if(!ec.isUserInRole("user")){
-            ec.getRequestMap().put("FromPage", "flow-productCreation");
+            //ec.getRequestMap().put("FromPage", "flow-productCreation");
+            ec.getSessionMap().put("FromPage", "flow-productCreation");
+            ec.redirect("loginPage.xhtml");
             return "/faces/loginPage.xhtml";
         }
         
         return "flow-productCreation";
+        
+        //ec.redirect("flow-productCreation.xhtml");
     }
     
     /**

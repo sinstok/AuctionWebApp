@@ -8,14 +8,19 @@
         <error-code>404</error-code>
         <location>/faces/errorNotFound.xhtml</location>
     </error-page>
-    <error-page>
+    <!--<error-page>
         <error-code>403</error-code>
         <location>/faces/loginPage.xhtml</location>
-    </error-page>
-    <!--<error-page>
-        <exception-type>javax.faces.application.ViewExpiredException</exception-type>
-        <location>/faces/loginPage.xhtml</location>
     </error-page>-->
+    <!--<filter>
+        <description>FilterPages</description>
+        <filter-name>WebFilter</filter-name>
+        <filter-class>helpers.WebFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>WebFilter</filter-name>
+        <url-pattern>/faces/*</url-pattern>
+    </filter-mapping>-->
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
@@ -28,6 +33,7 @@
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>/faces/*</url-pattern>
+        <!--<url-pattern>*.xhtml</url-pattern>-->
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ImageServlet</servlet-name>
@@ -71,7 +77,6 @@
             <url-pattern>/faces/flow-productCreation/newProduct.xhtml</url-pattern>
             <url-pattern>/faces/flow-productCreation/flow-productCreation.xhtml</url-pattern>
             <url-pattern>/faces/flow-productCreation/flow-productCreation-flow.xml</url-pattern>
-            <!--<url-pattern>/faces/productdescription.xhtml</url-pattern>-->
             <url-pattern>/faces/profile/*</url-pattern>
         </web-resource-collection>
         <auth-constraint>

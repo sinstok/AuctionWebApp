@@ -16,9 +16,6 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.annotation.security.DeclareRoles;
-import javax.annotation.security.PermitAll;
-import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -105,10 +102,9 @@ public class ProductDescriptionView implements Serializable {
         /*if (!ec.isUserInRole("user")) {
             return "loginPage";
         }*/
- /*ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
         if(!ec.isUserInRole("user")){
             return "loginPage";
-        }*/
+        }
 
         //AuctionUser bidder = auctionUserFacade.find(login.getUserId());
         AuctionUser bidder = auctionUserFacade.findUserByEmail(ec.getUserPrincipal().getName());
