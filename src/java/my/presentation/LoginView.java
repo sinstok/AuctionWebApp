@@ -99,7 +99,6 @@ public class LoginView implements Serializable {
      * redirected you to the login page.
      */
     public String login() {
-        plf.test();
         AuctionUser user = auctionUserFacade.login(email, password);
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
         HttpServletRequest request = (HttpServletRequest) ec.getRequest();

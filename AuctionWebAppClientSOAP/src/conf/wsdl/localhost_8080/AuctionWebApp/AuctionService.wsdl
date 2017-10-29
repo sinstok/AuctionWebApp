@@ -10,6 +10,9 @@
 <message name="testResponse">
 <part name="parameters" element="tns:testResponse"/>
 </message>
+<message name="ServletException">
+<part name="fault" element="tns:ServletException"/>
+</message>
 <message name="getBiddables">
 <part name="parameters" element="tns:getBiddables"/>
 </message>
@@ -26,6 +29,7 @@
 <operation name="test">
 <input wsam:Action="http://services/AuctionServiceSOAP/testRequest" message="tns:test"/>
 <output wsam:Action="http://services/AuctionServiceSOAP/testResponse" message="tns:testResponse"/>
+<fault message="tns:ServletException" name="ServletException" wsam:Action="http://services/AuctionServiceSOAP/test/Fault/ServletException"/>
 </operation>
 <operation name="getBiddables">
 <input wsam:Action="http://services/AuctionServiceSOAP/getBiddablesRequest" message="tns:getBiddables"/>
@@ -46,6 +50,9 @@
 <output>
 <soap:body use="literal"/>
 </output>
+<fault name="ServletException">
+<soap:fault name="ServletException" use="literal"/>
+</fault>
 </operation>
 <operation name="getBiddables">
 <soap:operation soapAction=""/>
