@@ -16,10 +16,12 @@ import helpers.Category;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
+import javax.inject.Inject;
 import javax.jws.Oneway;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
+import javax.servlet.ServletException;
 import serializers.BidObject;
 import serializers.ProductListingObject;
 
@@ -74,8 +76,8 @@ public class AuctionServiceSOAP {
     }
     
     @WebMethod(operationName = "test")
-    public String test() {
-        return "ojojoj";
+    public String test() throws ServletException{
+         return ejbRef.test();
     }
     
 }

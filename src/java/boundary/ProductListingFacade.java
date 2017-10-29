@@ -91,9 +91,10 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
 
     }
     
-    public void test(){
+    @RolesAllowed("user")
+    public String test(){
         String text;
-        JMSContext context = connectionFactory.createContext();
+        /*JMSContext context = connectionFactory.createContext();
 
         text = "---- START EMAIL to customer atle ----\n"
                 + "Dear atle ,\n"
@@ -103,8 +104,10 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
                 + "---- END EMAIL to customer atle ----";
         context.createProducer().send(queue, text);
         context.createProducer().send(topic, text);
+        */
+        return "ojojoj";
     }
-
+    
     @RolesAllowed("user")
     @Override
     public void create(ProductListing productListing) {
@@ -115,6 +118,7 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
         Timer timer = timerService.createSingleActionTimer(productListing.getClosing(), tc);
     }
 
+    @RolesAllowed("user")
     public List<ProductListing> getBiddables() {
         Date now = new Date();
         List<ProductListing> productListings = em.createQuery(

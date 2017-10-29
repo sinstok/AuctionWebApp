@@ -8,6 +8,7 @@ package auctionwebappclient;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.ws.WebServiceRef;
@@ -25,6 +26,7 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Queue;
 import javax.jms.Topic;
+import javax.xml.ws.BindingProvider;
 import services.AuctionService;
 
 /**
@@ -115,6 +117,9 @@ public class Main {
         // Note that the injected javax.xml.ws.Service reference as well as port objects are not thread safe.
         // If the calling of port operations may lead to race condition some synchronization is required.
         services.AuctionServiceSOAP port = service.getAuctionServiceSOAPPort();
+        Map<String,Object> requestContext = ((BindingProvider)port).getRequestContext();
+        requestContext.put(BindingProvider.USERNAME_PROPERTY, "joakim@gmail.com");
+        requestContext.put(BindingProvider.PASSWORD_PROPERTY, "123456");
         return port.getBiddables();
     }
 }

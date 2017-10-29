@@ -20,7 +20,6 @@ import services.ProductListingObject;
  */
 public class AuctionListener implements MessageListener{
     @WebServiceRef(wsdlLocation = "META-INF/wsdl/localhost_8080/AuctionWebApp/AuctionService.wsdl")
-    private static AuctionService service;
     
     ArrayList<ProductListingObject> items;
     
