@@ -5,9 +5,12 @@
  */
 package services;
 
+
+import boundary.AuctionUserFacade;
 import entities.AuctionUser;
 import java.util.List;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
@@ -25,12 +28,15 @@ import javax.ws.rs.core.MediaType;
  * @author Ragnhild
  */
 @Stateless
-@Path("entities.auctionuser")
+@Path("auctionuser")
 public class AuctionUserFacadeREST extends AbstractFacade<AuctionUser> {
 
     @PersistenceContext(unitName = "AuctionWebAppPU")
     private EntityManager em;
 
+    @Inject
+    AuctionUserFacade auctionUserFacade;
+    
     public AuctionUserFacadeREST() {
         super(AuctionUser.class);
     }
@@ -82,7 +88,16 @@ public class AuctionUserFacadeREST extends AbstractFacade<AuctionUser> {
     public String countREST() {
         return String.valueOf(super.count());
     }
-
+    
+    @GET
+    @Path("name")
+    @Produces({MediaType.TEXT_PLAIN})
+    public String findUser() {
+        Long tall = new Long(1);
+        AuctionUser user = auctionUserFacade.getSeller(tall);
+        return user.getName();
+    }
+    
     @Override
     protected EntityManager getEntityManager() {
         return em;

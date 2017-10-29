@@ -43,18 +43,7 @@ public class UserProfileView {
     @PostConstruct
     public void init() {
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-        //Long userId = (Long) ec.getRequestMap().get("userId");
-
-        /*if (userId == null !ec.isUserInRole("user")) {
-            try {
-                ec.redirect("../loginPage.xhtml");
-            } catch (IOException e) {
-                
-            }
-        } else {*/
-        //this.user = auctionUserFacade.find(userId);
         this.user = auctionUserFacade.findUserByEmail(ec.getUserPrincipal().getName());
-        //}
     }
 
     public String getEmail() {

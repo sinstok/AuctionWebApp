@@ -12,12 +12,11 @@ import entities.ProductListing;
 import helpers.DBean;
 import helpers.LoginBean;
 import helpers.TimeManger;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.annotation.security.DeclareRoles;
-import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -33,7 +32,6 @@ import javax.inject.Inject;
  */
 @ManagedBean(name = "PDView")
 @ViewScoped
-@RolesAllowed("user")
 public class ProductDescriptionView implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -75,13 +73,20 @@ public class ProductDescriptionView implements Serializable {
         this.product = new Product();
     }
 
-    @PermitAll
+    //@PermitAll
     @PostConstruct
     public void init() {
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-        this.pl = (ProductListing) ec.getRequestMap().get("productListing");
+        if (ec.getRequestMap().get("productListing") != null) {
+            this.pl = (ProductListing) ec.getRequestMap().get("productListing");
+            ec.getSessionMap().put("pl", this.pl);
+        } else if(ec.getSessionMap().get("pl") != null){
+            this.pl = (ProductListing) ec.getSessionMap().get("pl");
+            ec.getSessionMap().remove("pl");
+        }
     }
-    @PermitAll
+    //@PermitAll
+
     public ProductListing getProductListing(int id) {
         Long proListId = Long.valueOf(id);
         ProductListing proList = plFacade.find(proListId);
@@ -97,7 +102,7 @@ public class ProductDescriptionView implements Serializable {
      * @return String of a webpage or null
      */
     @RolesAllowed("user")
-    public String addBid(int pID) {
+    public String addBid(int pID) throws IOException {
         /*if (!login.isLoggedIn()) {
             return "loginPage";
         }*/
@@ -105,10 +110,13 @@ public class ProductDescriptionView implements Serializable {
         /*if (!ec.isUserInRole("user")) {
             return "loginPage";
         }*/
- /*ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-        if(!ec.isUserInRole("user")){
+        if (!ec.isUserInRole("user")) {
+            ec.getSessionMap().put("FromPage", "productdescription.xhtml");
+            //ec.getSessionMap().put("pl", this.pl);
+            //ec.getRequestMap().put("pl", pl);
+            ec.redirect(ec.getRequestContextPath() + "/faces/loginPage.xhtml");
             return "loginPage";
-        }*/
+        }
 
         //AuctionUser bidder = auctionUserFacade.find(login.getUserId());
         AuctionUser bidder = auctionUserFacade.findUserByEmail(ec.getUserPrincipal().getName());
@@ -136,12 +144,14 @@ public class ProductDescriptionView implements Serializable {
      * @return String of a webpage or null
      */
     @RolesAllowed("user")
-    public String addFeedback(int pID) {
+    public String addFeedback(int pID) throws IOException {
         /*if (!login.isLoggedIn()) {
             return "loginPage";
         }*/
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
         if (!ec.isUserInRole("user")) {
+            ec.getRequestMap().put("FromPage", "productDescription.xhtml");
+            ec.redirect(ec.getRequestContextPath() + "/faces/loginPage.xhtml");
             return "loginPage";
         }
         //AuctionUser rater = auctionUserFacade.find(login.getUserId());
@@ -199,7 +209,7 @@ public class ProductDescriptionView implements Serializable {
      *
      * @return String
      */
-    @PermitAll
+    //@PermitAll
     public String getTimeLeft() {
         Date closing = this.pl.getClosing();
         Date now = new Date();
@@ -217,7 +227,12 @@ public class ProductDescriptionView implements Serializable {
     }
 
     public String getAvergeProductRating() {
-        return plFacade.getAverageProductRating(pl.getProduct());
+        if (pl == null) {
+            System.out.println("Her skjer det!");
+            return "No ratings";
+        } else {
+            return plFacade.getAverageProductRating(pl.getProduct());
+        }
     }
 
     public String getAvergeSellerRating() {

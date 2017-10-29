@@ -81,7 +81,7 @@ public class AuctionUserFacade extends AbstractFacade<AuctionUser> {
             user.setPassword(hash.hashPassword(password + user.getSalt()).toString());
             em.persist(user);
         } catch (Exception e) {
-            System.out.println("her feiler den!" + e.getMessage());
+            System.out.println("Somthing went wrong when attempting to register a user" + e.getMessage());
         }
         /*UserGroup ug = new UserGroup();
         ug.setUserName(user.getEmail());

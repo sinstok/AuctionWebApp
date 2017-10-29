@@ -64,6 +64,7 @@ public class CreateProductListingView implements Serializable {
         category = 0;
     }
     
+    @RolesAllowed("user")
     public String postProductListing() throws IOException {
 
         /*if (!login.isLoggedIn()) {
@@ -107,11 +108,13 @@ public class CreateProductListingView implements Serializable {
         return "returnFromproductCreation";
     }
 
+    
     public String selectProduct(long id) {
         product = productFacade.find(id);
         return "createProductListing";
     }
 
+    
     public List<Product> getAllProducts() {
         return productFacade.findAll();
     }
