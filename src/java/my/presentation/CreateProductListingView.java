@@ -12,7 +12,6 @@ import entities.AuctionUser;
 import entities.Product;
 import entities.ProductListing;
 import helpers.Category;
-import helpers.LoginBean;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
@@ -44,9 +43,6 @@ public class CreateProductListingView implements Serializable {
     ProductFacade productFacade;
     @EJB
     AuctionUserFacade auctionUserFacade;
-
-    @Inject
-    LoginBean login;
 
     private Product product;
 

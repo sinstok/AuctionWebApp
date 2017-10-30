@@ -7,7 +7,6 @@ package my.presentation;
 
 import boundary.AuctionUserFacade;
 import entities.AuctionUser;
-import helpers.LoginBean;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
@@ -30,16 +29,12 @@ public class RegisterUserView {
     private String confPassword;
     //private PasswordHash hashing;
     private String password;
-    @Inject
-    private LoginBean loginBean;
 
     /**
      * Creates a new instance of RegisterUser
      */
     public RegisterUserView() {
         this.newUser = new AuctionUser();
-        //this.hashing = new PasswordHash();
-        this.loginBean = new LoginBean();
     }
 
     public AuctionUser getNewUser() {
@@ -73,7 +68,6 @@ public class RegisterUserView {
                     this.newUser.setPassword(hashedPassword);*/
                     AuctionUser user = auctionUserFacade.registerUser(this.newUser, this.password);
                     request.login(user.getEmail(), this.password + user.getSalt());
-                    loginBean.login(user.getId());
                     return "/faces/index?faces-redirect=true";
                 } catch (Exception e) {
                     System.out.println("There was a problem hashing the password " + e.getMessage());
@@ -88,9 +82,5 @@ public class RegisterUserView {
             context.addMessage(null, new FacesMessage("Email already exitst."));
             return null;
         }
-    }
-
-    public void logOut() {
-        loginBean.logOut();
     }
 }

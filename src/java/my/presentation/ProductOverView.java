@@ -8,7 +8,6 @@ package my.presentation;
 import boundary.ProductListingFacade;
 import entities.ProductListing;
 import helpers.Category;
-import helpers.LoginBean;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,8 +33,6 @@ public class ProductOverView {
     
     @EJB
     ProductListingFacade plFacade;
-    @Inject 
-    LoginBean login;
     
     private Category category;
     private String search;

@@ -9,7 +9,6 @@ import boundary.AuctionUserFacade;
 import boundary.ProductListingFacade;
 import entities.AuctionUser;
 import entities.ProductListing;
-import helpers.LoginBean;
 import helpers.PasswordHash;
 import java.io.IOException;
 import java.io.Serializable;
@@ -41,9 +40,6 @@ public class LoginView implements Serializable {
     private final AuctionUserFacade auctionUserFacade;
     @Inject
     private ProductListingFacade plf;
-
-    @Inject
-    private LoginBean loginBean;
 
     private final PasswordHash hash;
     private String email;

@@ -10,7 +10,6 @@ import entities.Bid;
 import entities.Product;
 import entities.ProductListing;
 import helpers.DBean;
-import helpers.LoginBean;
 import helpers.TimeManger;
 import java.io.IOException;
 import java.io.Serializable;
@@ -50,9 +49,6 @@ public class ProductDescriptionView implements Serializable {
 
     @EJB
     FeedbackFacade feedbackFacade;
-
-    @Inject
-    LoginBean login;
 
     @Inject
     private DBean dbi;
