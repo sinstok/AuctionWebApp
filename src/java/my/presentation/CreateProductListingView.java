@@ -12,7 +12,6 @@ import entities.AuctionUser;
 import entities.Product;
 import entities.ProductListing;
 import helpers.Category;
-import helpers.LoginBean;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
@@ -45,9 +44,6 @@ public class CreateProductListingView implements Serializable {
     @EJB
     AuctionUserFacade auctionUserFacade;
 
-    @Inject
-    LoginBean login;
-
     private Product product;
 
     @NotNull
@@ -64,6 +60,7 @@ public class CreateProductListingView implements Serializable {
         category = 0;
     }
     
+    @RolesAllowed("user")
     public String postProductListing() throws IOException {
 
         /*if (!login.isLoggedIn()) {
@@ -107,11 +104,13 @@ public class CreateProductListingView implements Serializable {
         return "returnFromproductCreation";
     }
 
+    
     public String selectProduct(long id) {
         product = productFacade.find(id);
         return "createProductListing";
     }
 
+    
     public List<Product> getAllProducts() {
         return productFacade.findAll();
     }

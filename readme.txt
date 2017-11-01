@@ -11,7 +11,7 @@ The aim of this assignment is to get familiar with:
 
 ## Configuration
 The application is connected to a database with some dummy data, so you need to build the application and run it.
-You must also open the prosject AuctionWebAppClientSOAP which is located inside the AuctionWebApp folder. When you first open this prosject it will have some errors. Using build once should resolve these problems.
+You must also open the prosjects AuctionWebAppClientSOAP and AuctionWebAppClientREST which is located inside the AuctionWebApp folder. When you first open this prosject it will have some errors. Using build once should resolve these problems.
 
 # Setting up JMS Destination Resources
 To create the JMS Destination Recources you can run asadmin.bat in glassfish4/bin, this will open a command prompt. Start the glassfish server and write the following command:

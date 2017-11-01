@@ -104,5 +104,16 @@ public class BidFacade extends AbstractFacade<Bid> {
         return null;
     }    
     
+    /*
+    For use with SOAP, since we use form authentication
+    */
+    public String addBidSOAP(Bid bid, ProductListing pl, String username, String password){
+        AuctionUser user = auctionUserFacade.login(username, password);
+        if(user.getRole().equals("user")) return addBid(bid, pl);
+        else {
+            return "unauthorized: role 'user' required";
+        }
+    }
+    
     
 }

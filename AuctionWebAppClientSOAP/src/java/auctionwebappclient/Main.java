@@ -8,6 +8,7 @@ package auctionwebappclient;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.ws.WebServiceRef;
@@ -25,6 +26,7 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Queue;
 import javax.jms.Topic;
+import javax.xml.ws.BindingProvider;
 import services.AuctionService;
 
 /**
@@ -64,7 +66,7 @@ public class Main {
             int id = sc.nextInt();
             System.out.print("Enter your bid:");
             int bid = sc.nextInt();
-            System.out.println(makeBid((double) bid, (long) id));
+            System.out.println(makeBid((double) bid, (long) id, "joakim@test.com", "123456"));
         }
 
     }
@@ -99,16 +101,15 @@ public class Main {
 
 
 
-    public static String makeBid(double amount, long productListingId) {
+    public static String makeBid(double amount, long productListingId, String username, String password) {
         // Note that the injected javax.xml.ws.Service reference as well as port objects are not thread safe.
         // If the calling of port operations may lead to race condition some synchronization is required.
         services.AuctionServiceSOAP port = service.getAuctionServiceSOAPPort();
         BidObject bid = new BidObject();
         bid.setAmount(amount);
-        bid.setUserId(1);
         bid.setBidDate(null);
 
-        return port.makeBid(bid, productListingId);
+        return port.makeBid(bid, productListingId, username, password);
     }
 
     public static java.util.List<services.ProductListingObject> getBiddables() {

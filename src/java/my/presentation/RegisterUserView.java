@@ -7,14 +7,14 @@ package my.presentation;
 
 import boundary.AuctionUserFacade;
 import entities.AuctionUser;
-import helpers.LoginBean;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  *
@@ -30,16 +30,12 @@ public class RegisterUserView {
     private String confPassword;
     //private PasswordHash hashing;
     private String password;
-    @Inject
-    private LoginBean loginBean;
 
     /**
      * Creates a new instance of RegisterUser
      */
     public RegisterUserView() {
         this.newUser = new AuctionUser();
-        //this.hashing = new PasswordHash();
-        this.loginBean = new LoginBean();
     }
 
     public AuctionUser getNewUser() {
@@ -68,29 +64,23 @@ public class RegisterUserView {
             if (this.confPassword.equals(this.password)) {
                 try {
                     HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-                    /*this.newUser.setSalt(hashing.generateSalt());
-                    String hashedPassword = hashing.hashPassword(this.newUser.getPassword() + this.newUser.getSalt()).toString();
-                    this.newUser.setPassword(hashedPassword);*/
                     AuctionUser user = auctionUserFacade.registerUser(this.newUser, this.password);
                     request.login(user.getEmail(), this.password + user.getSalt());
-                    loginBean.login(user.getId());
-                    return "/faces/index?faces-redirect=true";
+                    ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+                    ec.redirect(ec.getRequestContextPath() + "/faces/index.xhtml");
+                    return null;
                 } catch (Exception e) {
                     System.out.println("There was a problem hashing the password " + e.getMessage());
                     context.addMessage(null, new FacesMessage("Woops. Some of the input you wrote is wrong."));
                     return null;
                 }
             } else {
-                context.addMessage(null, new FacesMessage("Woops. Some of the input you wrote is wrong."));
+                context.addMessage("confPassword", new FacesMessage("Passwords does not match"));
                 return null;
             }
         } else {
             context.addMessage(null, new FacesMessage("Email already exitst."));
             return null;
         }
-    }
-
-    public void logOut() {
-        loginBean.logOut();
     }
 }

@@ -8,10 +8,9 @@ package my.presentation;
 import boundary.ProductListingFacade;
 import entities.ProductListing;
 import helpers.Category;
-import helpers.LoginBean;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.security.DeclareRoles;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
@@ -19,7 +18,6 @@ import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.inject.Inject;
 
 /**
  *
@@ -32,8 +30,6 @@ public class ProductOverView {
     
     @EJB
     ProductListingFacade plFacade;
-    @Inject 
-    LoginBean login;
     
     private Category category;
     private String search;
@@ -62,15 +58,18 @@ public class ProductOverView {
      * @return Path to flow-productCreation
      */
     @RolesAllowed("user")
-    public String toProductCreation(){
-        /*if(!login.isLoggedIn()){
-            return "loginPage";
-        }*/
-        /*ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+    public String toProductCreation() throws IOException {
+        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
         if(!ec.isUserInRole("user")){
-            return "loginPage";
-        }*/
+            //ec.getRequestMap().put("FromPage", "flow-productCreation");
+            ec.getSessionMap().put("FromPage", "flow-productCreation");
+            ec.redirect("loginPage.xhtml");
+            return "/faces/loginPage.xhtml";
+        }
+        
         return "flow-productCreation";
+        
+        //ec.redirect("flow-productCreation.xhtml");
     }
     
     /**
@@ -91,10 +90,17 @@ public class ProductOverView {
      * @return Path to productdescription
      */
     @PermitAll
-    public String toProductDescription(ProductListing productListing) {
+    public String toProductDescription(ProductListing productListing) throws IOException {
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
         ec.getRequestMap().put("productListing", productListing);
+        //ec.redirect(ec.getRequestContextPath() + "/faces/productdescription.xhtml");
         return "/faces/productdescription";
+    }
+    
+    @PermitAll
+    public void toIndex() throws IOException{
+        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        ec.redirect(ec.getRequestContextPath() + "/faces/index.xhtml");
     }
     
     /**

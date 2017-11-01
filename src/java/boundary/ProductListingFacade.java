@@ -12,6 +12,7 @@ import entities.Product;
 import entities.ProductListing;
 import helpers.Category;
 import helpers.RatingCalculator;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -23,6 +24,8 @@ import javax.ejb.Timeout;
 import javax.ejb.Timer;
 import javax.ejb.TimerConfig;
 import javax.ejb.TimerService;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.jms.ConnectionFactory;
 import javax.jms.JMSContext;
@@ -30,6 +33,9 @@ import javax.jms.Queue;
 import javax.jms.Topic;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  *
@@ -78,33 +84,30 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
         ProductListing pl = find((long)timer.getInfo());
         Bid bid = getHighestBid(pl);
         
-        if(bid.getUser() == null) return;
-
-        text = "---- START EMAIL to customer " + bid.getUser().getName() + " ----\n"
+        if(bid.getUser() == null){
+            text = "bidding on product listing " + pl.getId() + " has closed without bids";
+        } else {
+             text = "---- START EMAIL to customer " + bid.getUser().getName() + " ----\n"
                 + "Dear " + bid.getUser().getName() + ",\n"
                 + "Congratulations! You have won in bidding for product " + pl.getProduct().getName() + ".\n"
                 + "You can access the product using the following link: " + "https://localhost:8181/AuctionWebApp/faces/profile/userProfile.xhtml" + "\n"
                 + " \n"
                 + "---- END EMAIL to customer " + bid.getUser().getName() + " ----";
+        }
         context.createProducer().send(queue, text);
         context.createProducer().send(topic, text);
 
     }
     
-    public void test(){
+    public String test() throws ServletException{
         String text;
-        JMSContext context = connectionFactory.createContext();
-
-        text = "---- START EMAIL to customer atle ----\n"
-                + "Dear atle ,\n"
-                + "Congratulations! You have won in bidding for product sax .\n"
-                + "You can access the product using the following link:\n"
-                + " \n"
-                + "---- END EMAIL to customer atle ----";
-        context.createProducer().send(queue, text);
-        context.createProducer().send(topic, text);
+         AuctionUser user = auctionUserFacade.login("joakim@test.com", "123456");
+        if (user.getRole().equals("user")) {
+            return "oojoj";
+        }
+        return "unauthorized";
     }
-
+    
     @RolesAllowed("user")
     @Override
     public void create(ProductListing productListing) {
@@ -115,6 +118,7 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
         Timer timer = timerService.createSingleActionTimer(productListing.getClosing(), tc);
     }
 
+    //@RolesAllowed("user")
     public List<ProductListing> getBiddables() {
         Date now = new Date();
         List<ProductListing> productListings = em.createQuery(
@@ -165,7 +169,7 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
         List<Feedback> feeds = prod.getFeedbacks();
         List<Double> ratings = new ArrayList<>();
         int size = feeds.size();
-        if (size > 0) {
+        if (!ratings.isEmpty()) {
             for (int i = 0; i < size; i++) {
                 if (feeds.get(i).getRating() != 0.0) {
                     ratings.add(feeds.get(i).getRating());

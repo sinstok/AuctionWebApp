@@ -9,12 +9,8 @@
         <location>/faces/errorNotFound.xhtml</location>
     </error-page>
     <error-page>
-        <error-code>403</error-code>
-        <location>/faces/loginPage.xhtml</location>
-    </error-page>
-    <error-page>
-        <exception-type>javax.faces.application.ViewExpiredException</exception-type>
-        <location>/faces/loginPage.xhtml</location>
+        <error-code>500</error-code>
+        <location>/faces/index.xhtml</location>
     </error-page>
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
@@ -41,7 +37,7 @@
     <welcome-file-list>
         <welcome-file>faces/index.xhtml</welcome-file>
     </welcome-file-list>
-   <security-constraint>
+    <security-constraint>
         <display-name>SecureCommunication</display-name>
         <web-resource-collection>
             <web-resource-name>all paths</web-resource-name>
@@ -54,58 +50,32 @@
             <transport-guarantee>CONFIDENTIAL</transport-guarantee>
         </user-data-constraint>
     </security-constraint>
-    
     <security-constraint>
-    <web-resource-collection>
-        <web-resource-name>SOAP_Endpoint</web-resource-name>
-        <url-pattern>/AuctionService/*</url-pattern>
-    </web-resource-collection>
-    <user-data-constraint>
-        <transport-guarantee>NONE</transport-guarantee>
-    </user-data-constraint>
-</security-constraint>
-    
-    <security-constraint>
-        <display-name>Exclude</display-name>
+        <display-name>SOAP</display-name>
         <web-resource-collection>
-            <web-resource-name>index</web-resource-name>
-            <url-pattern>/faces/index.xhtml</url-pattern>
+            <web-resource-name>SOAP_Endpoint</web-resource-name>
+            <url-pattern>/AuctionService/*</url-pattern>
         </web-resource-collection>
+        <user-data-constraint>
+            <transport-guarantee>NONE</transport-guarantee>
+        </user-data-constraint>
     </security-constraint>
     <security-constraint>
         <display-name>SecurityRoles</display-name>
         <web-resource-collection>
             <web-resource-name>Restricted access</web-resource-name>
-            <description/>
+            <url-pattern>/faces/flow-productCreation/createProductListing.xhtml</url-pattern>
+            <url-pattern>/faces/flow-productCreation/newProduct.xhtml</url-pattern>
+            <url-pattern>/faces/flow-productCreation/flow-productCreation.xhtml</url-pattern>
+            <url-pattern>/faces/flow-productCreation/flow-productCreation-flow.xml</url-pattern>
             <url-pattern>/faces/profile/*</url-pattern>
-        </web-resource-collection>
-        <web-resource-collection>
-            <web-resource-name>Restrict</web-resource-name>
-            <description/>
-            <url-pattern>/faces/flow-productCreation/*</url-pattern>
-        </web-resource-collection>
-        <web-resource-collection>
-            <web-resource-name>Access</web-resource-name>
-            <description/>
-            <url-pattern>/faces/productdescription.xhtml</url-pattern>
-        </web-resource-collection>
-        <web-resource-collection>
-            <web-resource-name>navbar</web-resource-name>
-            <description/>
-            <url-pattern>/faces/Navbar.xhtml</url-pattern>
-        </web-resource-collection>
-        <web-resource-collection>
-            <web-resource-name>navbarS</web-resource-name>
-            <description/>
-            <url-pattern>/faces/NavbarStripped.xhtml</url-pattern>
+            <!--<url-pattern>/faces/productdescription.xhtml</url-pattern>-->
         </web-resource-collection>
         <auth-constraint>
             <description/>
             <role-name>user</role-name>
         </auth-constraint>
     </security-constraint>
-    
-    
     <login-config>
         <auth-method>FORM</auth-method>
         <realm-name>jdbcRealm</realm-name>
