@@ -6,10 +6,8 @@
 package my.presentation;
 
 import boundary.AuctionUserFacade;
-import boundary.ProductListingFacade;
 import entities.AuctionUser;
 import entities.ProductListing;
-import helpers.PasswordHash;
 import java.io.IOException;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
@@ -19,7 +17,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.inject.Inject;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -38,10 +35,7 @@ public class LoginView implements Serializable {
 
     @EJB
     private final AuctionUserFacade auctionUserFacade;
-    @Inject
-    private ProductListingFacade plf;
-
-    private final PasswordHash hash;
+    
     private String email;
     private String password;
     private String path;
@@ -51,7 +45,6 @@ public class LoginView implements Serializable {
      */
     public LoginView() {
         auctionUserFacade = new AuctionUserFacade();
-        hash = new PasswordHash();
     }
 
     @PostConstruct
@@ -98,10 +91,7 @@ public class LoginView implements Serializable {
         AuctionUser user = auctionUserFacade.login(email, password);
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
         HttpServletRequest request = (HttpServletRequest) ec.getRequest();
-        //System.out.println();
         if (user != null) {
-            //long id = user.getId();
-            //if (id != 0) {
             try {
                 request.login(user.getEmail(), password + user.getSalt());
                 HttpServletResponse response = (HttpServletResponse) ec.getResponse();
@@ -115,35 +105,13 @@ public class LoginView implements Serializable {
                     return null;
                 }
             } catch (ServletException | IOException e) {
+                FacesMessage msg = new FacesMessage("Username or password is wrong", "ERROR MSG");
+                FacesContext.getCurrentInstance().addMessage(null, msg);
                 return null;
             }
-            /*if (loginBean.login(id)) {
-                return "index?faces-redirect=true";
-                } else {
-                FacesMessage msg = new FacesMessage("Wrong user input!", "ERROR MSG");
-                FacesContext.getCurrentInstance().addMessage(null, msg);
-                return "loginPage";
-                }*/
- /*if (loginBean.login(id)) {
-                    return "index?faces-redirect=true";
-                } else {
-                    FacesMessage msg = new FacesMessage("Wrong user input!", "ERROR MSG");
-                    FacesContext.getCurrentInstance().addMessage(null, msg);
-                    return "loginPage";
-                }*/
- /*} else {
-                FacesMessage msg = new FacesMessage("Wrong user input!", "ERROR MSG");
-                FacesContext.getCurrentInstance().addMessage(null, msg);
-                return "/faces/loginPage.xhtml";
-            }*/
         } else {
             FacesMessage msg = new FacesMessage("Username or password is wrong", "ERROR MSG");
             FacesContext.getCurrentInstance().addMessage(null, msg);
-            try {
-                ec.redirect(ec.getRequestContextPath() + "/faces/loginPage.xhtml");
-            } catch (IOException i) {
-                System.out.println("Problem redirecting from loginPage");
-            }
             return null;
         }
     }
