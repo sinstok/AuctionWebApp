@@ -5,9 +5,13 @@
  */
 package services;
 
+import boundary.ProductFacade;
+import boundary.ProductListingFacade;
 import entities.Product;
+import entities.ProductListing;
 import java.util.List;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
@@ -25,12 +29,15 @@ import javax.ws.rs.core.MediaType;
  * @author Ragnhild
  */
 @Stateless
-@Path("entities.product")
+@Path("product")
 public class ProductFacadeREST extends AbstractFacade<Product> {
 
     @PersistenceContext(unitName = "AuctionWebAppPU")
     private EntityManager em;
 
+    @Inject
+    ProductFacade pFacade;
+    
     public ProductFacadeREST() {
         super(Product.class);
     }
@@ -81,6 +88,22 @@ public class ProductFacadeREST extends AbstractFacade<Product> {
     @Produces(MediaType.TEXT_PLAIN)
     public String countREST() {
         return String.valueOf(super.count());
+    }
+    
+    @GET
+    @Path("{id}/productlistings")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<ProductListing> getProductListings(@PathParam("id") Integer id) {
+        Product p = super.find((new Long(id)));
+        List<ProductListing> list = p.getProductListings();
+        return list;
+    }
+    
+    @GET
+    @Path("id")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Long> getProductListings() {
+        return pFacade.getIDs();
     }
 
     @Override

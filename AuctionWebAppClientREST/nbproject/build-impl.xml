@@ -780,10 +780,29 @@ exists or setup the property manually. For example like this:
         <!-- You can override this target in the ../build.xml file. -->
     </target>
     <target depends="compile" if="is.server.weblogic" name="library-inclusion-in-archive">
-        <manifest file="${build.ear.classes.dir}/META-INF/MANIFEST.MF" mode="update"/>
+        <basename file="${file.reference.httpclient-4.5.3.jar}" property="manifest.file.reference.httpclient-4.5.3.jar"/>
+        <basename file="${file.reference.jersey-client.jar}" property="manifest.file.reference.jersey-client.jar"/>
+        <basename file="${file.reference.jersey-core.jar}" property="manifest.file.reference.jersey-core.jar"/>
+        <basename file="${file.reference.jersey-server-2.2.jar}" property="manifest.file.reference.jersey-server-2.2.jar"/>
+        <basename file="${libs.GlassFish Server Jersey.classpath}" property="manifest.libs.GlassFish Server Jersey.classpath"/>
+        <manifest file="${build.ear.classes.dir}/META-INF/MANIFEST.MF" mode="update">
+            <attribute name="Extension-List" value="jar-1 jar-2 jar-3 jar-4 jar-5 "/>
+            <attribute name="jar-1-Extension-Name" value="${manifest.file.reference.httpclient-4.5.3.jar}"/>
+            <attribute name="jar-2-Extension-Name" value="${manifest.file.reference.jersey-client.jar}"/>
+            <attribute name="jar-3-Extension-Name" value="${manifest.file.reference.jersey-core.jar}"/>
+            <attribute name="jar-4-Extension-Name" value="${manifest.file.reference.jersey-server-2.2.jar}"/>
+            <attribute name="jar-5-Extension-Name" value="${manifest.libs.GlassFish Server Jersey.classpath}"/>
+        </manifest>
     </target>
     <target depends="compile" if="dist.ear.dir" name="library-inclusion-in-manifest">
-        <manifest file="${build.ear.classes.dir}/META-INF/MANIFEST.MF" mode="update"/>
+        <copyfiles files="${file.reference.httpclient-4.5.3.jar}" manifestproperty="manifest.file.reference.httpclient-4.5.3.jar" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.jersey-client.jar}" manifestproperty="manifest.file.reference.jersey-client.jar" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.jersey-core.jar}" manifestproperty="manifest.file.reference.jersey-core.jar" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.jersey-server-2.2.jar}" manifestproperty="manifest.file.reference.jersey-server-2.2.jar" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${libs.GlassFish Server Jersey.classpath}" manifestproperty="manifest.libs.GlassFish Server Jersey.classpath" todir="${dist.ear.dir}/lib"/>
+        <manifest file="${build.ear.classes.dir}/META-INF/MANIFEST.MF" mode="update">
+            <attribute name="Class-Path" value="${manifest.file.reference.httpclient-4.5.3.jar} lib/${manifest.file.reference.httpclient-4.5.3.jar} ${manifest.file.reference.jersey-client.jar} lib/${manifest.file.reference.jersey-client.jar} ${manifest.file.reference.jersey-core.jar} lib/${manifest.file.reference.jersey-core.jar} ${manifest.file.reference.jersey-server-2.2.jar} lib/${manifest.file.reference.jersey-server-2.2.jar} ${manifest.libs.GlassFish Server Jersey.classpath} lib/${manifest.libs.GlassFish Server Jersey.classpath} "/>
+        </manifest>
     </target>
     <target name="-copy-meta-inf">
         <copy todir="${classes.dir}">

@@ -47,4 +47,13 @@ public class ProductFacade extends AbstractFacade<Product> {
         return prod;
     }
     
+    public List<ProductListing> getProductListings(Product product) {
+        return product.getProductListings();
+    }
+    
+    public List<Long> getIDs() {
+        List<Long> ids = em.createQuery("SELECT p.id from Product p").getResultList();
+        return ids;
+    }
+    
 }
