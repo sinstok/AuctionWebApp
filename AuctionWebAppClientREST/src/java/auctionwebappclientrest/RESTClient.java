@@ -18,7 +18,7 @@ public class RESTClient {
         ProductListingRESTClient pl = new ProductListingRESTClient();
         ProductRESTClient p = new ProductRESTClient();
         pl.getJSONBiddables();
-        //p.getAuctions(653);
+        p.getAuctions(653);
     }
     
 }

@@ -91,7 +91,7 @@ public class ProductFacadeREST extends AbstractFacade<Product> {
     }
     
     @GET
-    @Path("productlistings/")
+    @Path("productlistings")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<ProductListing> getProductListings() {
         Long id = pFacade.getIDs().get(0);
@@ -101,7 +101,7 @@ public class ProductFacadeREST extends AbstractFacade<Product> {
     }
     
     @GET
-    @Path("productlistings/{id}")
+    @Path("{id}/productlistings")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<ProductListing> getProductListings(@PathParam("id") Long id) {
         Product p = super.find((id));
@@ -110,7 +110,7 @@ public class ProductFacadeREST extends AbstractFacade<Product> {
     }
     
     @GET
-    @Path("productids/")
+    @Path("productids")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<Long> getProductIds() {
         return pFacade.getIDs();
