@@ -6,7 +6,9 @@
 package services;
 
 import boundary.ProductListingFacade;
+import entities.Bid;
 import entities.ProductListing;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -28,7 +30,7 @@ import javax.ws.rs.core.MediaType;
  * @author Ragnhild
  */
 @Stateless
-@Path("entities.productlisting")
+@Path("productlisting")
 public class ProductListingFacadeREST extends AbstractFacade<ProductListing> {
 
     @PersistenceContext(unitName = "AuctionWebAppPU")
@@ -69,20 +71,6 @@ public class ProductListingFacadeREST extends AbstractFacade<ProductListing> {
     }
 
     @GET
-    @Override
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<ProductListing> findAll() {
-        return super.findAll();
-    }
-
-    @GET
-    @Path("{from}/{to}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<ProductListing> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
-        return super.findRange(new int[]{from, to});
-    }
-
-    @GET
     @Path("count")
     @Produces(MediaType.TEXT_PLAIN)
     public String countREST() {
@@ -90,12 +78,27 @@ public class ProductListingFacadeREST extends AbstractFacade<ProductListing> {
     }
     
     @GET
-    @Path("biddables")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<ProductListing> getBiddables() {
         return plFacade.getBiddables();
     }
-
+        
+    /*@GET
+    @Path("{search}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<ProductListing> getSearchBiddables(@PathParam("search")String search) {
+        return plFacade.searchBiddable(search);
+    }*/
+    
+        @GET
+    @Path("bids/{id}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Bid> getSearchBiddables(@PathParam("id")Long id) {
+        ProductListing pl = super.find(id);
+        List<Bid> bids = plFacade.getBids(pl);
+        return bids;
+    }
+    
     @Override
     protected EntityManager getEntityManager() {
         return em;

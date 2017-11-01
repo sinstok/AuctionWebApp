@@ -136,9 +136,9 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
         List<ProductListing> productListings = em.createQuery(
                 "SELECT pl "
                 + "FROM ProductListing pl JOIN pl.product p "
-                + "WHERE lower(pl.description) LIKE :search OR "
+                + "WHERE (lower(pl.description) LIKE :search OR "
                 + "lower(p.name) LIKE :search OR "
-                + "lower(p.features) LIKE :search AND "
+                + "lower(p.features) LIKE :search) AND "
                 + "pl.closing > :now",
                 ProductListing.class).setParameter("search", "%" + search.toLowerCase() + "%")
                 .setParameter("now", now)
@@ -247,6 +247,10 @@ public class ProductListingFacade extends AbstractFacade<ProductListing> {
             }
         }
         return highestBid;
+    }
+    
+    public List<Bid> getBids(ProductListing pl) {
+        return pl.getBids();
     }
 
     /**
