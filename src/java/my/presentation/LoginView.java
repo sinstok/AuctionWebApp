@@ -95,7 +95,6 @@ public class LoginView implements Serializable {
             try {
                 request.login(user.getEmail(), password + user.getSalt());
                 HttpServletResponse response = (HttpServletResponse) ec.getResponse();
-                request.authenticate(response);
 
                 System.out.println("This is the path you will be redirected to: " + this.path);
                 if (this.path.equals("flow-productCreation")) {
@@ -125,8 +124,6 @@ public class LoginView implements Serializable {
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
         HttpServletRequest request = (HttpServletRequest) ec.getRequest();
         request.logout();
-        //loginBean.logOut();
-        //return "/faces/index.xhtml";
         ec.redirect(ec.getRequestContextPath() + "/faces/index.xhtml");
     }
 

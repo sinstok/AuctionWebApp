@@ -11,7 +11,6 @@ import helpers.Category;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.security.DenyAll;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
@@ -19,8 +18,6 @@ import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  *

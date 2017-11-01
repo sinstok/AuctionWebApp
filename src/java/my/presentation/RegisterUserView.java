@@ -13,8 +13,8 @@ import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  *
@@ -64,9 +64,6 @@ public class RegisterUserView {
             if (this.confPassword.equals(this.password)) {
                 try {
                     HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-                    /*this.newUser.setSalt(hashing.generateSalt());
-                    String hashedPassword = hashing.hashPassword(this.newUser.getPassword() + this.newUser.getSalt()).toString();
-                    this.newUser.setPassword(hashedPassword);*/
                     AuctionUser user = auctionUserFacade.registerUser(this.newUser, this.password);
                     request.login(user.getEmail(), this.password + user.getSalt());
                     ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
