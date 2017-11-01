@@ -90,7 +90,7 @@ public class ProductListingFacadeREST extends AbstractFacade<ProductListing> {
         return plFacade.searchBiddable(search);
     }*/
     
-        @GET
+    @GET
     @Path("bids/{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<Bid> getSearchBiddables(@PathParam("id")Long id) {
