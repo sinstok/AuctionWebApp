@@ -11,6 +11,7 @@ import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -68,14 +69,16 @@ public class RegisterUserView {
                     this.newUser.setPassword(hashedPassword);*/
                     AuctionUser user = auctionUserFacade.registerUser(this.newUser, this.password);
                     request.login(user.getEmail(), this.password + user.getSalt());
-                    return "/faces/index?faces-redirect=true";
+                    ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+                    ec.redirect(ec.getRequestContextPath() + "/faces/index.xhtml");
+                    return null;
                 } catch (Exception e) {
                     System.out.println("There was a problem hashing the password " + e.getMessage());
                     context.addMessage(null, new FacesMessage("Woops. Some of the input you wrote is wrong."));
                     return null;
                 }
             } else {
-                context.addMessage(null, new FacesMessage("Woops. Some of the input you wrote is wrong."));
+                context.addMessage("confPassword", new FacesMessage("Passwords does not match"));
                 return null;
             }
         } else {
