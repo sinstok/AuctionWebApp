@@ -58,7 +58,7 @@ After all this is done you must restart the glassfish server in order for it to 
 ### RESTful service
 
 ##### XML
-URL for getting a products productlistings: https://localhost:8181/AuctionWebApp/webresources/product/ + id
+URL for getting a products productlistings: https://localhost:8181/AuctionWebApp/webresources/product/{id}/productlistings
 
 URL for getting biddable productlistings: https://localhost:8181/AuctionWebApp/webresources/productlisting
 
