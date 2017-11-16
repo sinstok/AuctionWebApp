@@ -26,7 +26,7 @@ import javax.persistence.TemporalType;
  *
  * @author Joakim
  */
-public class ProductListingObject {
+public class ProductListingObject implements Serializable{
     private Long id;
     private double basePrice;
     private String image;
@@ -36,6 +36,9 @@ public class ProductListingObject {
     private List<BidObject> bids;
     private long productId;
     private String productName;
+
+    public ProductListingObject() {
+    }
     
     public ProductListingObject(ProductListing pl){
         id = pl.getId();
