@@ -24,6 +24,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import serializers.ProductListingObject;
 
 /**
  *
@@ -79,8 +80,17 @@ public class ProductListingFacadeREST extends AbstractFacade<ProductListing> {
     
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<ProductListing> getBiddables() {
-        return plFacade.getBiddables();
+    public List<ProductListingObject> getBiddables() {
+        
+        List<ProductListing> biddables = plFacade.getBiddables();
+        List<ProductListingObject> biddableObjects = new ArrayList<ProductListingObject>();
+        for (ProductListing pl : biddables) {
+            biddableObjects.add(new ProductListingObject(pl));
+        }
+
+        return biddableObjects;
+        
+        //return plFacade.getBiddables();
     }
         
     /*@GET
