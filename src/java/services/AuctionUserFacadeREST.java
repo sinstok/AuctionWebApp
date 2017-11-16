@@ -8,6 +8,7 @@ package services;
 
 import boundary.AuctionUserFacade;
 import entities.AuctionUser;
+import entities.ProductListing;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -22,6 +23,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import rest.objects.HighestBidderObject;
+import rest.objects.RegisterUserObject;
+import rest.objects.UserObject;
+import serializers.AuctionUserObject;
 
 /**
  *
@@ -96,6 +101,55 @@ public class AuctionUserFacadeREST extends AbstractFacade<AuctionUser> {
         Long tall = new Long(1);
         AuctionUser user = auctionUserFacade.getSeller(tall);
         return user.getName();
+    }
+    
+        @GET
+    @Path("seller")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public AuctionUser getSeller(@PathParam("id") Long id){
+        AuctionUser user = auctionUserFacade.getSeller(id);
+        return user;
+    }
+    
+    @POST
+    @Path("register")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public boolean register(UserObject user){
+        return auctionUserFacade.register(user.getUsername(), user.getPassword());
+    }
+    
+    @GET
+    @Path("email")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public AuctionUser findUserByEmail(@PathParam("email") String email){
+        return auctionUserFacade.findUserByEmail(email);
+    }
+    
+    @POST
+    @Path("registeruser")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public AuctionUserObject registerUser(RegisterUserObject registerUser){
+        AuctionUserObject auctionUser = new AuctionUserObject(auctionUserFacade.registerUser(registerUser.getUser(), registerUser.getPassword()));
+        return auctionUser;
+    }
+    
+    @POST
+    @Path("login")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public boolean login(UserObject user){
+        AuctionUser auctionUser = auctionUserFacade.login(user.getUsername(), user.getPassword());
+        return (auctionUser != null);
+    }
+    
+    @POST
+    @Path("highestbidder")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public String isHighestBidder(HighestBidderObject highestBidder){
+        return auctionUserFacade.isHighestBidder(highestBidder.getProductListing(), highestBidder.getAuctionUser());
     }
     
     @Override

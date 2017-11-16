@@ -8,6 +8,7 @@ package serializers;
 import entities.AuctionUser;
 import entities.Feedback;
 import entities.ProductListing;
+import java.io.Serializable;
 import java.util.List;
 import static javax.persistence.CascadeType.PERSIST;
 import javax.persistence.JoinTable;
@@ -17,7 +18,7 @@ import javax.persistence.OneToMany;
  *
  * @author Joakim
  */
-public class AuctionUserObject {
+public class AuctionUserObject implements Serializable{
      private Long id;
 
     private String name;

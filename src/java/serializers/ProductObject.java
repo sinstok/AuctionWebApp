@@ -9,6 +9,7 @@ import entities.Feedback;
 import entities.Product;
 import entities.ProductListing;
 import helpers.Category;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import static javax.persistence.CascadeType.PERSIST;
@@ -20,7 +21,7 @@ import javax.persistence.OneToMany;
  *
  * @author Joakim
  */
-public class ProductObject {
+public class ProductObject implements Serializable{
     private Long id;
     private String name;
     private String features;

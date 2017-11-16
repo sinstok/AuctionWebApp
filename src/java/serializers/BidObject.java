@@ -7,6 +7,7 @@ package serializers;
 
 import entities.AuctionUser;
 import entities.Bid;
+import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -15,7 +16,7 @@ import javax.persistence.TemporalType;
  *
  * @author Joakim
  */
-public class BidObject {
+public class BidObject implements Serializable{
     private Long id;
     private double amount;
     private Date bidDate;

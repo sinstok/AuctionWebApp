@@ -7,12 +7,13 @@ package serializers;
 
 import entities.AuctionUser;
 import entities.Feedback;
+import java.io.Serializable;
 
 /**
  *
  * @author Joakim
  */
-public class FeedbackObject {
+public class FeedbackObject implements Serializable{
     private Long id;
     private double rating;
     private String feedback;
