@@ -5,9 +5,11 @@
  */
 package services;
 
+import boundary.BidFacade;
 import entities.Bid;
 import java.util.List;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
@@ -19,6 +21,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import rest.objects.AddBidObject;
 
 /**
  *
@@ -31,6 +34,9 @@ public class BidFacadeREST extends AbstractFacade<Bid> {
     @PersistenceContext(unitName = "AuctionWebAppPU")
     private EntityManager em;
 
+    @Inject
+    BidFacade bidFacade;
+    
     public BidFacadeREST() {
         super(Bid.class);
     }
@@ -83,6 +89,14 @@ public class BidFacadeREST extends AbstractFacade<Bid> {
         return String.valueOf(super.count());
     }
 
+    @POST
+    @Path("add")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public String addBid(AddBidObject object) {
+        return bidFacade.addBid(object.getBid(), object.getProductListing());
+    }
+    
     @Override
     protected EntityManager getEntityManager() {
         return em;

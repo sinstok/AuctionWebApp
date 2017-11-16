@@ -23,6 +23,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import rest.objects.ProductFromListingObject;
+import serializers.ProductObject;
 
 /**
  *
@@ -91,22 +93,28 @@ public class ProductFacadeREST extends AbstractFacade<Product> {
     }
     
     @GET
-    @Path("productlistings/")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<ProductListing> getProductListings() {
-        Long id = pFacade.getIDs().get(0);
-        Product p = super.find((id));
-        List<ProductListing> list = p.getProductListings();
-        return list;
-    }
-    
-    @GET
-    @Path("productlistings/{id}")
+    @Path("{id}/productlistings")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<ProductListing> getProductListings(@PathParam("id") Long id) {
         Product p = super.find((id));
         List<ProductListing> list = p.getProductListings();
         return list;
+    }
+    
+    @POST
+    @Path("fromlisting")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public ProductObject getProductFromListing(ProductFromListingObject object) {
+        ProductObject product = new ProductObject(pFacade.getProductFromListing(object.getFieldName(), object.getId()));
+        return product;
+    }
+    
+    @POST
+    @Path("productlistings")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<ProductListing> getProductListings(Product product) {
+        return pFacade.getProductListings(product);
     }
     
     @GET
