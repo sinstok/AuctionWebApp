@@ -120,7 +120,7 @@ public class AuctionUserFacadeREST extends AbstractFacade<AuctionUser> {
     }
     
     @GET
-    @Path("email")
+    @Path("/find/{email}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public AuctionUser findUserByEmail(@PathParam("email") String email){
         return auctionUserFacade.findUserByEmail(email);
