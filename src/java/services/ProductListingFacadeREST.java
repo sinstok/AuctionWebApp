@@ -81,32 +81,37 @@ public class ProductListingFacadeREST extends AbstractFacade<ProductListing> {
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<ProductListingObject> getBiddables() {
-         
         List<ProductListing> biddables = plFacade.getBiddables();
-        List<ProductListingObject> biddableObjects = new ArrayList<ProductListingObject>();
-        for (ProductListing pl : biddables) {
+        List<ProductListingObject> biddableObjects = new ArrayList<>();
+        biddables.forEach((pl) -> {
             biddableObjects.add(new ProductListingObject(pl));
-        }
- 
+        });
+
         return biddableObjects;
-         
-        //return plFacade.getBiddables();
     }
         
-    /*@GET
-    @Path("{search}")
+    @GET
+    @Path("search/{search}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<ProductListing> getSearchBiddables(@PathParam("search")String search) {
         return plFacade.searchBiddable(search);
-    }*/
+    }
     
     @GET
-    @Path("bids/{id}")
+    @Path("{id}/bids/")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<Bid> getBids(@PathParam("id")Long id) {
         ProductListing pl = super.find(id);
         List<Bid> bids = plFacade.getBids(pl);
         return bids;
+    }
+    
+    @GET
+    @Path("{id}/highestbid")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Bid getHighestBid(@PathParam("id")Long id) {
+        ProductListing pl = super.find(id);
+        return plFacade.getHighestBid(pl);
     }
     
     @Override
