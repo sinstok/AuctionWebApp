@@ -23,7 +23,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import rest.objects.ProductFromListingObject;
 import serializers.ProductObject;
 
 /**
@@ -39,6 +38,9 @@ public class ProductFacadeREST extends AbstractFacade<Product> {
 
     @Inject
     ProductFacade pFacade;
+    
+    @Inject
+    ProductListingFacade plFacade;
     
     public ProductFacadeREST() {
         super(Product.class);
@@ -102,10 +104,10 @@ public class ProductFacadeREST extends AbstractFacade<Product> {
     }
     
     @POST
-    @Path("fromlisting")
+    @Path("fromlisting/{id}/{fieldname}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public ProductObject getProductFromListing(ProductFromListingObject object) {
-        ProductObject product = new ProductObject(pFacade.getProductFromListing(object.getFieldName(), object.getId()));
+    public ProductObject getProductFromListing(@PathParam("id") Long id, @PathParam("fieldname") String fieldname) {
+        ProductObject product = new ProductObject(pFacade.getProductFromListing(fieldname, id));
         return product;
     }
     
@@ -122,6 +124,14 @@ public class ProductFacadeREST extends AbstractFacade<Product> {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<Long> getProductIds() {
         return pFacade.getIDs();
+    }
+    
+    @GET
+    @Path("{productId}/productrating")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public String getAverageProductRating(@PathParam("productId") Long productId) {
+        Product product = super.find(productId);
+        return plFacade.getAverageProductRating(product);
     }
 
     @Override
