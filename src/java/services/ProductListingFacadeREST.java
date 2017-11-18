@@ -109,6 +109,10 @@ public class ProductListingFacadeREST extends AbstractFacade<ProductListing> {
         return bids;
     }
     
+    
+    
+    
+    
     @Override
     protected EntityManager getEntityManager() {
         return em;
