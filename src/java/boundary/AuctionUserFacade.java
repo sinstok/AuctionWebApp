@@ -40,7 +40,7 @@ public class AuctionUserFacade extends AbstractFacade<AuctionUser> {
     /**
      * Finds the seller of a specific Product listing
      *
-     * @param id
+     * @param productListingId
      * @return AuctionUser
      */
     public AuctionUser getSeller(Long productListingId) {

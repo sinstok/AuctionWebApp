@@ -5,8 +5,13 @@
  */
 package services;
 
+import boundary.AuctionUserFacade;
 import boundary.BidFacade;
+import boundary.ProductListingFacade;
+import entities.AuctionUser;
 import entities.Bid;
+import entities.ProductListing;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -28,7 +33,7 @@ import rest.objects.AddBidObject;
  * @author Ragnhild
  */
 @Stateless
-@Path("entities.bid")
+@Path("bid")
 public class BidFacadeREST extends AbstractFacade<Bid> {
 
     @PersistenceContext(unitName = "AuctionWebAppPU")
@@ -36,6 +41,12 @@ public class BidFacadeREST extends AbstractFacade<Bid> {
 
     @Inject
     BidFacade bidFacade;
+    
+    @Inject
+    ProductListingFacade plFacade;
+    
+    @Inject
+    AuctionUserFacade auFacade;
     
     public BidFacadeREST() {
         super(Bid.class);
@@ -90,11 +101,20 @@ public class BidFacadeREST extends AbstractFacade<Bid> {
     }
 
     @POST
-    @Path("add")
+    @Path("/add/")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public String addBid(AddBidObject object) {
-        return bidFacade.addBid(object.getBid(), object.getProductListing());
+        Date date = new Date();
+        Bid bid = new Bid();
+        bid.setAmount(object.getBid());
+        bid.setBidDate(date);
+        Long plId = object.getProductListingId();
+        ProductListing pl = plFacade.find(plId);
+        Long userId = new Long(751);//object.getAuctionUserId();
+        AuctionUser user = auFacade.find(userId);
+        bid.setUser(user);
+        return bidFacade.addBid(bid, pl);
     }
     
     @Override

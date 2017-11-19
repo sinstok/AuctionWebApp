@@ -103,11 +103,11 @@ public class AuctionUserFacadeREST extends AbstractFacade<AuctionUser> {
         return user.getName();
     }
     
-        @GET
-    @Path("seller")
+    @GET
+    @Path("seller/{productListingId}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public AuctionUser getSeller(@PathParam("id") Long id){
-        AuctionUser user = auctionUserFacade.getSeller(id);
+    public AuctionUser getSeller(@PathParam("productListingId") Long productListingId){
+        AuctionUser user = auctionUserFacade.getSeller(productListingId);
         return user;
     }
     

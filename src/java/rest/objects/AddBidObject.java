@@ -5,38 +5,43 @@
  */
 package rest.objects;
 
-import entities.Bid;
-import entities.ProductListing;
 
 /**
  *
  * @author Ragnhild
  */
 public class AddBidObject {
-    Bid bid;
-    ProductListing productListing;
+    double bid;
+    Long productListingId;
+    Long auctionUserId;
 
-    public AddBidObject(Bid bid, ProductListing productListing) {
+    public AddBidObject(double bid, Long productListingId) {
         this.bid = bid;
-        this.productListing = productListing;
+        this.productListingId = productListingId;
     }
 
-    public Bid getBid() {
+    public double getBid() {
         return bid;
     }
 
-    public void setBid(Bid bid) {
+    public void setBid(double bid) {
         this.bid = bid;
     }
 
-    public ProductListing getProductListing() {
-        return productListing;
+    public Long getProductListingId() {
+        return productListingId;
     }
 
-    public void setProductListing(ProductListing productListing) {
-        this.productListing = productListing;
+    public void setProductListing(Long productListingId) {
+        this.productListingId = productListingId;
     }
-    
-    
-    
+
+    public Long getAuctionUserId() {
+        return auctionUserId;
+    }
+
+    public void setAuctionUserId(Long auctionUserId) {
+        this.auctionUserId = auctionUserId;
+    }
+
 }
