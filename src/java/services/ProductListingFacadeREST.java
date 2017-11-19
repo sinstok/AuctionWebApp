@@ -43,6 +43,7 @@ public class ProductListingFacadeREST extends AbstractFacade<ProductListing> {
     public ProductListingFacadeREST() {
         super(ProductListing.class);
     }
+    
 
     @POST
     @Override
