@@ -5,6 +5,8 @@
  */
 package serializers;
 
+import boundary.ProductFacade;
+import boundary.ProductListingFacade;
 import entities.Bid;
 import entities.Product;
 import entities.ProductListing;
@@ -12,6 +14,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.inject.Inject;
 import static javax.persistence.CascadeType.PERSIST;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -27,6 +30,7 @@ import javax.persistence.TemporalType;
  * @author Joakim
  */
 public class ProductListingObject implements Serializable{
+    
     private Long id;
     private double basePrice;
     private String image;
@@ -36,6 +40,7 @@ public class ProductListingObject implements Serializable{
     private List<BidObject> bids;
     private long productId;
     private String productName;
+    private double highestBid;
 
     public ProductListingObject() {
     }
@@ -43,10 +48,11 @@ public class ProductListingObject implements Serializable{
     public ProductListingObject(ProductListing pl){
         id = pl.getId();
         basePrice = pl.getBasePrice();
-        image = "http://localhost:8080/AuctionWebApp/image/productListing/" + id;
+        image = "https://localhost:8181/AuctionWebApp/image/productListing/" + id;
         description = pl.getDescription();
         closing = pl.getClosing();
         published = pl.getPublished();
+        highestBid = getHighestBid(pl).getAmount();
         
         bids = new ArrayList<BidObject>();
         for(Bid bid : pl.getBids()){
@@ -55,6 +61,22 @@ public class ProductListingObject implements Serializable{
  
         productId = pl.getId();
         productName = pl.getProduct().getName();
+    }
+    
+    public Bid getHighestBid(ProductListing pl) {
+        List<Bid> bids = pl.getBids();
+        Bid highestBid = new Bid();
+        highestBid.setAmount(pl.getBasePrice());
+
+        if (!(bids.isEmpty())) {
+            for (int i = 0; i < bids.size(); i++) {
+                double current = bids.get(i).getAmount();
+                if (current > highestBid.getAmount()) {
+                    highestBid = bids.get(i);
+                }
+            }
+        }
+        return highestBid;
     }
 
     public Long getId() {
@@ -127,6 +149,14 @@ public class ProductListingObject implements Serializable{
 
     public void setProductName(String productName) {
         this.productName = productName;
+    }
+
+    public double getHighestBid() {
+        return highestBid;
+    }
+
+    public void setHighestBid(double highestBid) {
+        this.highestBid = highestBid;
     }
 
     
