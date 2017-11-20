@@ -94,12 +94,23 @@ public class BidFacade extends AbstractFacade<Bid> {
             return "Someone already made that bid";
         }
         
-        create(bid);
+         create(bid);
+        List<Bid> bids = pl.getBids();
+        boolean found = false;
+        for(Bid b : bids){
+            if(b.getUser().getId() == bidder.getId()){
+                found = true;
+            }
+        }
+        if(!found){
         
         bidder.getBids().add(pl);
+        }
+        
+       
         auctionUserFacade.edit(bidder);
 
-        List<Bid> bids = pl.getBids();
+        //List<Bid> bids = pl.getBids();
         bids.add(bid);
         pl.setBids(bids);
         productListingFacade.edit(pl);
