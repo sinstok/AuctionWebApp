@@ -54,4 +54,17 @@ Password Encryption Algorithm: none
 Assign Groups: user  
 Digest Algorithm: SHA-256 or empty field. It defaults to SHA-256  
 After all this is done you must restart the glassfish server in order for it to work.  
-  
+
+### RESTful service
+
+##### XML
+URL for getting a products productlistings: https://localhost:8181/AuctionWebApp/webresources/product/{id}/productlistings
+
+URL for getting biddable productlistings: https://localhost:8181/AuctionWebApp/webresources/productlisting
+
+##### JSON
+Run AuctionWebAppClientREST
+
+If you get java.lang.NoClassDefFoundError: Could not initialize class org.eclipse.persistence.jaxb.BeanValidationHelper, 
+it is a bug in Glassfish, you therefore have to update org.eclipse.persistence.moxy.jar in C:\glassfish4\glassfish\modules to version 2.6.1
+

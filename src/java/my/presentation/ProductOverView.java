@@ -66,10 +66,7 @@ public class ProductOverView {
             ec.redirect("loginPage.xhtml");
             return "/faces/loginPage.xhtml";
         }
-        
         return "flow-productCreation";
-        
-        //ec.redirect("flow-productCreation.xhtml");
     }
     
     /**
@@ -95,6 +92,7 @@ public class ProductOverView {
         ec.getRequestMap().put("productListing", productListing);
         //ec.redirect(ec.getRequestContextPath() + "/faces/productdescription.xhtml");
         return "/faces/productdescription";
+        
     }
     
     @PermitAll
@@ -144,5 +142,4 @@ public class ProductOverView {
     public void setSearch(String search) {
         this.search = search;
     }
-    
 }

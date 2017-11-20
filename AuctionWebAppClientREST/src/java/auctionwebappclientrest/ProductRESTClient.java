@@ -29,7 +29,7 @@ public class ProductRESTClient {
                                     this.getHostnameVerifier(),
                                     this.getSSLContext()));
             Client client = Client.create(config);
-            WebResource webResource = client.resource("https://localhost:8181/AuctionWebApp/webresources/product/productlistings/"+id);
+            WebResource webResource = client.resource("https://localhost:8181/AuctionWebApp/webresources/product/"+id.toString()+"/productlistings/");
             ClientResponse response = webResource.accept("application/json").get(ClientResponse.class);
             if (response.getStatus() != 200) {
                 throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
@@ -39,6 +39,7 @@ public class ProductRESTClient {
             System.out.println("Auctions:");
             System.out.println("============JSONResponse============");
             System.out.println(output);
+            System.out.println();
 
         } catch (RuntimeException e) {
             throw (e);
