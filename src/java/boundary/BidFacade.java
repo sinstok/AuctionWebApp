@@ -65,7 +65,7 @@ public class BidFacade extends AbstractFacade<Bid> {
      * @param newBidValue
      * @return String of a potensial error message or null
      */
-    @RolesAllowed("user")
+    //@RolesAllowed("user")
     public String addBid(Bid bid, ProductListing pl) {
         
         AuctionUser seller = auctionUserFacade.getSeller(pl.getId());

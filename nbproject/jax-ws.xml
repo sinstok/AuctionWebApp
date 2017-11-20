@@ -4,9 +4,6 @@
     <service name="AuctionServiceSOAP">
       <implementation-class>services.AuctionServiceSOAP</implementation-class>
     </service>
-    <service name="TempService">
-      <implementation-class>services.TempService</implementation-class>
-    </service>
   </services>
   <clients/>
 </jax-ws>
