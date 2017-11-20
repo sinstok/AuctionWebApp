@@ -5,12 +5,15 @@
  */
 package services;
 
+import boundary.AuctionUserFacade;
+import boundary.ProductFacade;
 import boundary.ProductListingFacade;
+import entities.AuctionUser;
 import entities.Bid;
+import entities.Product;
 import entities.ProductListing;
 import java.util.ArrayList;
 import java.util.List;
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -36,10 +39,16 @@ public class ProductListingFacadeREST extends AbstractFacade<ProductListing> {
 
     @PersistenceContext(unitName = "AuctionWebAppPU")
     private EntityManager em;
-    
+
     @Inject
     ProductListingFacade plFacade;
     
+    @Inject
+    AuctionUserFacade auFacade;
+    
+    @Inject
+    ProductFacade pFacade;
+
     public ProductListingFacadeREST() {
         super(ProductListing.class);
     }
@@ -48,6 +57,19 @@ public class ProductListingFacadeREST extends AbstractFacade<ProductListing> {
     @Override
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void create(ProductListing entity) {
+        super.create(entity);
+    }
+
+    @POST
+    @Path("/seller/{sid}/product/{pid}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void createListing(@PathParam("sid") Long sid, @PathParam("pid") Long pid, ProductListing entity) {
+        System.out.println("Testing");
+        AuctionUser seller = auFacade.find(sid);
+        Product product = pFacade.find(pid);
+        entity.setProduct(product);
+        seller.addListing(entity);
+        product.addListing(entity);
         super.create(entity);
     }
 
@@ -77,7 +99,7 @@ public class ProductListingFacadeREST extends AbstractFacade<ProductListing> {
     public String countREST() {
         return String.valueOf(super.count());
     }
-    
+
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<ProductListingObject> getBiddables() {
@@ -89,34 +111,34 @@ public class ProductListingFacadeREST extends AbstractFacade<ProductListing> {
 
         return biddableObjects;
     }
-        
+
     @GET
     @Path("search/{search}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<ProductListing> getSearchBiddables(@PathParam("search")String search) {
+    public List<ProductListing> getSearchBiddables(@PathParam("search") String search) {
         return plFacade.searchBiddable(search);
     }
-    
+
     @GET
     @Path("{id}/bids/")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Bid> getBids(@PathParam("id")Long id) {
+    public List<Bid> getBids(@PathParam("id") Long id) {
         ProductListing pl = super.find(id);
         List<Bid> bids = plFacade.getBids(pl);
         return bids;
     }
-    
+
     @GET
     @Path("{id}/highestbid")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Bid getHighestBid(@PathParam("id")Long id) {
+    public Bid getHighestBid(@PathParam("id") Long id) {
         ProductListing pl = super.find(id);
         return plFacade.getHighestBid(pl);
     }
-    
+
     @Override
     protected EntityManager getEntityManager() {
         return em;
     }
-    
+
 }
