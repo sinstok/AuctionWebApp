@@ -27,6 +27,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import rest.objects.AddBidObject;
+import rest.objects.Message;
+import serializers.BidObject;
 
 /**
  *
@@ -101,20 +103,26 @@ public class BidFacadeREST extends AbstractFacade<Bid> {
     }
 
     @POST
-    @Path("/add/")
+    @Path("/add/productlisting/{productListingId}/amount/")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public String addBid(AddBidObject object) {
+    public Message addBid(@PathParam("productListingId") Long plId, BidObject object) {
         Date date = new Date();
         Bid bid = new Bid();
-        bid.setAmount(object.getBid());
+        bid.setAmount(object.getAmount());
         bid.setBidDate(date);
-        Long plId = object.getProductListingId();
+        //Long plId2 = new Long(plId);
         ProductListing pl = plFacade.find(plId);
-        Long userId = new Long(751);//object.getAuctionUserId();
-        AuctionUser user = auFacade.find(userId);
+        //Long userId = new Long(userId);//object.getAuctionUserId();
+        AuctionUser user = auFacade.find(object.getUserId());
         bid.setUser(user);
-        return bidFacade.addBid(bid, pl);
+        Message message = new Message();
+        if(bidFacade.addBid(bid, pl) == null){
+            message.setMessage("Success");
+        }else{
+            message.setMessage(bidFacade.addBid(bid, pl));
+        }
+        return message;
     }
     
     @Override
