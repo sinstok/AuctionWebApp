@@ -43,6 +43,7 @@ public class BidFacade extends AbstractFacade<Bid> {
     
     @Inject
     ProductListingFacade productListingFacade;
+   
     
     static final Logger logger = Logger.getLogger("Main");
     
@@ -92,7 +93,9 @@ public class BidFacade extends AbstractFacade<Bid> {
         } else if (bid.getAmount() == highestBid.getAmount() && highestBid.getUser() != null) {
             return "Someone already made that bid";
         }
-
+        
+        create(bid);
+        
         bidder.getBids().add(pl);
         auctionUserFacade.edit(bidder);
 
