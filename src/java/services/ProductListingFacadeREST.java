@@ -71,6 +71,7 @@ public class ProductListingFacadeREST extends AbstractFacade<ProductListing> {
         seller.addListing(entity);
         product.addListing(entity);
         super.create(entity);
+        
     }
 
     @PUT
