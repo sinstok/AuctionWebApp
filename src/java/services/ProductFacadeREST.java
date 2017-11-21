@@ -23,6 +23,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import rest.objects.Message;
 import serializers.ProductObject;
 
 /**
@@ -47,10 +48,12 @@ public class ProductFacadeREST extends AbstractFacade<Product> {
     }
 
     @POST
-    @Override
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void create(Product entity) {
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Message createAndReturn(Product entity) {
         super.create(entity);
+        return new Message(entity.getId().toString());
+        
     }
 
     @PUT
