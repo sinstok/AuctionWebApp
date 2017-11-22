@@ -41,6 +41,7 @@ public class ProductListingObject implements Serializable{
     private long productId;
     private String productName;
     private double highestBid;
+    private String productFeautures;
 
     public ProductListingObject() {
     }
@@ -59,8 +60,9 @@ public class ProductListingObject implements Serializable{
             bids.add(new BidObject(bid));
         }
  
-        productId = pl.getId();
+        productId = pl.getProduct().getId();
         productName = pl.getProduct().getName();
+        productFeautures = pl.getProduct().getFeatures();
     }
     
     public Bid getHighestBid(ProductListing pl) {
@@ -157,6 +159,14 @@ public class ProductListingObject implements Serializable{
 
     public void setHighestBid(double highestBid) {
         this.highestBid = highestBid;
+    }
+
+    public String getProductFeautures() {
+        return productFeautures;
+    }
+
+    public void setProductFeautures(String productFeautures) {
+        this.productFeautures = productFeautures;
     }
 
     
